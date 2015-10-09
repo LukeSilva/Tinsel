@@ -9,8 +9,13 @@ CXX= g++ $(CFLAGS)
 
 
 # link
+all: tinsel tinsel-vm
+
 tinsel: $(OBJS)
 	$(CXX) $(OBJS) -o tinsel
+
+tinsel-vm: source-vm/main.cpp source-vm/tinsel.cpp
+	$(CXX) source-vm/main.cpp source-vm/tinsel.cpp -o tinsel-vm
 
 # pull in dependency info for *existing* .o files
 -include $(OBJS:.o=.d)
@@ -25,6 +30,7 @@ tinsel: $(OBJS)
 	@rm -f $*.d.tmp
 
 clean:
+	rm -f tinsel-vm
 	rm -f tinsel
 	rm -f source/*.o
 	rm -f source/CodeGenerator/*.o

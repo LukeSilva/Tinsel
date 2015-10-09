@@ -1,0 +1,51 @@
+int CRT0 ( )
+{
+	call main ;
+	Exit ;
+}
+
+int Number = 47 ;
+int Guesses = 0 ;
+
+string WelcomeText = "Guess my number, you have 10 guesses\n" ;
+string ToLow = "\nToo Low!\n" ;
+string ToHigh = "\nToo High!\n" ;
+string Correct = "\nCorrect!\n" ;
+string TooManyGuesses = "\nYou have guessed too many times\n" ;
+string GuessString = "? " ;
+
+int GuessNumber ( )
+{
+	Guesses = Guesses + 1 ;
+	int Guess ;
+	PrintString GuessString ;
+	Guess = GetInt ;
+	if ( Guess < Number )
+	{
+		PrintString ToLow ;
+	}
+	if ( Guess > Number )
+	{
+		PrintString ToHigh ;
+	}
+	if ( ! ( Guess ^ Number ) )
+	{
+		PrintString Correct ;
+		return 0 ;
+	}
+	if ( Guesses < 10 )
+	{
+		call GuessNumber ;
+		return 0 ;
+	}
+	PrintString TooManyGuesses ;
+	return 0 ;
+}
+
+
+int main ( )
+{
+	PrintString WelcomeText ;
+	call GuessNumber ;
+	return 0 ;
+}

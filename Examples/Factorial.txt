@@ -1,0 +1,42 @@
+int CRT0 ( )
+{
+	call main ;
+	Exit ;
+}
+
+int N = 0 ;
+
+string WelcomeText = "Tinsel Factorial Demonstration\nPlease Enter n = " ;
+string Message = "Factorial ( n ) = " ;
+string NewLine = "\n" ;
+
+int Factorial ( )
+{
+	int iN ;
+	iN = N ;
+	if ( iN > 0 )
+	{
+		int RetVal ;
+		N = iN - 1 ;
+		RetVal = call Factorial * iN ;
+		return RetVal ;
+	}
+	return 1 ;
+}
+
+int main ( )
+{
+	PrintString WelcomeText ;
+	
+	int RetVal ;
+	
+	N = GetInt ;
+	
+	RetVal = call Factorial ;
+	
+	PrintString Message ;
+	PrintInt RetVal ;
+	PrintString NewLine ;
+	
+	return RetVal ;
+}
