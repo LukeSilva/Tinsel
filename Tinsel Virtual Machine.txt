@@ -1,0 +1,29 @@
+Tinsel - Virtual Machine files
+
+Tinsel	Is 		Not a 		Super 		Elongated 	Loop
+T		I		N     		S     		E			L
+
+
+
+The tinsel virtual machine consists of two registers A ( r0 ) and B ( r1 )
+The instruction set is defined in "Assembly Language of Virtual Machine - Spreadsheet"
+
+
+
+VM Code files:
+
+The VM code first starts with the MAGIC character 'T'
+The VM code then continues with the version number 0x01
+Then the VM code file contains a u16 containing the size of the code segment (up to 65536 bytes)
+Then the VM code file contains a u16 containing the size of the data segmetn (up to 65536 bytes)
+Then the VM code file contains a u16 containing the entry point of the program (usually 0x0000)
+
+The header of a VM code file is 8 bytes.
+
+Next the VM code file contains the code segment, of the size defined earlier.
+Next the VM code file contains the data segment, of the size defined earliers.
+
+The VM should load the code segment to 0x00000000 in the machines memory.
+The VM should load the data segment afther the code segment in the machines memory.
+
+The VM will then jump to the entry point.
