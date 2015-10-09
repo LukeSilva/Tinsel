@@ -72,9 +72,9 @@ protected:
 	Tinsel::VariableType GetVariableTypeFromToken(Tinsel::Token Token);
 	bool Expect(std::ifstream& Stream, Tinsel::TokenTypes Type);
 	bool CodeBlock(std::ifstream& InputFile, bool IsFunction, Tinsel::Variable Function);
-	bool Tinsel::ParseFactor(std::ifstream& InputFile);
-	Tinsel::Token Tinsel::ParseTerm(std::ifstream& InputFile);
-	Tinsel::Token Tinsel::ParseLevel2(std::ifstream& InputFile);
+	bool ParseFactor(std::ifstream& InputFile);
+	Tinsel::Token ParseTerm(std::ifstream& InputFile);
+	Tinsel::Token ParseLevel2(std::ifstream& InputFile);
 	Tinsel::Token ParseExpression(std::ifstream& InputFile);
 
 	void DoIf(std::ifstream& InputFile, Tinsel::Variable Function);
@@ -85,7 +85,7 @@ protected:
 	void PopSecondaryRegister(Tinsel::VariableType SecondaryRegisterType, int Bytes);
 	void PopSecondaryRegister(Tinsel::VariableType SecondaryRegisterType);
 	void ZeroStackOffset(int StackOffset = 0);
-	void Tinsel::RemoveInvalidLocals(int StackOffset);
+	void RemoveInvalidLocals(int StackOffset);
 };
 
 #include "../CodeGenerator/DefaultCodeGenerator.h"
