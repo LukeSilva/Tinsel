@@ -1,15 +1,11 @@
 # Tinsel - Programming Language
 
-Tinsel    Is       Not a    Super     Elongated    Loop
-T         I        N        S         E            L
 
-
-
-#Command Line:
+##Command Line:
 
 The Tinsel Project consists of two executables, tinsel and tinsel-vm
 
-tinsel: The tinsel compiler
+###tinsel: The tinsel compiler
 
 The tinsel compiler will compile a tinsel source code into a vm code file.
 Usage
@@ -18,7 +14,7 @@ Eg:
 	tinsel Examples\Factorial.txt Factorial.tnl
 
 
-tinsel-vm: The tinsel Virtual Machine
+###tinsel-vm: The tinsel Virtual Machine
 
 The tinsel virtual machine will execute a vm code file
 Usage:
@@ -28,10 +24,10 @@ Eg:
 
 
 
-#Reading of source files:
+##Reading of source files:
 
 Tinsel reads through source files by going through tokens. Every token must be seperated by a space. All defined tokens are as follows:
-
+```
 "u8" "s8" "u16" "s16" "u32" "s32" "string" "int" 
 "(" ")" "[" "]" "{" "}" ";" 
 "=" "+" "-" "*" "/" "%"
@@ -42,71 +38,88 @@ Tinsel reads through source files by going through tokens. Every token must be s
 "if" "else" "for" "while" "return"
 "PrintString" "PrintInt" "GetInt" "Exit"
 "@" "call"
-
+```
 All tokens are reserved, and variables may not have the same name as an existing token.
 
 
 
-#Variables:
+##Variables:
 
 Tinsel supports the following variable types
+```
 u8 - Unsigned 8 bit variable
 s8 - Signed 8 bit variable
 u16 - Unsigned 16 bit variable
 s16 - Signed 16 bit variable
 u32 - Unsigned 32 bit variable
 s32 - Signed 32 bit variable
-int - A variable that is at least 8 bits long, and is signed. This type will be the fastest variable type to run on a specific platform
-string - An array of ASCII characters. This variable can only be defined globally, and can not be used in expressions.
-
+int - A variable that is at least 8 bits long, and is signed.
+	This type will be the fastest variable type to run on a specific platform
+string - An array of ASCII characters.
+	This variable can only be defined globally, and can not be used in expressions.
+```
 
 A main tinsel code file consists of a number of global variables, these variables can also be functions.
 A variable may be defined as follows
-<variable-type> <variable-name> [ = <default-value> ] ;
+
+    <variable-type> <variable-name> [ = <default-value> ] ;
 
 Eg:
+```
 int A = 5 ;
 u8 Hex = 0xFF ;
 u16 C ;
+```
 
 The default value for a variable may be given in decimal without a prefix, or in hexadecimal with the 0x prefix.
 NOTE: the default value is _ALWAYS_ a literal, and never an expression.
 
 
 
-#Functions:
+##Functions:
 
-Functions are a special type of global variable, they consist of a code block, and return a value, which can be assigned to variables. Internally the address of a function is stored in the data page of an exectuable as a variable of the name fo the function. This is to allow a single pass through the code file. If a function is not defined when referenced, a blank variable is created, with a (random) jump point. Then when the function is defined, the address of the function in the data page is updated.
+Functions are a special type of global variable, they consist of a code block, and return a value, which can be assigned to variables.
+
+Internally the address of a function is stored in the data page of an exectuable as a variable of the name fo the function. This is to allow a single pass through the code file. 
+
+If a function is not defined when referenced, a blank variable is created, with a (random) jump point. Then when the function is defined, the address of the function in the data page is updated.
 
 Functions may be defined as follows.
 
-<function-type> <function-name> ( )
+    <function-type> <function-name> ( )
 
 At the moment, functions do not accept argument lists, and all potential arguments must be passed through the use of global variables.
+
 Immediately after a function definition, a code block must appear.
+
 At the moment, tinsel will begin execution by running the first function that is defined. 
+
 Traditionally in other langauges the compiler will create an machine specific function which sets up the environment, and calls main. If you would like this functionality in tinsel, add the following function to the top of your source code file.
 
+```
 int CRT0 ( )
 {
  call main ;
  Exit ;
 }
+```
 
 
-
-#Code Blocks:
+##Code Blocks:
 
 A code block in tinsel houses all executable code. A code block begins with an open curly bracket, and ends with a close curly bracket.
 Eg:
+```
 {
 }
+```
 
 A code block may only occur after a function definition, or an if statement. At the moment, in both these conditions, a code block _MUST_ appear.
 
 A code block may house the following executable statements:
-
-Local variable definitions. These are defined exactly like global variables, but may only be referenced in the code block defined, and in code blocks within the code block defined.
+```
+Local variable definitions. These are defined exactly like global variables, but may only be 
+	referenced in the code block defined, and in code blocks within the code block defined.
 	<variable-type> <variable-name> [ = <default-value> ] ;
 A return statement. These only take a single variable, or integer literal.
 	return <variable-name / integer> ;
@@ -120,19 +133,21 @@ An assignment. This statement will assign a variable to the result of an express
 	<variable-name> = <expression> ;
 A call statement. This statement will call a function, ignoring the return value.	
 	call <function-name> ;
-If statement. This will evaluate an expression, and execute another code block if the expression does not evaluate to 0 / false.
+If statement. This will evaluate an expression, and execute another code block if the expression
+	does not evaluate to 0 / false.
 	if ( <expression> ) <code-block>
-	
+```
 Tinsel does not support while loops or else and else if statements.
 
 
 	
-#Expressions:
+##Expressions:
 
 Tinsel houses all calculations in expressions. There are a variety of operators that can be used in expressions. 
 Every operator has a certain preceedence level, of which there are 4 possible levels. These levels allow expressions to generally follow the rules of traditional BODMAS.
 The currently implemented operators, by preceedence level are as follows.
 
+```
 Level1:
 	<  = Less than, returns true if lval is lower than rval.
 	>  = Greater than, returns true if lval is greater than rval.
@@ -153,17 +168,19 @@ Level4:
 	GetInt = returns the value of an integer from stdin.
 	call <function-name> = calls a function, and returns the result of that function.
 	( <expression> ) = Allows for parentheses.
+```
 	
 There are a number of operators that are currently unimplemented in tinsel. They, and potential work arounds are as follows.
-
-	%  = Modulo, no workaround, other than a (complicated) bitwise calculation function, which is out of the scope of this document.
-	== = Equal to, One can use ! ( a ^ b ) to workaround this.
-	!= = Not equal to, one can use ( a ^ b ) to workaround this.
-	<= = Less than or equal to, one can use ( ( a < b ) || ! ( a ^ b ) ) to workaround this
-	>= = Greater than or equal to, one can use ( ( a > b ) || ! ( a ^ b ) ) to workaround this
-	<< = Bitwise shift left, one can use multiplication / division to work around this
-	>> = Bitwise shift right, one can use multiplication / division to work around this.
-	
+```
+%  = Modulo, no workaround, other than a (complicated) bitwise calculation function, 
+	which is out of the scope of this document.
+== = Equal to, One can use ! ( a ^ b ) to workaround this.
+!= = Not equal to, one can use ( a ^ b ) to workaround this.
+<= = Less than or equal to, one can use ( ( a < b ) || ! ( a ^ b ) ) to workaround this
+>= = Greater than or equal to, one can use ( ( a > b ) || ! ( a ^ b ) ) to workaround this
+<< = Bitwise shift left, one can use multiplication / division to work around this
+>> = Bitwise shift right, one can use multiplication / division to work around this.
+```	
 Due to the few number of preceedence levels of operators in tinsel, excess parentheses may be required in locations that are unfamiliar to users of other programming languages.
 
 
