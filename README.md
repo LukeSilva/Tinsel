@@ -78,9 +78,9 @@ NOTE: the default value is _ALWAYS_ a literal, and never an expression.
 
 ##Functions:
 
-Functions are a special type of global variable, they consist of a code block, and return a value, which can be assigned to variables.
+Functions are special types of global variables; they consist of a code block, and return a value, which can be assigned to variables.
 
-Internally the address of a function is stored in the data page of an exectuable as a variable of the name fo the function. This is to allow a single pass through the code file. 
+Internally, the address of a function is stored in the data page of an exectuable as a variable of the name for the function. This is to allow a single pass through the code file. 
 
 If a function is not defined when referenced, a blank variable is created, with a (random) jump point. Then when the function is defined, the address of the function in the data page is updated.
 
@@ -170,7 +170,7 @@ Level4:
 	( <expression> ) = Allows for parentheses.
 ```
 	
-There are a number of operators that are currently unimplemented in tinsel. They, and potential work arounds are as follows.
+There are a number of operators that are currently unimplemented in tinsel. They, and potential work arounds, are as follows.
 ```
 %  = Modulo, no workaround, other than a (complicated) bitwise calculation function, 
 	which is out of the scope of this document.
@@ -181,7 +181,7 @@ There are a number of operators that are currently unimplemented in tinsel. They
 << = Bitwise shift left, one can use multiplication / division to work around this
 >> = Bitwise shift right, one can use multiplication / division to work around this.
 ```	
-Due to the few number of preceedence levels of operators in tinsel, excess parentheses may be required in locations that are unfamiliar to users of other programming languages.
+Due to the few number of precedence levels of operators in tinsel, excess parentheses may be required in locations that are unfamiliar to users of other programming languages.
 
 
 
