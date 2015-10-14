@@ -13,5 +13,54 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Tinsel">
+      <UniqueIdentifier>{540c193a-6dcd-460a-b5b8-348d207bfd14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CodeGenerator">
+      <UniqueIdentifier>{4c7b4430-1c23-4a5e-ad5f-0b3265018abd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\Tinsel\Boilerplate.cpp">
+      <Filter>Source Files\Tinsel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Tinsel\CodeBlock.cpp">
+      <Filter>Source Files\Tinsel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Tinsel\Conditionals.cpp">
+      <Filter>Source Files\Tinsel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Tinsel\Expression.cpp">
+      <Filter>Source Files\Tinsel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Tinsel\Globals.cpp">
+      <Filter>Source Files\Tinsel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Tinsel\Locals.cpp">
+      <Filter>Source Files\Tinsel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Tinsel\Tinsel.cpp">
+      <Filter>Source Files\Tinsel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Tinsel\Token.cpp">
+      <Filter>Source Files\Tinsel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\CodeGenerator\VMCodeGenerator.cpp">
+      <Filter>Source Files\CodeGenerator</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\source\Tinsel\Tinsel.h">
+      <Filter>Source Files\Tinsel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\CodeGenerator\DefaultCodeGenerator.h">
+      <Filter>Source Files\CodeGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\CodeGenerator\VMCodeGenerator.h">
+      <Filter>Source Files\CodeGenerator</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
