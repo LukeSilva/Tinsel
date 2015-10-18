@@ -72,8 +72,8 @@ protected:
 	Tinsel::VariableType GetVariableTypeFromToken(Tinsel::Token Token);
 	bool Expect(std::ifstream& Stream, Tinsel::TokenTypes Type);
 	bool CodeBlock(std::ifstream& InputFile, bool IsFunction, Tinsel::Variable Function);
-	bool ParseFactor(std::ifstream& InputFile);
-	Tinsel::Token ParseTerm(std::ifstream& InputFile);
+	bool ParseLevel4(std::ifstream& InputFile);
+	Tinsel::Token ParseLevel3(std::ifstream& InputFile);
 	Tinsel::Token ParseLevel2(std::ifstream& InputFile);
 	Tinsel::Token ParseExpression(std::ifstream& InputFile);
 

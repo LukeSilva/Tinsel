@@ -16,7 +16,7 @@
 
 
 //This function parses level 4 operands, to be renamed
-bool Tinsel::ParseFactor(std::ifstream& InputFile)
+bool Tinsel::ParseLevel4(std::ifstream& InputFile)
 {
 
 	//First read a token
@@ -74,7 +74,7 @@ bool Tinsel::ParseFactor(std::ifstream& InputFile)
 	else if (t.Type == NOT)
 	{
 		//If we need to invert (bitwise) a regiser, get the next number
-		ParseFactor(InputFile);
+		ParseLevel4(InputFile);
 
 		//And request the code generator to invert it. 
 		//[OPTIMISATIONS] If we want to get a literal, we could load the inverse of the literal straight away
@@ -84,7 +84,7 @@ bool Tinsel::ParseFactor(std::ifstream& InputFile)
 	else if (t.Type == BOOLNOT)
 	{
 		//If we need to invert (logical) a regiser, get the next number
-		ParseFactor(InputFile);
+		ParseLevel4(InputFile);
 
 		//And request the code generator to invert it
 		CodeGenerator->LogicalNotMain(ExpressionType);
@@ -138,13 +138,13 @@ bool Tinsel::ParseFactor(std::ifstream& InputFile)
 
 
 //This function implements Level 3 of the expression parser, to be renamed
-Tinsel::Token Tinsel::ParseTerm(std::ifstream& InputFile)
+Tinsel::Token Tinsel::ParseLevel3(std::ifstream& InputFile)
 {
 	Tinsel::Token unkt;
 	unkt.Type = UNKNOWN;
 
 	//Gets the next number in the main register, quitting on error.
-	if (ParseFactor(InputFile))
+	if (ParseLevel4(InputFile))
 	{
 		return unkt;
 	}
@@ -160,7 +160,7 @@ Tinsel::Token Tinsel::ParseTerm(std::ifstream& InputFile)
 		PushMainRegister(ExpressionType);
 		
 		//Get the next number in the main register
-		if (ParseFactor(InputFile))
+		if (ParseLevel4(InputFile))
 			return unkt;
 		
 		//Pop the old value into the second register
@@ -193,9 +193,9 @@ Tinsel::Token Tinsel::ParseTerm(std::ifstream& InputFile)
 //This function parses the 2nd level of tinsels expression
 Tinsel::Token Tinsel::ParseLevel2(std::ifstream& InputFile)
 {
-	//Get the first number in the main register, (ParseTerm returns the next token)
+	//Get the first number in the main register, (ParseLevel3 returns the next token)
 	Tinsel::Token t;
-	t = ParseTerm(InputFile);
+	t = ParseLevel3(InputFile);
 
 	if (t.Type == UNKNOWN) return t;
 
@@ -208,7 +208,7 @@ Tinsel::Token Tinsel::ParseLevel2(std::ifstream& InputFile)
 		PushMainRegister(ExpressionType);
 
 		//Get the second number
-		t = ParseTerm(InputFile);
+		t = ParseLevel3(InputFile);
 		if (t.Type == UNKNOWN) return t;
 
 		//Pop the first number from the stack
