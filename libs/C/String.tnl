@@ -1,0 +1,91 @@
+class String
+{
+public:
+	int pos = 0;
+	int length = 0;
+	u32 array characters;
+
+	/// Creates a string of length 0
+	String()
+	{
+		characters.reset(0);
+		pos = 0;
+		length = 0;
+	}
+
+	/// Creates a string with a certain length
+	String(int nlength)
+	{
+		length = nlength;
+		pos = 0;
+		characters.reset(nlength);
+	}
+
+	///Creates a string from a string literal ( C++ syntax )
+	String(const char* string_literal)
+	{
+		pos = 0;
+		length = strlen(string_literal);
+		characters.reset(length);
+
+		for (int i = 0; i < length; ++i)
+		{
+			characters[i]=string_literal[i];
+		}
+		
+	}
+
+	///Allows the string to be copied by the = operator
+	String& operator=(const String& that)
+	{
+		characters.reset(that.length);
+		length = that.length;
+		pos = that.pos;
+		for (int i = 0; i < length; ++i)
+		{
+			characters[i]=that.characters[i];
+		}
+	}	
+	
+	/// Gets a character from the string
+	//@ return the character value
+	u32 getchar(int npos)
+	{
+		return characters[npos];
+	}
+
+	/// Sets a character in the string
+	//@ return true on success
+	bool setchar(int npos, u32 character)
+	{
+		characters[npos] = character;
+		return true;
+	}
+
+	/// Appends a character to the string
+	//@ return true on success
+	bool append(u32 character)
+	{
+		if (pos < characters.length)
+			characters[pos] = character;
+		else
+			return false;
+		++pos;
+		return true;		
+	}
+
+	/// Reverses the string
+	//@ return true on success (always)
+	bool reverse()
+	{
+		int npos = 0;
+		while (npos < pos/2)
+		{
+			u32 ochar = characters[pos-npos-1];
+			characters[pos-npos-1] = characters[npos];
+			characters[npos] = ochar;
+			++npos;
+		}
+		return true;
+	}
+};

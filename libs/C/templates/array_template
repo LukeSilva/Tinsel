@@ -1,0 +1,20 @@
+#pragma once
+class _type_array
+{
+public:
+	int length = 0;
+	_type* ptr;
+	void reset(int nlength)
+	{
+		if (length != 0)
+			free(ptr);
+		if (nlength != 0)
+			ptr = (_type*)malloc(nlength * sizeof(_type));
+		length = nlength;
+	}
+	
+	_type& operator[](int pos) const
+	{
+		return ptr[pos];
+	}
+};

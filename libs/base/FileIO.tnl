@@ -1,0 +1,53 @@
+import IO
+
+//@ table File modes
+/// mode  | meaning
+///    r  | read only, do not open if the file doesn't exist
+///    w  | write only, create file if the file doesn't exist
+///    r+ | read and write, do not open if the file doesn't exist
+///    w+ | read and write, create file if the file doesn't exist
+
+//@ table Encodings
+/// code  | encoding
+/// ascii | ASCII (Returns characters as UTF-32)
+///  utf8 | UTF-8 (Returns characters as UTF-32)
+/// utf32 | UTF-32 
+///   bin | binary file (Only uses lower 8 bits on the character)
+
+class File extends IOStream
+{
+public:
+	/// Attempts to open a file in the requested mode
+	//@ return true on success
+	bool open(String filename, String mode, String encoding)
+	{
+		IO.open(self);
+
+		//Attempt to open the file, return false on error
+		return false;
+	}
+
+	/// Attempts to flush and close the file
+	//@ return true on success
+	bool close()
+	{
+		IO.close(self);
+		
+		return true;
+	}
+
+	/// Attempts to get the next character in the file
+	//@ return negative value on error
+	//@ return character value on success
+	s32 getchar()
+	{
+		return -1;
+	}
+
+	/// Puts a character into the file
+	//@ return true on success
+	bool putchar(u32 character)
+	{
+		return false;
+	}
+};
