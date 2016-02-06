@@ -5,7 +5,7 @@ then
  # This is where we need to do function parsing to create help and main() functions for the entry point
  cmdargs=$( sed --posix -n -e "s/int $3.*(\(.*\))/\1/p" $1 )
  cmdargsarr=$(echo $cmdargs | sed -e "s/\s*,\s*/\n/g" | sed -e "s/ /__ctinsel__/g")
- mainfunction="int $3($cmdargs); int main(int argc,char** argv){"
+ mainfunction="int $3($cmdargs); int main(int argc,char** argv){ std_in.open(); std_out.open();"
  for x in $cmdargsarr
  do
 

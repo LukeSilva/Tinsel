@@ -1,0 +1,29 @@
+import FileIO
+class TokenStream
+{
+private:
+	File TokenStream;
+	bool _open = false;
+public:
+	bool open(String filename){
+		if (!TokenStream.open(filename,String("r"),String("ASCII")))
+			return false;
+		_open = true;
+		return true;
+	}
+
+	Token getToken(){
+		Token tok;
+		tok.type = TOKEN_UNKNOWN;
+		if (_open == false)
+			tok.type = TOKEN_ENDOFSTREAM;
+
+		return tok;
+	}
+
+	bool close(){
+		_open = false;
+		return TokenStream.close();
+	}
+
+};

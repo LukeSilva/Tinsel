@@ -1,0 +1,73 @@
+enum TokenType
+{
+// Variable Types (primitive)
+	TOKEN_U8, 		// = "u8"
+	TOKEN_S8, 		// = "s8"
+	TOKEN_U16,		// = "u16"
+	TOKEN_S16,		// = "s16"
+	TOKEN_U32,		// = "u32"
+	TOKEN_S32,		// = "s32"
+	TOKEN_INT,		// = "int"
+	TOKEN_BOOL,		// = "bool"
+
+// Misc operators
+	TOKEN_OBRACKET,		// = "("
+	TOKEN_CBRACKET,		// = ")"
+	TOKEN_COMMA,		// = ","
+
+	TOKEN_ELEMENT,		// = "." , "->" (with warning)	
+	TOKEN_STATICELEMENT,	// = "::"
+
+	TOKEN_OSBRACKET,	// = "["
+	TOKEN_CSBRACKET,	// = "]"
+	TOKEN_OBLOCK,		// = "{"
+	TOKEN_CBLOCK,		// = "}"
+	TOKEN_SEMICOLON,	// = ";"
+	TOKEN_ASSIGN,		// = "="
+
+// Operators
+	TOKEN_ADDITION,		// = "+"
+	TOKEN_SUBTRACTION,	// = "-"
+	TOKEN_MULTIPLICATION,	// = "*"
+	TOKEN_DIVISION,		// = "/"
+	TOKEN_MODULO,		// = "%"
+	TOKEN_BITNOT,		// = "~"
+	TOKEN_BITOR,		// = "|"
+	TOKEN_BITAND,		// = "&"
+	TOKEN_BOOLNOT,		// = "!"
+	TOKEN_BOOLOR,		// = "||"
+	TOKEN_BOOLAND,		// = "&&"
+
+// Comparators
+	TOKEN_GREATER,		// = ">"
+	TOKEN_LESS,		// = "<"
+	TOKEN_GREATEREQUAL,	// = ">="
+	TOKEN_LESSEQUAL,	// = "<="
+	TOKEN_EQUAL,		// = "=="
+	TOKEN_NOTEQUAL,		// = "!="
+
+// Reserved names
+	TOKEN_SELF,		// = "self" or "this" (recommend self)
+	TOKEN_CLASS,		// = "class"
+	TOKEN_CONST,		// = "const"
+	TOKEN_ENUM,		// = "enum"
+	TOKEN_RETURN,		// = "return"
+	TOKEN_IF,		// = "if"
+	TOKEN_ELSE,		// = "else"
+	TOKEN_WHILE,		// = "while"
+	TOKEN_FOR,		// = "for"
+	TOKEN_PUBLIC,		// = "public:"
+	TOKEN_PRIVATE,		// = "private:"
+	TOKEN_PROTECTED,	// = "protected:"
+
+// Others
+	TOKEN_STRING_LIT,	// = [\"\'][\w\s]*[\"\']
+	TOKEN_INT_LIT,		// = [0-9]*
+	TOKEN_NAME,		// = [\w]*
+
+	TOKEN_ENDOFSTREAM,	// = EOF
+
+	TOKEN_UNKNOWN		// Anything else that doesn't match the tokens above
+	
+};
+

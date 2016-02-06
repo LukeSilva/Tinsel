@@ -17,6 +17,10 @@ do
 echo "#include \"$i""_array.h\"" >> h/tnl2c.h
 done
 echo "#include \"String.h\"" >> h/tnl2c.h
+echo "#include \"ConsoleIO.h\"
+Console std_in;
+Console std_out;" >> h/tnl2c.h
+
 cd ../../
 
 echo "----Building the stdlib for C---"

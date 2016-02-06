@@ -1,0 +1,33 @@
+int test_Tokenizer()
+{
+	int total_tests = 1;
+	int passed_tests = 0;
+
+	//Print welcome message	
+	std_out.putstring(String("--------Tokenizer Unit Tests--------\n\n"));	
+
+	//@test 1 Creates a TokenStream, without opening it. Checks for ENDOFSTREAM token type;
+	std_out.putstring(String("Test #001: Un-opened files    "));
+	
+	TokenStream test_1;
+	Token rettok = test_1.getToken();
+	if (rettok.type == TOKEN_ENDOFSTREAM)
+	{
+		passed_tests++;
+		std_out.putstring(String("[PASS]\n"));
+	}else   std_out.putstring(String("[FAIL]\n"));
+
+	
+
+	//Print ending message, with percentage of pass rate
+	std_out.putstring(String("\n\n--------Tokenizer Results   --------\n\n"));
+	std_out.putstring(String("Pass-Rate: "));
+	std_out.putint((passed_tests*100)/total_tests);
+	std_out.putstring(String("%\n"));
+	if (passed_tests==total_tests)
+		std_out.putstring(String("All tests passed, tokenizer _should_ be stable\n"));
+
+	std_out.close();
+	
+	return (passed_tests*100)/total_tests;
+}

@@ -7,8 +7,6 @@ public:
 	//@ return true on success
 	bool open()
 	{
-		IO.open(self);
-
 		//Attempt to open the file, return false on error
 		return false;
 	}
@@ -17,8 +15,6 @@ public:
 	//@ return true on success
 	bool close()
 	{
-		IO.close(self);
-		
 		return true;
 	}
 

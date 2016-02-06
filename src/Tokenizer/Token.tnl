@@ -1,0 +1,9 @@
+class Token
+{
+public:
+
+	TokenType type;
+	String str;
+	u32 value;
+
+};
