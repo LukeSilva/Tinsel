@@ -1,22 +1,56 @@
 int test_Tokenizer()
 {
-	int total_tests = 1;
+	int total_tests = 3;
 	int passed_tests = 0;
+
+	TokenStream test;
 
 	//Print welcome message	
 	std_out.putstring(String("--------Tokenizer Unit Tests--------\n\n"));	
 
+
 	//@test 1 Creates a TokenStream, without opening it. Checks for ENDOFSTREAM token type;
 	std_out.putstring(String("Test #001: Un-opened files    "));
 	
-	TokenStream test_1;
-	Token rettok = test_1.getToken();
+	Token rettok = test.getToken();
 	if (rettok.type == TOKEN_ENDOFSTREAM)
 	{
 		passed_tests++;
 		std_out.putstring(String("[PASS]\n"));
 	}else   std_out.putstring(String("[FAIL]\n"));
 
+
+	//@test 2 Creates a TokenStream, opening a file with a token in it. Check for no ENDOFSTREAM token.
+	std_out.putstring(String("Test #002: Openfile, NO EOF  "));
+
+	if (!test.open(String("tests/Tokenizer/NonEmptyFile.tnl")))
+		std_out.putstring(String("[FAIL]\n  Could not open file\n"));
+	else
+	{
+		rettok = test.getToken();
+		if (rettok.type != TOKEN_ENDOFSTREAM)
+		{
+			passed_tests++;
+			std_out.putstring(String("[PASS]\n"));
+		}else std_out.putstring(String("[FAIL]\n"));
+	}
+	test.close();
+
+	//@test 3 Creates a TokenStream, opens an empty file and expects ENDOFSTREAM
+
+	std_out.putstring(String("Test #003: Empty file, EOF   "));
+
+	if (!test.open(String("tests/Tokenizer/EmptyFile.tnl")))
+		std_out.putstring(String("[FAIL]\n  Could not open file\n"));
+	else
+	{
+		rettok = test.getToken();
+		if (rettok.type == TOKEN_ENDOFSTREAM)
+		{
+			passed_tests++;
+			std_out.putstring(String("[PASS]\n"));
+		}else std_out.putstring(String("[FAIL]\n"));
+	}
 	
 
 	//Print ending message, with percentage of pass rate

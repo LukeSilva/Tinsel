@@ -24,7 +24,7 @@ public:
 	///Creates a string from a string literal ( C++ syntax )
 	String(const char* string_literal)
 	{
-		pos = 0;
+		pos = strlen(string_literal);
 		length = strlen(string_literal);
 		characters.reset(length);
 
@@ -79,7 +79,7 @@ public:
 	bool reverse()
 	{
 		int npos = 0;
-		while (npos < pos/2)
+		while (npos < (pos-1)/2)
 		{
 			u32 ochar = characters[pos-npos-1];
 			characters[pos-npos-1] = characters[npos];

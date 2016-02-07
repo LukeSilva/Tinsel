@@ -46,7 +46,7 @@ public:
 	{
 		bool retval = true;
 		int pos = 0;
-		while (pos < msg.length && retval == true)
+		while (pos < msg.pos && retval == true)
 		{
 			retval = putchar(msg.getchar(pos)) && retval;
 			pos += 1;

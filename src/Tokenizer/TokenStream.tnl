@@ -2,11 +2,11 @@ import FileIO
 class TokenStream
 {
 private:
-	File TokenStream;
+	File Stream;
 	bool _open = false;
 public:
 	bool open(String filename){
-		if (!TokenStream.open(filename,String("r"),String("ASCII")))
+		if (!Stream.open(filename,String("r"),String("ASCII")))
 			return false;
 		_open = true;
 		return true;
@@ -23,7 +23,7 @@ public:
 
 	bool close(){
 		_open = false;
-		return TokenStream.close();
+		return Stream.close();
 	}
 
 };
