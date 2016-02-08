@@ -4,19 +4,59 @@ class TokenStream
 private:
 	File Stream;
 	bool _open = false;
+
+	s32 lookahead;
+
+	u32 linenum;
+	
+	//Keeps a lookahead character, and removes all whitespace from the stream
+	s32 safe_getchar()
+	{
+		s32 retchar = lookahead;
+		lookahead = Stream.getchar();
+		while (lookahead == ' ' || lookahead == '\t' || lookahead == '\n')
+		{
+			if (lookahead == '\n') ++linenum;
+			lookahead = Stream.getchar();
+		}
+		return retchar;
+	}
+
+	bool attempt_match_strong_token(TokenType& type)
+	{
+		if (lookahead=='(')
+			type = TOKEN_OBRACKET;
+		else if (lookahead==')')
+			type = TOKEN_CBRACKET;
+		else if (lookahead < 0)
+			type = TOKEN_ENDOFSTREAM;
+		else
+			return false;
+		safe_getchar();
+		return true;
+	}
+		
 public:
 	bool open(String filename){
 		if (!Stream.open(filename,String("r"),String("ASCII")))
 			return false;
 		_open = true;
+		linenum = 0;
+		lookahead = Stream.getchar();
 		return true;
 	}
+
+
 
 	Token getToken(){
 		Token tok;
 		tok.type = TOKEN_UNKNOWN;
 		if (_open == false)
 			tok.type = TOKEN_ENDOFSTREAM;
+		else
+		{
+			if(!attempt_match_strong_token(tok.type)) safe_getchar();
+		}
 
 		return tok;
 	}

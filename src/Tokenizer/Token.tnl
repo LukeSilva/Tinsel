@@ -5,5 +5,20 @@ public:
 	TokenType type;
 	String str;
 	u32 value;
+	u32 linenum;
+
+	bool print(IOStream& stream)
+	{
+		if (type == TOKEN_UNKNOWN)
+			stream.putstring(String("TOKEN_UNKNOWN "));
+		else if (type == TOKEN_ENDOFSTREAM)
+			stream.putstring(String("TOKEN_ENDOFSTREAM "));
+		else if (type == TOKEN_OBRACKET)
+			stream.putstring(String("TOKEN_OBRACKET "));
+		else if (type == TOKEN_CBRACKET)
+			stream.putstring(String("TOKEN_CBRACKET "));
+		stream.putchar('\n');
+		return true;
+	}
 
 };

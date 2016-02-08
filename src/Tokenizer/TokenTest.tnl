@@ -21,7 +21,7 @@ int test_Tokenizer()
 
 
 	//@test 2 Creates a TokenStream, opening a file with a token in it. Check for no ENDOFSTREAM token.
-	std_out.putstring(String("Test #002: Openfile, NO EOF  "));
+	std_out.putstring(String("Test #002: Openfile, NO EOF   "));
 
 	if (!test.open(String("tests/Tokenizer/NonEmptyFile.tnl")))
 		std_out.putstring(String("[FAIL]\n  Could not open file\n"));
@@ -38,7 +38,7 @@ int test_Tokenizer()
 
 	//@test 3 Creates a TokenStream, opens an empty file and expects ENDOFSTREAM
 
-	std_out.putstring(String("Test #003: Empty file, EOF   "));
+	std_out.putstring(String("Test #003: Empty file, EOF    "));
 
 	if (!test.open(String("tests/Tokenizer/EmptyFile.tnl")))
 		std_out.putstring(String("[FAIL]\n  Could not open file\n"));

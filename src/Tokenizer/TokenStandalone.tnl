@@ -1,0 +1,33 @@
+int standalone_tokenizer(String infile, String outfile)
+{
+	// Open the files
+	TokenStream tok_stream;
+
+	File out_stream;
+
+	if (!tok_stream.open(infile))
+	{
+		std_out.putstring(String("Could not open infile"));
+		return -1;
+	}
+
+	if (!out_stream.open(outfile,String("w"),String("ASCII")))
+	{
+		std_out.putstring(String("Could not open outfile"));
+		return -1;
+	}
+
+	Token rettok;
+
+	rettok = tok_stream.getToken();
+
+	while (rettok.type != TOKEN_ENDOFSTREAM)
+	{
+		rettok.print(out_stream);
+		rettok = tok_stream.getToken();
+	}
+
+	tok_stream.close();
+	out_stream.close();
+	return 0;
+}
