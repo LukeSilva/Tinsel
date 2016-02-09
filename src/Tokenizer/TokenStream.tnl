@@ -9,13 +9,17 @@ private:
 
 	u32 linenum;
 	
+	bool found_whitespace;
+	
 	//Keeps a lookahead character, and removes all whitespace from the stream
 	s32 safe_getchar()
 	{
 		s32 retchar = lookahead;
 		lookahead = Stream.getchar();
+		found_whitespace = false;
 		while (lookahead == ' ' || lookahead == '\t' || lookahead == '\n')
 		{
+			found_whitespace = true;
 			if (lookahead == '\n') ++linenum;
 			lookahead = Stream.getchar();
 		}
@@ -28,6 +32,54 @@ private:
 			type = TOKEN_OBRACKET;
 		else if (lookahead==')')
 			type = TOKEN_CBRACKET;
+		else if (lookahead==',')
+			type = TOKEN_COMMA;
+		else if (lookahead=='.')
+			type = TOKEN_ELEMENT;
+		else if (lookahead=='[')
+			type = TOKEN_OSBRACKET;
+		else if (lookahead==']')
+			type = TOKEN_CSBRACKET;
+		else if (lookahead=='{')
+			type = TOKEN_OBLOCK;
+		else if (lookahead=='}')
+			type = TOKEN_CBLOCK;
+		else if (lookahead==';')
+			type = TOKEN_SEMICOLON;
+		else if (lookahead=='=')
+		{
+			type = TOKEN_ASSIGN;
+			safe_getchar();
+			if (lookahead=='=' && found_whitespace==false)
+			{
+				type = TOKEN_EQUAL;
+				safe_getchar();
+			}
+			return true;
+		}
+		else if (lookahead=='+')
+			type = TOKEN_ADDITION;
+		else if (lookahead=='-')
+			type = TOKEN_SUBTRACTION;
+		else if (lookahead=='*')
+			type = TOKEN_MULTIPLICATION;
+		else if (lookahead=='/')
+			type = TOKEN_DIVISION;
+		else if (lookahead=='%')
+			type = TOKEN_MODULO;
+		else if (lookahead=='~')
+			type = TOKEN_BITNOT;
+		else if (lookahead=='|')
+			type = TOKEN_BITOR;
+		else if (lookahead=='&')
+			type = TOKEN_BITAND;
+		else if (lookahead=='!')
+			type = TOKEN_BOOLNOT;
+		else if (lookahead=='>')
+			type = TOKEN_GREATER;
+		else if (lookahead=='<')
+			type = TOKEN_LESS;
+		
 		else if (lookahead < 0)
 			type = TOKEN_ENDOFSTREAM;
 		else

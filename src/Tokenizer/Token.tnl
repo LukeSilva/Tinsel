@@ -7,16 +7,70 @@ public:
 	u32 value;
 	u32 linenum;
 
-	bool print(IOStream& stream)
+	bool print(IOStream stream)
 	{
 		if (type == TOKEN_UNKNOWN)
-			stream.putstring(String("TOKEN_UNKNOWN "));
+			stream.putstring(String("TOKEN_UNKNOWN"));
 		else if (type == TOKEN_ENDOFSTREAM)
-			stream.putstring(String("TOKEN_ENDOFSTREAM "));
+			stream.putstring(String("TOKEN_ENDOFSTREAM"));
 		else if (type == TOKEN_OBRACKET)
-			stream.putstring(String("TOKEN_OBRACKET "));
+			stream.putstring(String("TOKEN_OBRACKET"));
 		else if (type == TOKEN_CBRACKET)
-			stream.putstring(String("TOKEN_CBRACKET "));
+			stream.putstring(String("TOKEN_CBRACKET"));
+		else if (type == TOKEN_COMMA)
+			stream.putstring(String("TOKEN_COMMA"));
+		else if (type == TOKEN_ELEMENT)
+			stream.putstring(String("TOKEN_ELEMENT"));
+		else if (type == TOKEN_STATICELEMENT)
+			stream.putstring(String("TOKEN_STATICELEMENT"));
+		else if (type == TOKEN_OSBRACKET)
+			stream.putstring(String("TOKEN_OSBRACKET"));
+		else if (type == TOKEN_CSBRACKET)
+			stream.putstring(String("TOKEN_CSBRACKET"));
+		else if (type == TOKEN_OBLOCK)
+			stream.putstring(String("TOKEN_OBLOCK"));
+		else if (type == TOKEN_CBLOCK)
+			stream.putstring(String("TOKEN_CBLOCK"));
+		else if (type == TOKEN_SEMICOLON)
+			stream.putstring(String("TOKEN_SEMICOLON"));
+		else if (type == TOKEN_ASSIGN)
+			stream.putstring(String("TOKEN_ASSIGN"));
+		else if (type == TOKEN_ADDITION)
+			stream.putstring(String("TOKEN_ADDITION"));
+		else if (type == TOKEN_SUBTRACTION)
+			stream.putstring(String("TOKEN_SUBTRACTION"));
+		else if (type == TOKEN_MULTIPLICATION)
+			stream.putstring(String("TOKEN_MULTIPLICATION"));
+		else if (type == TOKEN_DIVISION)
+			stream.putstring(String("TOKEN_DIVISION"));
+		else if (type == TOKEN_MODULO)
+			stream.putstring(String("TOKEN_MODULO"));
+		else if (type == TOKEN_BITNOT)
+			stream.putstring(String("TOKEN_BITNOT"));
+		else if (type == TOKEN_BITOR)
+			stream.putstring(String("TOKEN_BITOR"));
+		else if (type == TOKEN_BITAND)
+			stream.putstring(String("TOKEN_BITAND"));
+		else if (type == TOKEN_BOOLNOT)
+			stream.putstring(String("TOKEN_BOOLNOT"));
+		else if (type == TOKEN_BOOLOR)
+			stream.putstring(String("TOKEN_BOOLOR"));
+		else if (type == TOKEN_BOOLAND)
+			stream.putstring(String("TOKEN_BOOLAND"));
+		else if (type == TOKEN_GREATER)
+			stream.putstring(String("TOKEN_GREATER"));
+		else if (type == TOKEN_LESS)
+			stream.putstring(String("TOKEN_LESS"));
+		else if (type == TOKEN_GREATEREQUAL)
+			stream.putstring(String("TOKEN_GREATEREQUAL"));
+		else if (type == TOKEN_LESSEQUAL)
+			stream.putstring(String("TOKEN_LESSEQUAL"));
+		else if (type == TOKEN_EQUAL)
+			stream.putstring(String("TOKEN_EQUAL"));
+		else if (type == TOKEN_NOTEQUAL)
+			stream.putstring(String("TOKEN_NOTEQUAL"));
+
+		stream.putchar(' ');
 		stream.putchar('\n');
 		return true;
 	}

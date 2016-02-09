@@ -7,13 +7,13 @@ int standalone_tokenizer(String infile, String outfile)
 
 	if (!tok_stream.open(infile))
 	{
-		std_out.putstring(String("Could not open infile"));
+		std_out.putstring(String("Could not open infile\n"));
 		return -1;
 	}
 
 	if (!out_stream.open(outfile,String("w"),String("ASCII")))
 	{
-		std_out.putstring(String("Could not open outfile"));
+		std_out.putstring(String("Could not open outfile\n"));
 		return -1;
 	}
 
