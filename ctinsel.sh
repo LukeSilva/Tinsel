@@ -61,4 +61,4 @@ fi
 
 echo "#pragma once
 #include \"tnl2c.h\" 
-$mainfunction" | cat - $1 | sed --posix -e "s/\([a-z]*\) array/\1_array/g" -e "s/import \(.*\)/#include \\\"\1.h\\\"/g" -e "s/extends/\: public/g" -e "s/self\./this\-\>/g" -e "s/self/this/g" > $2
+$mainfunction" | cat - $1 | sed --posix -e "s/\([a-z]*\) array/\1_array/g" -e "s/import \(.*\)/#include \\\"\1.h\\\"/g" -e "s/extends/\: public/g" -e "s/self\./this\-\>/g" -e "s/self/this/g" -e "s/String /__string__/g" -e "s/\([a-zA-Z]*\)(\([A-Z][a-zA-Z0-9]*\) \(.*\))/\1(\2\& \3)/g" -e "s/__string__/String /g" > $2
