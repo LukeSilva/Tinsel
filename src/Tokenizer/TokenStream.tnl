@@ -60,7 +60,17 @@ private:
 		else if (lookahead=='+')
 			type = TOKEN_ADDITION;
 		else if (lookahead=='-')
+		{
 			type = TOKEN_SUBTRACTION;
+			safe_getchar();
+			if (lookahead=='>' && found_whitespace==false)
+			{
+				std_out.putstring(String("Warning: Use of -> for TOKEN_ELEMENT is not recommended!\n"));
+				type = TOKEN_ELEMENT;
+				safe_getchar();
+			}
+			return true;
+		}
 		else if (lookahead=='*')
 			type = TOKEN_MULTIPLICATION;
 		else if (lookahead=='/')
@@ -70,15 +80,60 @@ private:
 		else if (lookahead=='~')
 			type = TOKEN_BITNOT;
 		else if (lookahead=='|')
+		{
 			type = TOKEN_BITOR;
+			safe_getchar();
+			if (lookahead=='|' && found_whitespace == false)
+			{
+				type = TOKEN_BOOLOR;
+				safe_getchar();
+			}
+			return true;
+		}
 		else if (lookahead=='&')
+		{
 			type = TOKEN_BITAND;
+			safe_getchar();
+			if (lookahead=='&' && found_whitespace == false)
+			{
+				type = TOKEN_BOOLAND;
+				safe_getchar();
+			}
+			return true;
+		}
 		else if (lookahead=='!')
+		{
 			type = TOKEN_BOOLNOT;
+			safe_getchar();
+			if (lookahead=='=' && found_whitespace == false)
+			{
+				type = TOKEN_NOTEQUAL;
+				safe_getchar();
+			}
+			return true;
+		}
 		else if (lookahead=='>')
+		{
 			type = TOKEN_GREATER;
+			safe_getchar();
+			if (lookahead=='=' && found_whitespace == false)
+			{
+				type = TOKEN_GREATEREQUAL;
+				safe_getchar();
+			}
+			return true;
+		}
 		else if (lookahead=='<')
+		{
 			type = TOKEN_LESS;
+			safe_getchar();
+			if (lookahead=='=' && found_whitespace == false)
+			{
+				type = TOKEN_LESSEQUAL;
+				safe_getchar();
+			}
+			return true;
+		}
 		
 		else if (lookahead < 0)
 			type = TOKEN_ENDOFSTREAM;
