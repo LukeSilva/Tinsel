@@ -79,7 +79,7 @@ public:
 	bool reverse()
 	{
 		int npos = 0;
-		while (npos < (pos-1)/2)
+		while (npos < (pos)/2)
 		{
 			u32 ochar = characters[pos-npos-1];
 			characters[pos-npos-1] = characters[npos];
