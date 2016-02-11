@@ -69,8 +69,11 @@ public:
 			stream.putstring(String("TOKEN_EQUAL"));
 		else if (type == TOKEN_NOTEQUAL)
 			stream.putstring(String("TOKEN_NOTEQUAL"));
+		else if (type == TOKEN_INT_LIT)
+			stream.putstring(String("TOKEN_INT_LIT"));
 
 		stream.putchar(' ');
+		stream.putint(value);
 		stream.putchar('\n');
 		return true;
 	}

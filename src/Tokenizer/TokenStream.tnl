@@ -162,7 +162,22 @@ public:
 			tok.type = TOKEN_ENDOFSTREAM;
 		else
 		{
-			if(!attempt_match_strong_token(tok.type)) safe_getchar();
+			if(!attempt_match_strong_token(tok.type))
+			{
+				if (lookahead >= '0' && lookahead <= '9')
+				{
+					found_whitespace = false;
+					int integer = 0;
+					while (lookahead >= '0' && lookahead <= '9' && found_whitespace == false)
+					{
+						integer = integer * 10 + (lookahead - '0');
+						safe_getchar();
+					}
+					tok.type = TOKEN_INT_LIT;
+					tok.value = integer;
+				}
+				else safe_getchar();
+			}
 		}
 
 		return tok;
