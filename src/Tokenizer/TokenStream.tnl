@@ -26,7 +26,7 @@ private:
 		return retchar;
 	}
 
-	bool attempt_match_strong_token(TokenType& type)
+	bool attempt_match_strong_token(TokenType type)
 	{
 		if (lookahead=='(')
 			type = TOKEN_OBRACKET;
@@ -142,6 +142,28 @@ private:
 		safe_getchar();
 		return true;
 	}
+
+	bool attempt_match_string_token(TokenType type, String str_token)
+	{
+		if (str_token.compare("u8"))
+			type = TOKEN_U8;
+		else if (str_token.compare("s8"))
+			type = TOKEN_S8;
+		else if (str_token.compare("u16"))
+			type = TOKEN_U16;
+		else if (str_token.compare("s16"))
+			type = TOKEN_S16;
+		else if (str_token.compare("u32"))
+			type = TOKEN_U32;
+		else if (str_token.compare("s32"))
+			type = TOKEN_S32;
+		else if (str_token.compare("int"))
+			type = TOKEN_INT;
+		else if (str_token.compare("bool"))
+			type = TOKEN_BOOL;
+
+		return true;
+	}
 		
 public:
 	bool open(String filename){
@@ -158,6 +180,7 @@ public:
 	Token getToken(){
 		Token tok;
 		tok.type = TOKEN_UNKNOWN;
+		tok.value = 0;
 		if (_open == false)
 			tok.type = TOKEN_ENDOFSTREAM;
 		else
@@ -175,6 +198,29 @@ public:
 					}
 					tok.type = TOKEN_INT_LIT;
 					tok.value = integer;
+				}
+				else if ((lookahead >= 'a' && lookahead <= 'z') || (lookahead >= 'A' && lookahead <= 'Z'))
+				{
+					found_whitespace = false;
+					String str_token(256);
+					int string_length = 0;
+
+				//while lookahead is in [a-zA-Z0-9], we've encounted no whitespace, and we haven't gone out of bounds of our string
+					while (	(
+							(lookahead >= 'a' && lookahead <= 'z') || 
+							(lookahead >= 'A' && lookahead <= 'Z') || 
+							(lookahead >= '0' && lookahead <= '9') || lookahead == '_'
+						) && found_whitespace == false && string_length < 256)
+					{
+						str_token.append(lookahead);
+						string_length += 1;
+						safe_getchar();
+					}
+					tok.type = TOKEN_NAME;
+					tok.str = str_token;
+
+					attempt_match_string_token(tok.type,tok.str);
+
 				}
 				else safe_getchar();
 			}

@@ -71,9 +71,33 @@ public:
 			stream.putstring(String("TOKEN_NOTEQUAL"));
 		else if (type == TOKEN_INT_LIT)
 			stream.putstring(String("TOKEN_INT_LIT"));
+		else if (type == TOKEN_NAME)
+			stream.putstring(String("TOKEN_NAME"));
+		else if (type==TOKEN_U8)
+			stream.putstring(String("TOKEN_U8"));
+		else if (type==TOKEN_S8)
+			stream.putstring(String("TOKEN_S8"));
+		else if (type==TOKEN_U16)
+			stream.putstring(String("TOKEN_U16"));
+		else if (type==TOKEN_S16)
+			stream.putstring(String("TOKEN_S16"));
+		else if (type==TOKEN_U32)
+			stream.putstring(String("TOKEN_U32"));
+		else if (type==TOKEN_S32)
+			stream.putstring(String("TOKEN_S32"));
+		else if (type==TOKEN_INT)
+			stream.putstring(String("TOKEN_INT"));
+		else if (type==TOKEN_BOOL)
+			stream.putstring(String("TOKEN_BOOL"));
+
+
 
 		stream.putchar(' ');
 		stream.putint(value);
+		stream.putchar(' ');
+		stream.putchar('\"');
+		stream.putstring(str);
+		stream.putchar('\"');
 		stream.putchar('\n');
 		return true;
 	}
