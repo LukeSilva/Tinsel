@@ -88,4 +88,20 @@ public:
 		}
 		return true;
 	}
+
+	/// Compares the string with another string
+	//@ return true on success
+	bool compare(String str)
+	{
+		if (pos != str.pos)
+			return false;
+		int npos = 0;
+		while(npos < pos)
+		{
+			if (characters[npos] != str.characters[npos])
+				return false;
+			++npos;
+		}
+		return true;
+	}
 };
