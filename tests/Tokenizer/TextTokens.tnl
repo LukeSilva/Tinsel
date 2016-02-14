@@ -1,0 +1,2 @@
+u8=s8.u16 u32 s32;s16
+int,bool
