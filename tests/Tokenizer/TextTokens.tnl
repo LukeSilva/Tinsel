@@ -1,2 +1,18 @@
 u8=s8.u16 u32 s32;s16
 int,bool
+self
+self.something = 5
+this->ohnoanerror = oops;
+selfa!=self
+enum
+return
+if
+else
+else if
+while
+for
+public
+private
+protected
+
+arst
