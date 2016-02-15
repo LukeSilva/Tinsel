@@ -56,9 +56,9 @@ enum TokenType
 	TOKEN_ELSE,		// = "else"
 	TOKEN_WHILE,		// = "while"
 	TOKEN_FOR,		// = "for"
-	TOKEN_PUBLIC,		// = "public:"
-	TOKEN_PRIVATE,		// = "private:"
-	TOKEN_PROTECTED,	// = "protected:"
+	TOKEN_PUBLIC,		// = "public"
+	TOKEN_PRIVATE,		// = "private"
+	TOKEN_PROTECTED,	// = "protected"
 
 // Others
 	TOKEN_STRING_LIT,	// = [\"\'][\w\s]*[\"\']

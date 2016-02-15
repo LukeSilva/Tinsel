@@ -161,6 +161,35 @@ private:
 			type = TOKEN_INT;
 		else if (str_token.compare("bool"))
 			type = TOKEN_BOOL;
+		else if (str_token.compare("self"))
+			type = TOKEN_SELF;
+		else if (str_token.compare("this"))
+		{
+			std_out.putstring(String("Warning: Use of this for TOKEN_SELF is not recommended!\n"));
+			type = TOKEN_SELF;
+		}
+		else if (str_token.compare("class"))
+			type = TOKEN_CLASS;
+		else if (str_token.compare("const"))
+			type = TOKEN_CONST;
+		else if (str_token.compare("enum"))
+			type = TOKEN_ENUM;
+		else if (str_token.compare("return"))
+			type = TOKEN_RETURN;
+		else if (str_token.compare("if"))
+			type = TOKEN_IF;
+		else if (str_token.compare("else"))
+			type = TOKEN_ELSE;
+		else if (str_token.compare("while"))
+			type = TOKEN_WHILE;
+		else if (str_token.compare("for"))
+			type = TOKEN_FOR;
+		else if (str_token.compare("public"))
+			type = TOKEN_PUBLIC;
+		else if (str_token.compare("private"))
+			type = TOKEN_PRIVATE;
+		else if (str_token.compare("protected"))
+			type = TOKEN_PROTECTED;
 
 		return true;
 	}
@@ -218,7 +247,7 @@ public:
 					}
 					tok.type = TOKEN_NAME;
 					tok.str = str_token;
-
+					
 					attempt_match_string_token(tok.type,tok.str);
 
 				}

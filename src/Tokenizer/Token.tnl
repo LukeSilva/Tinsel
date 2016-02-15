@@ -89,6 +89,30 @@ public:
 			stream.putstring(String("TOKEN_INT"));
 		else if (type==TOKEN_BOOL)
 			stream.putstring(String("TOKEN_BOOL"));
+		else if (type==TOKEN_SELF)
+			stream.putstring(String("TOKEN_SELF"));
+		else if (type==TOKEN_CLASS)
+			stream.putstring(String("TOKEN_CLASS"));
+		else if (type==TOKEN_CONST)
+			stream.putstring(String("TOKEN_CONST"));
+		else if (type==TOKEN_ENUM)
+			stream.putstring(String("TOKEN_ENUM"));
+		else if (type==TOKEN_RETURN)
+			stream.putstring(String("TOKEN_RETURN"));
+		else if (type==TOKEN_IF)
+			stream.putstring(String("TOKEN_IF"));
+		else if (type==TOKEN_ELSE)
+			stream.putstring(String("TOKEN_ELSE"));
+		else if (type==TOKEN_WHILE)
+			stream.putstring(String("TOKEN_WHILE"));
+		else if (type==TOKEN_FOR)
+			stream.putstring(String("TOKEN_FOR"));
+		else if (type==TOKEN_PUBLIC)
+			stream.putstring(String("TOKEN_PUBLIC"));
+		else if (type==TOKEN_PRIVATE)
+			stream.putstring(String("TOKEN_PRIVATE"));
+		else if (type==TOKEN_PROTECTED)
+			stream.putstring(String("TOKEN_PROTECTED"));
 
 
 
