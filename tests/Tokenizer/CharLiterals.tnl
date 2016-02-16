@@ -1,0 +1,10 @@
+u8 my_char = 'c';
+
+this_should_be_valid:
+'''
+
+'\n' '\t' '\\' '\'' '\"'
+
+hey_look_an_error:
+'xD
+
