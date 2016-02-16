@@ -27,6 +27,25 @@ private:
 		return retchar;
 	}
 
+	bool unescape_lookahead()
+	{
+
+		if (lookahead == '\\')
+		{
+			safe_getchar();
+			if (lookahead == '\\')
+				lookahead = '\\';
+			else if (lookahead == '\'')
+				lookahead = '\'';
+			else if (lookahead == '\"')
+				lookahead = '\"';
+			else if (lookahead == 't')
+				lookahead = '\t';
+			else if (lookahead == 'n')
+				lookahead = '\n';
+		}
+	}
+
 	bool attempt_match_strong_token(TokenType type)
 	{
 		if (lookahead=='(')
@@ -268,12 +287,16 @@ public:
 				else if (lookahead == '\'')
 				{
 					safe_getchar();
+					unescape_lookahead();
+
 					tok.type = TOKEN_CHAR_LIT;
 					tok.value = lookahead;
+
 					String char_lit(1);
-					char_lit.append(lookahead);
+					char_lit.append(tok.value);
 					tok.str = char_lit;
 					safe_getchar();
+
 					if (lookahead != '\'')
 					{
 						std_out.putstring("Error: CHAR_LIT requires a closing \'\n");
