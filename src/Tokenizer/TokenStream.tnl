@@ -3,8 +3,9 @@ class TokenStream
 {
 private:
 	File Stream;
-	bool _open = false;
 
+	bool _open = false;
+	bool _error = false;
 	s32 lookahead;
 
 	u32 linenum;
@@ -134,7 +135,17 @@ private:
 			}
 			return true;
 		}
-		
+		else if (lookahead==':')
+		{
+			type = TOKEN_COLON;
+			safe_getchar();
+			if (lookahead==':' && found_whitespace == false)
+			{
+				type = TOKEN_STATICELEMENT;
+				safe_getchar();
+			}
+			return true;
+		}
 		else if (lookahead < 0)
 			type = TOKEN_ENDOFSTREAM;
 		else
@@ -199,6 +210,7 @@ public:
 		if (!Stream.open(filename,String("r"),String("ASCII")))
 			return false;
 		_open = true;
+		_error = false;
 		linenum = 0;
 		lookahead = Stream.getchar();
 		return true;
@@ -212,6 +224,8 @@ public:
 		tok.value = 0;
 		if (_open == false)
 			tok.type = TOKEN_ENDOFSTREAM;
+		else if (_error)
+			tok.type = TOKEN_ERROR;
 		else
 		{
 			if(!attempt_match_strong_token(tok.type))
@@ -250,6 +264,23 @@ public:
 					
 					attempt_match_string_token(tok.type,tok.str);
 
+				}
+				else if (lookahead == '\'')
+				{
+					safe_getchar();
+					tok.type = TOKEN_CHAR_LIT;
+					tok.value = lookahead;
+					String char_lit(1);
+					char_lit.append(lookahead);
+					tok.str = char_lit;
+					safe_getchar();
+					if (lookahead != '\'')
+					{
+						std_out.putstring("Error: CHAR_LIT requires a closing \'\n");
+						_error = true;
+						tok.type = TOKEN_ERROR;
+					}
+					safe_getchar();
 				}
 				else safe_getchar();
 			}

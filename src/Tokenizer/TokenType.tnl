@@ -15,7 +15,8 @@ enum TokenType
 	TOKEN_CBRACKET,		// = ")"
 	TOKEN_COMMA,		// = ","
 
-	TOKEN_ELEMENT,		// = "." , "->" (with warning)	
+	TOKEN_ELEMENT,		// = "." , "->" (with warning)
+	TOKEN_COLON,		// = ":"
 	TOKEN_STATICELEMENT,	// = "::"
 
 	TOKEN_OSBRACKET,	// = "["
@@ -61,11 +62,13 @@ enum TokenType
 	TOKEN_PROTECTED,	// = "protected"
 
 // Others
-	TOKEN_STRING_LIT,	// = [\"\'][\w\s]*[\"\']
+	TOKEN_STRING_LIT,	// = [\"][\w\s]*[\"]
+	TOKEN_CHAR_LIT,		// = [\'][\w\s][\']
 	TOKEN_INT_LIT,		// = [0-9]*
 	TOKEN_NAME,		// = [\w]*
 
 	TOKEN_ENDOFSTREAM,	// = EOF
+	TOKEN_ERROR,		// = Error has occured
 
 	TOKEN_UNKNOWN		// Anything else that doesn't match the tokens above
 	

@@ -21,7 +21,7 @@ int standalone_tokenizer(String infile, String outfile)
 
 	rettok = tok_stream.getToken();
 
-	while (rettok.type != TOKEN_ENDOFSTREAM)
+	while (rettok.type != TOKEN_ENDOFSTREAM && rettok.type != TOKEN_ERROR)
 	{
 		rettok.print(out_stream);
 		rettok = tok_stream.getToken();
@@ -29,5 +29,8 @@ int standalone_tokenizer(String infile, String outfile)
 
 	tok_stream.close();
 	out_stream.close();
+
+	if (rettok.type == TOKEN_ERROR)
+		return -2;
 	return 0;
 }

@@ -21,6 +21,8 @@ public:
 			stream.putstring(String("TOKEN_COMMA"));
 		else if (type == TOKEN_ELEMENT)
 			stream.putstring(String("TOKEN_ELEMENT"));
+		else if (type == TOKEN_COLON)
+			stream.putstring(String("TOKEN_COLON"));
 		else if (type == TOKEN_STATICELEMENT)
 			stream.putstring(String("TOKEN_STATICELEMENT"));
 		else if (type == TOKEN_OSBRACKET)
@@ -113,6 +115,10 @@ public:
 			stream.putstring(String("TOKEN_PRIVATE"));
 		else if (type==TOKEN_PROTECTED)
 			stream.putstring(String("TOKEN_PROTECTED"));
+		else if (type==TOKEN_CHAR_LIT)
+			stream.putstring(String("TOKEN_CHAR_LIT"));
+		else if (type==TOKEN_ERROR)
+			stream.putstring(String("TOKEN_ERROR"));
 
 
 
