@@ -56,7 +56,7 @@ public:
 
 	/// Puts an integer into the stream
 	//@ return true on success
-	bool putint(int integer)
+	bool putint(s32 integer)
 	{
 		String output_string(34);
 

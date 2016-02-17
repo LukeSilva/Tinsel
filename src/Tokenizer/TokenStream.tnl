@@ -243,7 +243,33 @@ private:
 
 		return true;
 	}
-		
+
+	s32 parse_integer_literal(int base)
+	{
+		if (base != 2 && base != 10 && base != 16)
+		{
+			print_error("Invalid base for parsing integer literal (internal error)",linenum);
+			_error = true;
+			return -1;
+		}
+
+		found_whitespace = false;
+		s32 integer = 0;
+		while ( (
+				( (base == 10 || base == 16) && lookahead>= '0' && lookahead <= '9') ||
+				( (base == 16 ) && lookahead >= 'A' && lookahead <= 'F') ||
+				( base == 2 && ( lookahead == '0' || lookahead == '1') )
+			) && found_whitespace == false )
+		{
+			if (lookahead >= '0' && lookahead <= '9')
+				integer = integer * base + (lookahead - '0');
+			else if (lookahead >= 'A' && lookahead <= 'F')
+				integer = integer * base + (lookahead - 'A' + 10);
+			safe_getchar();
+		}
+
+		return integer;		
+	}
 public:
 	bool open(String filename){
 		if (!Stream.open(filename,String("r"),String("ASCII")))
@@ -263,25 +289,32 @@ public:
 		tok.type = TOKEN_UNKNOWN;
 		tok.value = 0;
 		tok.linenum = linenum;
-		if (_open == false)
-			tok.type = TOKEN_ENDOFSTREAM;
-		else if (_error)
+		if (_error)
 			tok.type = TOKEN_ERROR;
+		else if (_open == false)
+			tok.type = TOKEN_ENDOFSTREAM;
 		else
 		{
 			if(!attempt_match_strong_token(tok.type))
 			{
 				if (lookahead >= '0' && lookahead <= '9')
 				{
-					found_whitespace = false;
-					int integer = 0;
-					while (lookahead >= '0' && lookahead <= '9' && found_whitespace == false)
+					int base = 10;
+					if (lookahead == '0')
 					{
-						integer = integer * 10 + (lookahead - '0');
+						safe_getchar();
+						if (lookahead == 'b')
+							base = 2;
+						else if (lookahead == 'x')
+							base = 16;
+						else
+						{
+							print_error("Invalid base type for integer literal", tok.linenum);
+						}
 						safe_getchar();
 					}
 					tok.type = TOKEN_INT_LIT;
-					tok.value = integer;
+					tok.value = parse_integer_literal(base);
 				}
 				else if ((lookahead >= 'a' && lookahead <= 'z') || (lookahead >= 'A' && lookahead <= 'Z'))
 				{

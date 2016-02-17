@@ -4,7 +4,7 @@ public:
 
 	TokenType type;
 	String str;
-	u32 value;
+	s32 value;
 	u32 linenum;
 
 	bool print(IOStream stream)
