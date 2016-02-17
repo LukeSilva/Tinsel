@@ -6,10 +6,10 @@ private:
 
 	bool _open = false;
 	bool _error = false;
-	s32 lookahead;
+	String _filename;
 
+	s32 lookahead;	
 	u32 linenum;
-	
 	bool found_whitespace;
 	
 	//Keeps a lookahead character, and removes all whitespace from the stream
@@ -21,7 +21,7 @@ private:
 		while (lookahead == ' ' || lookahead == '\t' || lookahead == '\n')
 		{
 			found_whitespace = true;
-			if (lookahead == '\n') ++linenum;
+			if (lookahead == '\n') linenum+=1;
 			lookahead = Stream.getchar();
 		}
 		return retchar;
@@ -44,6 +44,26 @@ private:
 			else if (lookahead == 'n')
 				lookahead = '\n';
 		}
+	}
+
+	void print_warning(String warning_string, u32 warnlinenum)
+	{
+		std_out.putstring(_filename);
+		std_out.putchar(':');
+		std_out.putint(warnlinenum);
+		std_out.putstring(" - Warning: ");
+		std_out.putstring(warning_string);
+		std_out.putchar('\n');
+	}
+
+	void print_error(String error_string, u32 errorlinenum)
+	{
+		std_out.putstring(_filename);
+		std_out.putchar(':');
+		std_out.putint(errorlinenum);
+		std_out.putstring(" - Error: ");
+		std_out.putstring(error_string);
+		std_out.putchar('\n');
 	}
 
 	bool attempt_match_strong_token(TokenType type)
@@ -85,7 +105,7 @@ private:
 			safe_getchar();
 			if (lookahead=='>' && found_whitespace==false)
 			{
-				std_out.putstring(String("Warning: Use of -> for TOKEN_ELEMENT is not recommended!\n"));
+				print_warning("Use of -> for TOKEN_ELEMENT is not recommended!", linenum);
 				type = TOKEN_ELEMENT;
 				safe_getchar();
 			}
@@ -195,7 +215,7 @@ private:
 			type = TOKEN_SELF;
 		else if (str_token.compare("this"))
 		{
-			std_out.putstring(String("Warning: Use of this for TOKEN_SELF is not recommended!\n"));
+			print_warning("Use of this for TOKEN_SELF is not recommended!", linenum);
 			type = TOKEN_SELF;
 		}
 		else if (str_token.compare("class"))
@@ -230,7 +250,8 @@ public:
 			return false;
 		_open = true;
 		_error = false;
-		linenum = 0;
+		_filename = filename;
+		linenum = 1;
 		lookahead = Stream.getchar();
 		return true;
 	}
@@ -241,6 +262,7 @@ public:
 		Token tok;
 		tok.type = TOKEN_UNKNOWN;
 		tok.value = 0;
+		tok.linenum = linenum;
 		if (_open == false)
 			tok.type = TOKEN_ENDOFSTREAM;
 		else if (_error)
@@ -299,10 +321,32 @@ public:
 
 					if (lookahead != '\'')
 					{
-						std_out.putstring("Error: CHAR_LIT requires a closing \'\n");
+						print_error("CHAR_LIT requires a closing \'",tok.linenum);
 						_error = true;
 						tok.type = TOKEN_ERROR;
 					}
+					safe_getchar();
+				}
+				else if (lookahead=='\"')
+				{
+					String str_lit(512);
+					safe_getchar();					
+					tok.type = TOKEN_STRING_LIT;
+					while (lookahead!= '\"' && !_error)
+					{
+						unescape_lookahead();
+						str_lit.append(lookahead);
+						lookahead = Stream.getchar();
+						if (lookahead < 0)
+						{
+							print_error("End of File encountered while parsing string literal",tok.linenum);
+							tok.type = TOKEN_ERROR;
+							_error = true;
+						}
+						else if (lookahead == '\n')
+							linenum+=1;
+					}
+					tok.str = str_lit;
 					safe_getchar();
 				}
 				else safe_getchar();

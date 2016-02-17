@@ -117,6 +117,8 @@ public:
 			stream.putstring(String("TOKEN_PROTECTED"));
 		else if (type==TOKEN_CHAR_LIT)
 			stream.putstring(String("TOKEN_CHAR_LIT"));
+		else if (type==TOKEN_STRING_LIT)
+			stream.putstring(String("TOKEN_STRING_LIT"));
 		else if (type==TOKEN_ERROR)
 			stream.putstring(String("TOKEN_ERROR"));
 
@@ -128,6 +130,8 @@ public:
 		stream.putchar('\"');
 		stream.putstring(str);
 		stream.putchar('\"');
+		stream.putchar(' ');
+		stream.putint(linenum);
 		stream.putchar('\n');
 		return true;
 	}
