@@ -105,7 +105,7 @@ private:
 			safe_getchar();
 			if (lookahead=='>' && found_whitespace==false)
 			{
-				print_warning("Use of -> for TOKEN_ELEMENT is not recommended!", linenum);
+				print_warning("Use of -> for TOKEN_ELEMENT is not recommended! (use . instead)", linenum);
 				type = TOKEN_ELEMENT;
 				safe_getchar();
 			}
@@ -215,7 +215,7 @@ private:
 			type = TOKEN_SELF;
 		else if (str_token.compare("this"))
 		{
-			print_warning("Use of this for TOKEN_SELF is not recommended!", linenum);
+			print_warning("Use of this for TOKEN_SELF is not recommended! (use self. instead of this->)", linenum);
 			type = TOKEN_SELF;
 		}
 		else if (str_token.compare("class"))
@@ -248,7 +248,7 @@ private:
 	{
 		if (base != 2 && base != 10 && base != 16)
 		{
-			print_error("Invalid base for parsing integer literal (internal error)",linenum);
+			print_error("Invalid base for parsing integer literal (internal error, dafaq?)",linenum);
 			_error = true;
 			return -1;
 		}
@@ -309,7 +309,7 @@ public:
 							base = 16;
 						else
 						{
-							print_error("Invalid base type for integer literal", tok.linenum);
+							print_error("Invalid base for integer literal (you've got a leading 0)", tok.linenum);
 						}
 						safe_getchar();
 					}
@@ -372,7 +372,7 @@ public:
 						lookahead = Stream.getchar();
 						if (lookahead < 0)
 						{
-							print_error("End of File encountered while parsing string literal",tok.linenum);
+							print_error("End of File encountered while parsing string literal (put the \" in)",tok.linenum);
 							tok.type = TOKEN_ERROR;
 							_error = true;
 						}
