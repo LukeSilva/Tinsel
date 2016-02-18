@@ -1,0 +1,38 @@
+import FileIO
+
+int file_compare(String filename1, String filename2)
+{
+	File file1;
+	File file2;
+	if (!file1.open(filename1,String("r"),String("ASCII")))
+	{
+		std_out.putstring("Could not open file 1\n");
+		return -1;
+	}
+	if (!file2.open(filename2,String("r"),String("ASCII")))
+	{
+		file1.close();
+		std_out.putstring("Could not open file 2\n");
+		return -1;
+	}
+	s32 char1 = file1.getchar();
+	s32 char2 = file2.getchar();
+	while (char1 == char2 && char1 >= 0 && char2 >= 0 )
+	{
+		char1 = file1.getchar();
+		char2 = file2.getchar();
+		if (char1 < 0 && char2 < 0)
+		{
+			file1.close();
+			file2.close();
+			return 0;
+		}
+		else if (char2 < 0)
+			break;
+		else if (char1 < 0)
+			break;
+	}
+	file1.close();
+	file2.close();
+	return -1;
+}
