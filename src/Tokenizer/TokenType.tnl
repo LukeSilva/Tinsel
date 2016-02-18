@@ -9,6 +9,7 @@ enum TokenType
 	TOKEN_S32,		// = "s32"
 	TOKEN_INT,		// = "int"
 	TOKEN_BOOL,		// = "bool"
+	TOKEN_VOID,		// = "void"
 
 // Misc operators
 	TOKEN_OBRACKET,		// = "("
@@ -60,12 +61,23 @@ enum TokenType
 	TOKEN_PUBLIC,		// = "public"
 	TOKEN_PRIVATE,		// = "private"
 	TOKEN_PROTECTED,	// = "protected"
+	TOKEN_IMPORT,		// = "import"
+	TOKEN_BREAK,		// = "break"
+
+// Boolean literals
+	TOKEN_BOOL_TRUE,	// = "true"
+	TOKEN_BOOL_FALSE,	// = "false"
+
+// Comments
+	TOKEN_COMMENT,		// = "//"
+	TOKEN_DOC_COMMENT,	// = "//@" or "///"
 
 // Others
 	TOKEN_STRING_LIT,	// = [\"][\w\s]*[\"]
 	TOKEN_CHAR_LIT,		// = [\'][\w\s][\']
 	TOKEN_INT_LIT,		// = [0-9]*
 	TOKEN_NAME,		// = [\w]*
+	
 
 	TOKEN_ENDOFSTREAM,	// = EOF
 	TOKEN_ERROR,		// = Error has occured

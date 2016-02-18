@@ -121,8 +121,20 @@ public:
 			stream.putstring(String("TOKEN_STRING_LIT"));
 		else if (type==TOKEN_ERROR)
 			stream.putstring(String("TOKEN_ERROR"));
-
-
+		else if (type==TOKEN_BOOL_TRUE)
+			stream.putstring(String("TOKEN_BOOL_TRUE"));
+		else if (type==TOKEN_BOOL_FALSE)
+			stream.putstring(String("TOKEN_BOOL_FALSE"));
+		else if (type==TOKEN_COMMENT)
+			stream.putstring(String("TOKEN_COMMENT"));
+		else if (type==TOKEN_DOC_COMMENT)
+			stream.putstring(String("TOKEN_DOC_COMMENT"));
+		else if (type==TOKEN_IMPORT)
+			stream.putstring(String("TOKEN_IMPORT"));
+		else if (type==TOKEN_VOID)
+			stream.putstring(String("TOKEN_VOID"));
+		else if (type==TOKEN_BREAK)
+			stream.putstring(String("TOKEN_BREAK"));
 
 		stream.putchar(' ');
 		stream.putint(value);

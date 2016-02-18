@@ -29,7 +29,6 @@ private:
 
 	bool unescape_lookahead()
 	{
-
 		if (lookahead == '\\')
 		{
 			safe_getchar();
@@ -114,7 +113,17 @@ private:
 		else if (lookahead=='*')
 			type = TOKEN_MULTIPLICATION;
 		else if (lookahead=='/')
+		{
 			type = TOKEN_DIVISION;
+			safe_getchar();
+			if (lookahead=='/' && found_whitespace == false)
+			{
+				type = TOKEN_COMMENT;
+				lookahead = Stream.getchar();
+				return false;
+			}
+			return true;
+		}
 		else if (lookahead=='%')
 			type = TOKEN_MODULO;
 		else if (lookahead=='~')
@@ -240,15 +249,27 @@ private:
 			type = TOKEN_PRIVATE;
 		else if (str_token.compare("protected"))
 			type = TOKEN_PROTECTED;
+		else if (str_token.compare("true"))
+			type = TOKEN_BOOL_TRUE;
+		else if (str_token.compare("false"))
+			type = TOKEN_BOOL_FALSE;
+		else if (str_token.compare("import"))
+			type = TOKEN_IMPORT;
+		else if (str_token.compare("void"))
+			type = TOKEN_VOID;
+		else if (str_token.compare("break"))
+			type = TOKEN_BREAK;
 
 		return true;
 	}
 
 	s32 parse_integer_literal(int base)
 	{
+		if (base == 0) return 0;
 		if (base != 2 && base != 10 && base != 16)
 		{
 			print_error("Invalid base for parsing integer literal (internal error, dafaq?)",linenum);
+			std_out.putint(base);
 			_error = true;
 			return -1;
 		}
@@ -297,7 +318,25 @@ public:
 		{
 			if(!attempt_match_strong_token(tok.type))
 			{
-				if (lookahead >= '0' && lookahead <= '9')
+				if (tok.type == TOKEN_COMMENT)
+				{
+					tok.value = lookahead;
+					String comment_str(256);
+					if (lookahead == '@' || lookahead == '/')
+					{
+						tok.type = TOKEN_DOC_COMMENT;
+						lookahead = Stream.getchar();
+					}
+
+					while (lookahead!='\n')
+					{
+						comment_str.append(lookahead);
+						lookahead = Stream.getchar();					
+					}
+					tok.str = comment_str;
+					safe_getchar();
+				}
+				else if (lookahead >= '0' && lookahead <= '9')
 				{
 					int base = 10;
 					if (lookahead == '0')
@@ -307,6 +346,10 @@ public:
 							base = 2;
 						else if (lookahead == 'x')
 							base = 16;
+						else if (lookahead < '0' || lookahead > '9' || found_whitespace==true)
+						{
+							base = 0;
+						}
 						else
 						{
 							print_error("Invalid base for integer literal (you've got a leading 0)", tok.linenum);
@@ -316,13 +359,13 @@ public:
 					tok.type = TOKEN_INT_LIT;
 					tok.value = parse_integer_literal(base);
 				}
-				else if ((lookahead >= 'a' && lookahead <= 'z') || (lookahead >= 'A' && lookahead <= 'Z'))
+				else if ((lookahead >= 'a' && lookahead <= 'z') || (lookahead >= 'A' && lookahead <= 'Z') || lookahead=='_')
 				{
 					found_whitespace = false;
 					String str_token(256);
 					int string_length = 0;
 
-				//while lookahead is in [a-zA-Z0-9], we've encounted no whitespace, and we haven't gone out of bounds of our string
+					//while lookahead is in [a-zA-Z0-9], we've encounted no whitespace, and we haven't gone out of bounds of our string
 					while (	(
 							(lookahead >= 'a' && lookahead <= 'z') || 
 							(lookahead >= 'A' && lookahead <= 'Z') || 
@@ -341,7 +384,7 @@ public:
 				}
 				else if (lookahead == '\'')
 				{
-					safe_getchar();
+					lookahead = Stream.getchar();
 					unescape_lookahead();
 
 					tok.type = TOKEN_CHAR_LIT;
