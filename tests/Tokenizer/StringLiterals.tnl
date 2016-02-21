@@ -1,8 +1,0 @@
-my_string = "This is totally a test";
-whitespace_test = "int main(){\n\tthe_string = \\\"\\\'\\\"\n};"
-
-
-enscaped_string = "
-
-
-

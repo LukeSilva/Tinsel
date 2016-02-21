@@ -85,6 +85,14 @@ private:
 			type = TOKEN_CBLOCK;
 		else if (lookahead==';')
 			type = TOKEN_SEMICOLON;
+		else if (lookahead=='+')
+			type = TOKEN_ADDITION;
+		else if (lookahead=='*')
+			type = TOKEN_MULTIPLICATION;
+		else if (lookahead=='%')
+			type = TOKEN_MODULO;
+		else if (lookahead=='~')
+			type = TOKEN_BITNOT;
 		else if (lookahead=='=')
 		{
 			type = TOKEN_ASSIGN;
@@ -96,8 +104,6 @@ private:
 			}
 			return true;
 		}
-		else if (lookahead=='+')
-			type = TOKEN_ADDITION;
 		else if (lookahead=='-')
 		{
 			type = TOKEN_SUBTRACTION;
@@ -110,8 +116,6 @@ private:
 			}
 			return true;
 		}
-		else if (lookahead=='*')
-			type = TOKEN_MULTIPLICATION;
 		else if (lookahead=='/')
 		{
 			type = TOKEN_DIVISION;
@@ -124,10 +128,6 @@ private:
 			}
 			return true;
 		}
-		else if (lookahead=='%')
-			type = TOKEN_MODULO;
-		else if (lookahead=='~')
-			type = TOKEN_BITNOT;
 		else if (lookahead=='|')
 		{
 			type = TOKEN_BITOR;

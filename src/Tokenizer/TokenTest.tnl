@@ -1,6 +1,6 @@
 int test_Tokenizer()
 {
-	int total_tests = 3;
+	int total_tests = 4;
 	int passed_tests = 0;
 
 	TokenStream test;
@@ -30,7 +30,7 @@ int test_Tokenizer()
 		rettok = test.getToken();
 		if (rettok.type != TOKEN_ENDOFSTREAM)
 		{
-			passed_tests++;
+			passed_tests+=1;
 			std_out.putstring(String("[PASS]\n"));
 		}else std_out.putstring(String("[FAIL]\n"));
 	}
@@ -47,11 +47,25 @@ int test_Tokenizer()
 		rettok = test.getToken();
 		if (rettok.type == TOKEN_ENDOFSTREAM)
 		{
-			passed_tests++;
+			passed_tests+=1;
 			std_out.putstring(String("[PASS]\n"));
 		}else std_out.putstring(String("[FAIL]\n"));
 	}
 	
+	//@test 4 Tests the strong tokens
+	
+	std_out.putstring(String("Test #004: Strong Tokens      "));
+
+	if (standalone_tokenizer(String("tests/Tokenizer/StrongTokens.tnl"),String("tmp.ttok")))
+		std_out.putstring(String("[FAIL]\n  Internal error\n"));
+	else if(file_compare(String("tmp.ttok"),String("tests/Tokenizer/StrongTokens.ttok")))
+		std_out.putstring(String("[FAIL]\n"));
+	else
+	{
+		passed_tests+=1;
+		std_out.putstring(String("[PASS]\n"));
+	}
+
 
 	//Print ending message, with percentage of pass rate
 	std_out.putstring(String("\n\n--------Tokenizer Results   --------\n\n"));
