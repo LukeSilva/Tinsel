@@ -1,6 +1,6 @@
 int test_Tokenizer()
 {
-	int total_tests = 4;
+	int total_tests = 5;
 	int passed_tests = 0;
 
 	TokenStream test;
@@ -60,6 +60,20 @@ int test_Tokenizer()
 		std_out.putstring(String("[FAIL]\n  Internal error\n"));
 	else if(file_compare(String("tmp.ttok"),String("tests/Tokenizer/StrongTokens.ttok")))
 		std_out.putstring(String("[FAIL]\n"));
+	else
+	{
+		passed_tests+=1;
+		std_out.putstring(String("[PASS]\n"));
+	}
+
+	//@test 5 Tests the strong tokens, with whitespace separating the characters
+
+	std_out.putstring(String("Test #005: Strong Tokens with whitespace \n    (warning): "));
+
+	if (standalone_tokenizer(String("tests/Tokenizer/StrongTokensWhitespace.tnl"),String("tmp.ttok")))
+		std_out.putstring(String("[FAIL]\n  Internal error\n"));
+	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/StrongTokensWhitespace.ttok")))
+		std_out.putstring(String("[FAIl]\n"));
 	else
 	{
 		passed_tests+=1;
