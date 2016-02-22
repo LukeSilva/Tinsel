@@ -1,6 +1,6 @@
 int test_Tokenizer()
 {
-	int total_tests = 5;
+	int total_tests = 6;
 	int passed_tests = 0;
 
 	TokenStream test;
@@ -73,7 +73,21 @@ int test_Tokenizer()
 	if (standalone_tokenizer(String("tests/Tokenizer/StrongTokensWhitespace.tnl"),String("tmp.ttok")))
 		std_out.putstring(String("[FAIL]\n  Internal error\n"));
 	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/StrongTokensWhitespace.ttok")))
-		std_out.putstring(String("[FAIl]\n"));
+		std_out.putstring(String("[FAIL]\n"));
+	else
+	{
+		passed_tests+=1;
+		std_out.putstring(String("[PASS]\n"));
+	}
+
+	//@test 6 Tests textual tokens
+
+	std_out.putstring(String("Test #006: Textual Tokens     "));
+
+	if (standalone_tokenizer(String("tests/Tokenizer/TextTokens.tnl"),String("tmp.ttok")))
+		std_out.putstring(String("[FAIL]\n  Internal error\n"));
+	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/TextTokens.ttok")))
+		std_out.putstring(String("[FAIL]\n"));
 	else
 	{
 		passed_tests+=1;
