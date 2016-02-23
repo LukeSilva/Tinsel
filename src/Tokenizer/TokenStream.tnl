@@ -333,6 +333,7 @@ public:
 						comment_str.append(lookahead);
 						lookahead = Stream.getchar();					
 					}
+					linenum += 1;
 					tok.str = comment_str;
 					safe_getchar();
 				}

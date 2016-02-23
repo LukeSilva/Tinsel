@@ -1,0 +1,4 @@
+TOKEN_STRING_LIT 0 "This is totally a test" 1
+TOKEN_STRING_LIT 0 "int main(){
+	the_string = \"\'\"
+};" 2

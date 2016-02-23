@@ -1,6 +1,6 @@
 int test_Tokenizer()
 {
-	int total_tests = 6;
+	int total_tests = 10;
 	int passed_tests = 0;
 
 	TokenStream test;
@@ -92,6 +92,62 @@ int test_Tokenizer()
 	{
 		passed_tests+=1;
 		std_out.putstring(String("[PASS]\n"));
+	}	
+
+	//@test 7 Tests String tokens
+
+	std_out.putstring(String("Test #007: String Tokens      "));
+
+	if (standalone_tokenizer(String("tests/Tokenizer/StringLiterals.tnl"),String("tmp.ttok")))
+		std_out.putstring(String("[FAIL]\n  Internal error\n"));
+	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/StringLiterals.ttok")))
+		std_out.putstring(String("[FAIL]\n"));
+	else
+	{
+		passed_tests+=1;
+		std_out.putstring(String("[PASS]\n"));
+	}
+
+	//@test 8 Tests char tokens
+
+	std_out.putstring(String("Test #008: Char Tokens        "));
+
+	if (standalone_tokenizer(String("tests/Tokenizer/CharLiterals.tnl"),String("tmp.ttok")))
+		std_out.putstring(String("[FAIL]\n  Internal error\n"));
+	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/CharLiterals.ttok")))
+		std_out.putstring(String("[FAIL]\n"));
+	else
+	{
+		passed_tests+=1;
+		std_out.putstring(String("[PASS]\n"));
+	}
+
+	//@test 9 Tests integer literals
+
+	std_out.putstring(String("Test #009: Integer Tokens     "));
+
+	if (standalone_tokenizer(String("tests/Tokenizer/LiteralIntegers.tnl"),String("tmp.ttok")))
+		std_out.putstring(String("[FAIL]\n  Internal error\n"));
+	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/LiteralIntegers.ttok")))
+		std_out.putstring(String("[FAIL]\n"));
+	else
+	{
+		passed_tests+=1;
+		std_out.putstring(String("[PASS]\n"));
+	}
+
+	//@test 10 Tests comments
+
+	std_out.putstring(String("Test #010: Comments           "));
+
+	if (standalone_tokenizer(String("tests/Tokenizer/Comments.tnl"),String("tmp.ttok")))
+		std_out.putstring(String("[FAIL]\n  Internal error\n"));
+	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/Comments.ttok")))
+		std_out.putstring(String("[FAIL]\n"));
+	else
+	{
+		passed_tests+=1;
+		std_out.putstring(String("[PASS]\n"));
 	}
 
 
@@ -100,7 +156,7 @@ int test_Tokenizer()
 	std_out.putstring(String("Pass-Rate: "));
 	std_out.putint((passed_tests*100)/total_tests);
 	std_out.putstring(String("%\n"));
-	if (passed_tests==total_tests)
+	if (passed_tests>=total_tests)
 		std_out.putstring(String("All tests passed, tokenizer _should_ be stable\n"));
 
 	std_out.close();
