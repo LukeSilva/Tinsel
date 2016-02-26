@@ -1,5 +1,7 @@
 import FileIO
 
+/// Compares two files
+//@ return 0 if they match, non zero if error, or mismatch
 int file_compare(String filename1, String filename2)
 {
 	File file1;

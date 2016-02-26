@@ -1,19 +1,31 @@
 import FileIO
+
+/// A class that reads a .tnl file and creates a stream of token objects from it.
 class TokenStream
 {
 private:
+	/// The file stream of the .tnl input file
 	File Stream;
 
+	/// True if the input file has been opened
 	bool _open = false;
+	/// True if an error has occured
 	bool _error = false;
+	/// Holds the original filename of the input file
 	String _filename;
 
+	/// A lookahead, for the next character
 	s32 lookahead;	
+
+	/// The current line number
 	u32 linenum;
+
+	/// True if the stream reader has found whitespace between the last word character
 	bool found_whitespace;
 	
-	//Keeps a lookahead character, and removes all whitespace from the stream
-	s32 safe_getchar()
+	/// Reads a character from the stream and holds it in lookahead
+	///  Ignores whitespace, but updates linenumber and found_whitespace flags
+	void safe_getchar()
 	{
 		s32 retchar = lookahead;
 		lookahead = Stream.getchar();
@@ -24,10 +36,11 @@ private:
 			if (lookahead == '\n') linenum+=1;
 			lookahead = Stream.getchar();
 		}
-		return retchar;
 	}
 
-	bool unescape_lookahead()
+	/// A simple function that reads string escape codes
+	///  The following are supported: \\ \' \" \t \n
+	void unescape_lookahead()
 	{
 		if (lookahead == '\\')
 		{
@@ -45,6 +58,7 @@ private:
 		}
 	}
 
+	/// Prints a pretty warning message
 	void print_warning(String warning_string, u32 warnlinenum)
 	{
 		std_out.putstring(_filename);
@@ -55,6 +69,7 @@ private:
 		std_out.putchar('\n');
 	}
 
+	/// Prints a pretty error message
 	void print_error(String error_string, u32 errorlinenum)
 	{
 		std_out.putstring(_filename);
@@ -65,6 +80,9 @@ private:
 		std_out.putchar('\n');
 	}
 
+	/// Attemps to match strong tokens (tokens that seperate other tokens without the need for whitespace)
+	///  Also matches comment tokens, but doesn't handle them, returns false in this case
+	//@ return true if a token was matched, false if not.
 	bool attempt_match_strong_token(TokenType type)
 	{
 		if (lookahead=='(')
@@ -202,7 +220,8 @@ private:
 		return true;
 	}
 
-	bool attempt_match_string_token(TokenType type, String str_token)
+	/// Attemps to match a textual/reserved token.
+	void attempt_match_string_token(TokenType type, String str_token)
 	{
 		if (str_token.compare("u8"))
 			type = TOKEN_U8;
@@ -263,8 +282,13 @@ private:
 		return true;
 	}
 
+	/// Pases a integer literal in a specified base
+	/// If the base is zero, this function returns 0 immediately
+	///  Implemented bases: 0,2,10,16
+	//@ return the pased integer
 	s32 parse_integer_literal(int base)
 	{
+		
 		if (base == 0) return 0;
 		if (base != 2 && base != 10 && base != 16)
 		{
@@ -276,6 +300,8 @@ private:
 
 		found_whitespace = false;
 		s32 integer = 0;
+	
+		//while (the lookahead is a valid character for the requested base)
 		while ( (
 				( (base == 10 || base == 16) && lookahead>= '0' && lookahead <= '9') ||
 				( (base == 16 ) && lookahead >= 'A' && lookahead <= 'F') ||
@@ -292,6 +318,8 @@ private:
 		return integer;		
 	}
 public:
+
+	/// Opens a filename and prepares it for parsing.
 	bool open(String filename){
 		if (!Stream.open(filename,String("r"),String("ASCII")))
 			return false;
@@ -304,20 +332,25 @@ public:
 	}
 
 
-
+	/// Parses and returns the next token in the stream
+	///  Only allocates 256 bytes for comments and names, and 512 bytes for string literals
 	Token getToken(){
 		Token tok;
 		tok.type = TOKEN_UNKNOWN;
 		tok.value = 0;
 		tok.linenum = linenum;
+		// Return Token{ type = TOKEN_ERROR } if there has been an error
 		if (_error)
 			tok.type = TOKEN_ERROR;
+		// Return Token{ type = TOKEN_ENDOFSTREAM } if the file is not open
 		else if (_open == false)
 			tok.type = TOKEN_ENDOFSTREAM;
 		else
 		{
+			// First attempt to match strong tokens
 			if(!attempt_match_strong_token(tok.type))
 			{
+				//Then check if a comment token was matched, but not handled, and if so, handle it.
 				if (tok.type == TOKEN_COMMENT)
 				{
 					tok.value = lookahead;
@@ -433,6 +466,8 @@ public:
 		return tok;
 	}
 
+	/// Closes the previously opened file
+	//@ return true on success
 	bool close(){
 		_open = false;
 		return Stream.close();

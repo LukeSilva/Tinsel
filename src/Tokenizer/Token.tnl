@@ -1,12 +1,20 @@
+/// Describes a token in the tinsel tokenizer
 class Token
 {
 public:
-
+	/// Holds the type of the token
 	TokenType type;
+	/// Holds the string value of the token
 	String str;
+	/// Holds the integer value of the token
 	s32 value;
+	/// Holds the line number that the token first appeared on
 	u32 linenum;
 
+
+	/// Prints the token to a stream in the form:
+	///  {TOKEN_TYPE} {INT_VALUE} {STR_VALUE} {LINENUM} \n
+	//@ return true on success (always)
 	bool print(IOStream stream)
 	{
 		if (type == TOKEN_UNKNOWN)
