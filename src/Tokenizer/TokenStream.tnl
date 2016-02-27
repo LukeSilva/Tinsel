@@ -221,7 +221,8 @@ private:
 	}
 
 	/// Attemps to match a textual/reserved token.
-	void attempt_match_string_token(TokenType type, String str_token)
+	//@ return true if a string token was matched
+	bool attempt_match_string_token(TokenType type, String str_token)
 	{
 		if (str_token.compare("u8"))
 			type = TOKEN_U8;
@@ -278,6 +279,7 @@ private:
 			type = TOKEN_VOID;
 		else if (str_token.compare("break"))
 			type = TOKEN_BREAK;
+		else return false;
 
 		return true;
 	}
@@ -411,9 +413,9 @@ public:
 						safe_getchar();
 					}
 					tok.type = TOKEN_NAME;
-					tok.str = str_token;
 					
-					attempt_match_string_token(tok.type,tok.str);
+					if (!attempt_match_string_token(tok.type,str_token))
+						tok.str = str_token;
 
 				}
 				else if (lookahead == '\'')
