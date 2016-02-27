@@ -355,11 +355,12 @@ public:
 				//Then check if a comment token was matched, but not handled, and if so, handle it.
 				if (tok.type == TOKEN_COMMENT)
 				{
-					tok.value = lookahead;
+
 					String comment_str(256);
 					if (lookahead == '@' || lookahead == '/')
 					{
 						tok.type = TOKEN_DOC_COMMENT;
+						tok.value = lookahead;
 						lookahead = Stream.getchar();
 					}
 
@@ -401,7 +402,7 @@ public:
 					String str_token(256);
 					int string_length = 0;
 
-					//while lookahead is in [a-zA-Z0-9], we've encounted no whitespace, and we haven't gone out of bounds of our string
+					//while lookahead is in [a-zA-Z0-9_], we've encounted no whitespace, and we haven't gone out of bounds of our string
 					while (	(
 							(lookahead >= 'a' && lookahead <= 'z') || 
 							(lookahead >= 'A' && lookahead <= 'Z') || 
