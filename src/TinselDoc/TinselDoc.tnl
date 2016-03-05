@@ -1,0 +1,9 @@
+int tinsel_doc(String infile, String outfile)
+{
+	std_out.putstring("Tinsel Documentation Generator\n In-file:  \"");
+	std_out.putstring(infile);
+	std_out.putstring("\"\n Out-file: \"");
+	std_out.putstring(outfile);
+	std_out.putstring("\"\n");
+	return 0;	
+}
