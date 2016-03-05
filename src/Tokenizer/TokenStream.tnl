@@ -303,7 +303,7 @@ private:
 		found_whitespace = false;
 		s32 integer = 0;
 	
-		//while (the lookahead is a valid character for the requested base)
+		//while (the lookahead is a valid character for the requested base) && (whitespace is not found)
 		while ( (
 				( (base == 10 || base == 16) && lookahead>= '0' && lookahead <= '9') ||
 				( (base == 16 ) && lookahead >= 'A' && lookahead <= 'F') ||
@@ -347,123 +347,125 @@ public:
 		// Return Token{ type = TOKEN_ENDOFSTREAM } if the file is not open
 		else if (_open == false)
 			tok.type = TOKEN_ENDOFSTREAM;
-		else
+		// First attempt to match strong tokens
+		else if(!attempt_match_strong_token(tok.type))
 		{
-			// First attempt to match strong tokens
-			if(!attempt_match_strong_token(tok.type))
+			//Then check if a comment token was matched, but not handled, and if so, handle it.
+			if (tok.type == TOKEN_COMMENT)
 			{
-				//Then check if a comment token was matched, but not handled, and if so, handle it.
-				if (tok.type == TOKEN_COMMENT)
+
+				String comment_str(256);
+				if (lookahead == '@' || lookahead == '/')
 				{
-
-					String comment_str(256);
-					if (lookahead == '@' || lookahead == '/')
-					{
-						tok.type = TOKEN_DOC_COMMENT;
-						tok.value = lookahead;
-						lookahead = Stream.getchar();
-					}
-
-					while (lookahead!='\n')
-					{
-						comment_str.append(lookahead);
-						lookahead = Stream.getchar();					
-					}
-					linenum += 1;
-					tok.str = comment_str;
-					safe_getchar();
-				}
-				else if (lookahead >= '0' && lookahead <= '9')
-				{
-					int base = 10;
-					if (lookahead == '0')
-					{
-						safe_getchar();
-						if (lookahead == 'b')
-							base = 2;
-						else if (lookahead == 'x')
-							base = 16;
-						else if (lookahead < '0' || lookahead > '9' || found_whitespace==true)
-						{
-							base = 0;
-						}
-						else
-						{
-							print_error("Invalid base for integer literal (you've got a leading 0)", tok.linenum);
-						}
-						safe_getchar();
-					}
-					tok.type = TOKEN_INT_LIT;
-					tok.value = parse_integer_literal(base);
-				}
-				else if ((lookahead >= 'a' && lookahead <= 'z') || (lookahead >= 'A' && lookahead <= 'Z') || lookahead=='_')
-				{
-					found_whitespace = false;
-					String str_token(256);
-					int string_length = 0;
-
-					//while lookahead is in [a-zA-Z0-9_], we've encounted no whitespace, and we haven't gone out of bounds of our string
-					while (	(
-							(lookahead >= 'a' && lookahead <= 'z') || 
-							(lookahead >= 'A' && lookahead <= 'Z') || 
-							(lookahead >= '0' && lookahead <= '9') || lookahead == '_'
-						) && found_whitespace == false && string_length < 256)
-					{
-						str_token.append(lookahead);
-						string_length += 1;
-						safe_getchar();
-					}
-					tok.type = TOKEN_NAME;
-					
-					if (!attempt_match_string_token(tok.type,str_token))
-						tok.str = str_token;
-
-				}
-				else if (lookahead == '\'')
-				{
-					lookahead = Stream.getchar();
-					unescape_lookahead();
-
-					tok.type = TOKEN_CHAR_LIT;
+					tok.type = TOKEN_DOC_COMMENT;
 					tok.value = lookahead;
-
-					String char_lit(1);
-					char_lit.append(tok.value);
-					tok.str = char_lit;
-					safe_getchar();
-
-					if (lookahead != '\'')
-					{
-						print_error("CHAR_LIT requires a closing \'",tok.linenum);
-						_error = true;
-						tok.type = TOKEN_ERROR;
-					}
-					safe_getchar();
+					lookahead = Stream.getchar();
 				}
-				else if (lookahead=='\"')
+
+				while (lookahead!='\n')
 				{
-					String str_lit(512);
-					safe_getchar();					
-					tok.type = TOKEN_STRING_LIT;
-					while (lookahead!= '\"' && !_error)
+					comment_str.append(lookahead);
+					lookahead = Stream.getchar();					
+				}
+				linenum += 1;
+				tok.str = comment_str;
+				safe_getchar();
+			}
+			// Parse integer literals
+			else if (lookahead >= '0' && lookahead <= '9')
+			{
+				int base = 10;
+				if (lookahead == '0')
+				{
+					safe_getchar();
+					if (lookahead == 'b')
+						base = 2;
+					else if (lookahead == 'x')
+						base = 16;
+					else if (lookahead < '0' || lookahead > '9' || found_whitespace==true)
 					{
-						unescape_lookahead();
-						str_lit.append(lookahead);
-						lookahead = Stream.getchar();
-						if (lookahead < 0)
-						{
-							print_error("End of File encountered while parsing string literal (put the \" in)",tok.linenum);
-							tok.type = TOKEN_ERROR;
-							_error = true;
-						}
-						else if (lookahead == '\n')
-							linenum+=1;
+						base = 0;
 					}
-					tok.str = str_lit;
+					else
+					{
+						print_error("Invalid base for integer literal, but you have a leading 0", tok.linenum);
+					}
 					safe_getchar();
 				}
-				else safe_getchar();
+				tok.type = TOKEN_INT_LIT;
+				tok.value = parse_integer_literal(base);
 			}
+			// Parse string tokens and names
+			else if ((lookahead >= 'a' && lookahead <= 'z') || (lookahead >= 'A' && lookahead <= 'Z') || lookahead=='_')
+			{
+				found_whitespace = false;
+				String str_token(256);
+				int string_length = 0;
+
+				//while lookahead is in [a-zA-Z0-9_], we've encounted no whitespace, and we haven't gone out of bounds of our string
+				while (	(
+						(lookahead >= 'a' && lookahead <= 'z') || 
+						(lookahead >= 'A' && lookahead <= 'Z') || 
+						(lookahead >= '0' && lookahead <= '9') || lookahead == '_'
+					) && found_whitespace == false && string_length < 256)
+				{
+					str_token.append(lookahead);
+					string_length += 1;
+					safe_getchar();
+				}
+				tok.type = TOKEN_NAME;
+				
+				if (!attempt_match_string_token(tok.type,str_token))
+					tok.str = str_token;
+
+			}
+			// Parse character literals
+			else if (lookahead == '\'')
+			{
+				lookahead = Stream.getchar();
+				unescape_lookahead();
+
+				tok.type = TOKEN_CHAR_LIT;
+				tok.value = lookahead;
+
+				String char_lit(1);
+				char_lit.append(tok.value);
+				tok.str = char_lit;
+				safe_getchar();
+
+				if (lookahead != '\'')
+				{
+					print_error("CHAR_LIT requires a closing \'",tok.linenum);
+					_error = true;
+					tok.type = TOKEN_ERROR;
+				}
+				safe_getchar();
+			}
+			// Parse strings
+			else if (lookahead=='\"')
+			{
+				String str_lit(512);
+				safe_getchar();					
+				tok.type = TOKEN_STRING_LIT;
+				while (lookahead!= '\"' && !_error)
+				{
+					unescape_lookahead();
+					str_lit.append(lookahead);
+					lookahead = Stream.getchar();
+					if (lookahead < 0)
+					{
+						print_error("End of File encountered while parsing string literal (put the \" in)",tok.linenum);
+						tok.type = TOKEN_ERROR;
+						_error = true;
+					}
+					else if (lookahead == '\n')
+						linenum+=1;
+				}
+				tok.str = str_lit;
+				safe_getchar();
+			}
+			// Otherwise, eat the current character
+			else safe_getchar();
 		}
 
 		return tok;
