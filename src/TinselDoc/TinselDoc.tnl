@@ -1,9 +1,27 @@
-int tinsel_doc(String infile, String outfile)
+int tinsel_doc(String infile, String outfile, String format)
 {
 	std_out.putstring("Tinsel Documentation Generator\n In-file:  \"");
 	std_out.putstring(infile);
 	std_out.putstring("\"\n Out-file: \"");
 	std_out.putstring(outfile);
 	std_out.putstring("\"\n");
+
+	TokenStream tok_in;
+	if (!tok_in.open(infile))
+	{
+		std_out.putstring("Could not open infile!\n");
+		return -1;
+	}
+
+	HTMLOutputGenerator output;
+	File doc_out;
+	if (!doc_out.open(outfile,String("w"),String("ASCII")))
+	{
+		std_out.putstring("Could not open outfile!\n");
+		return -1;
+	}
+	output.header(doc_out,infile);
+	output.footer(doc_out);
+	tok_in.close();
 	return 0;	
 }

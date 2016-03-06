@@ -1,0 +1,16 @@
+class HTMLOutputGenerator extends OutputGenerator
+{
+public:
+	void header(IOStream stream, String filename)
+	{
+		stream.putstring("<html><head><title>");
+		stream.putstring(filename);
+		stream.putstring("</title></head><body><h1>");
+		stream.putstring(filename);
+		stream.putstring("</h1>");
+	}
+	void footer(IOStream stream)
+	{
+		stream.putstring("<br><br>Documentation created with Tinsel Doc</body></html>");
+	}
+};

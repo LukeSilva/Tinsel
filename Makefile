@@ -25,5 +25,7 @@ tokenizer_standalone: tokenizer_base
 
 tinsel_doc: tokenizer_base
 	bash ctinsel.sh src/TinselDoc/TinselDoc.tnl build/TinselDoc.ctobj tinsel_doc
-	cat build/TokenType.ctobj build/Token.ctobj build/TokenStream.ctobj build/TinselDoc.ctobj > build/tinsel_doc.cpp
+	bash ctinsel.sh src/TinselDoc/OutputGenerator.tnl build/OutputGenerator.ctobj
+	bash ctinsel.sh src/TinselDoc/HTMLOutputGenerator.tnl build/HTMLOutputGenerator.ctobj
+	cat build/TokenType.ctobj build/Token.ctobj build/TokenStream.ctobj build/OutputGenerator.ctobj build/HTMLOutputGenerator.ctobj build/TinselDoc.ctobj > build/tinsel_doc.cpp
 	g++ $(CXXFLAGS) build/tinsel_doc.cpp -o build/tinsel_doc

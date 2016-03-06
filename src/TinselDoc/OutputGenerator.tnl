@@ -1,0 +1,6 @@
+class OutputGenerator
+{
+public:
+	virtual void header(IOStream stream, String filename){}
+	virtual void footer(IOStream stream){}
+};
