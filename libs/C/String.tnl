@@ -35,6 +35,13 @@ public:
 		
 	}
 
+	/// Sets the string to ""
+	void clear()
+	{
+		pos = 0;
+		characters.reset(length);
+	}
+
 	///Allows the string to be copied by the = operator
 	String& operator=(const String& that)
 	{
@@ -72,6 +79,18 @@ public:
 			return false;
 		++pos;
 		return true;		
+	}
+
+	/// Appends a string to the string
+	//@ return true on success
+	bool concat(String str)
+	{
+		int npos = 0;
+		while (npos < str.pos)
+		{
+			self.append(str.characters[npos]);
+			++npos;
+		}
 	}
 
 	/// Reverses the string
