@@ -1,3 +1,5 @@
+/// This is a multiline
+/// Doc comment
 int tinsel_doc(String infile, String outfile, String format)
 {
 	std_out.putstring("Tinsel Documentation Generator\n In-file:  \"");
@@ -21,6 +23,61 @@ int tinsel_doc(String infile, String outfile, String format)
 		return -1;
 	}
 	output.header(doc_out,infile);
+
+
+	Token tok;
+	tok.type = TOKEN_UNKNOWN;
+	String comment(2048);
+	String source(512);
+	bool parse_comment = false;
+	while (tok.type != TOKEN_ENDOFSTREAM && tok.type != TOKEN_ERROR)
+	{
+
+		if (tok.type == TOKEN_DOC_COMMENT)
+		{
+			if (tok.value == 47)
+			{
+				comment.concat(tok.str);
+				comment.append('\n');
+				parse_comment = true;
+			}
+		}
+		else if ((tok.type == TOKEN_SEMICOLON || tok.type == TOKEN_OBLOCK) && parse_comment)
+		{
+			output.definition(doc_out,source,comment);
+			comment.clear();
+			source.clear();
+			parse_comment = false;
+		}
+		else if (parse_comment)
+		{
+			if (tok.type == TOKEN_U8) source.concat(String("u8 "));
+			else if (tok.type == TOKEN_S8) source.concat(String("s8 "));
+			else if (tok.type == TOKEN_U16)	source.concat(String("u16 "));
+			else if (tok.type == TOKEN_S16) source.concat(String("s16 "));
+			else if (tok.type == TOKEN_U32) source.concat(String("u32 "));
+			else if (tok.type == TOKEN_S32) source.concat(String("s32 "));
+			else if (tok.type == TOKEN_INT) source.concat(String("int "));
+			else if (tok.type == TOKEN_BOOL) source.concat(String("bool "));
+			else if (tok.type == TOKEN_VOID) source.concat(String("void "));
+			else if (tok.type == TOKEN_NAME){  source.concat(tok.str); source.append(' '); }
+			else if (tok.type == TOKEN_COMMA) source.concat(String(", "));
+			else if (tok.type == TOKEN_OBRACKET) source.concat(String("("));
+			else if (tok.type == TOKEN_CBRACKET) source.concat(String(")"));
+			else if (tok.type == TOKEN_CLASS) source.concat(String("class "));
+			else if (tok.type == TOKEN_ENUM) source.concat(String("enum "));
+			else if (tok.type == TOKEN_VIRTUAL) source.concat(String("virtual "));
+			else
+			{
+				std_out.putstring(String("Unknown token to add to source line\n"));
+				tok.print(std_out);
+			}
+		}
+
+		tok = tok_in.getToken();
+
+	}
+
 	output.footer(doc_out);
 	tok_in.close();
 	return 0;	

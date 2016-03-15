@@ -1,3 +1,28 @@
+
+/// Function that converts \n to <br> for html
+String nl2br(String in)
+{
+	int len = in.length;
+	int npos = 0;
+	while (npos < in.pos)
+	{
+		if (in.characters[npos] == '\n')
+			len+=3;
+		++npos;
+	}
+	String out(len);
+	npos = 0;
+	while (npos < in.pos)
+	{
+		if (in.characters[npos] == '\n')
+			out.concat("<br>");
+		else
+			out.append(in.characters[npos]);
+		++npos;
+	}
+	return out;
+}
+
 class HTMLOutputGenerator extends OutputGenerator
 {
 public:
@@ -9,6 +34,16 @@ public:
 		stream.putstring(filename);
 		stream.putstring("</h1>");
 	}
+
+	void definition(IOStream stream, String source, String comment)
+	{
+		stream.putstring("<div><h2>");
+		stream.putstring(source);
+		stream.putstring("</h2><br><p>");
+		stream.putstring(nl2br(comment));
+		stream.putstring("</p></div>");
+	}
+
 	void footer(IOStream stream)
 	{
 		stream.putstring("<br><br>Documentation created with Tinsel Doc</body></html>");

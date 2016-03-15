@@ -2,5 +2,6 @@ class OutputGenerator
 {
 public:
 	virtual void header(IOStream stream, String filename){}
+	virtual void definition(IOStream stream, String source, String comment){}
 	virtual void footer(IOStream stream){}
 };
