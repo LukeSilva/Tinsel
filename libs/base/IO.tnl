@@ -1,8 +1,8 @@
-import String
+import String1
 
 //@ table Error Values
-/// Value | Error
-///    -1 | End of Stream / File
+//@ data Value | Error
+//@ data    -1 | End of Stream / File
 
 class IOStream
 {
@@ -11,7 +11,7 @@ public:
 
 	/// Opens the Stream
 	//@ return true on success
-	bool open()
+	virtual bool open()
 	{
 		_isOpen = true;
 		return true;
@@ -19,7 +19,7 @@ public:
 
 	/// Closes the Stream
 	//@ return true on success
-	bool close()
+	virtual bool close()
 	{
 		_isOpen = false;
 		return true;
@@ -28,14 +28,14 @@ public:
 	/// Gets a character from the stream
 	//@ return negative value on error 
 	//@ return character value on success
-	s32 getchar()
+	virtual s32 getchar()
 	{
 		return -1;
 	}
 
 	/// Puts a character into the stream
 	//@ return true on success
-	bool putchar(u32 character)
+	virtual bool putchar(u32 character)
 	{
 		return false;
 	}
@@ -46,7 +46,7 @@ public:
 	{
 		bool retval = true;
 		int pos = 0;
-		while (pos < msg.length && retval == true)
+		while (pos < msg.pos && retval == true)
 		{
 			retval = putchar(msg.getchar(pos)) && retval;
 			pos += 1;
@@ -56,7 +56,7 @@ public:
 
 	/// Puts an integer into the stream
 	//@ return true on success
-	bool putint(int integer)
+	bool putint(s32 integer)
 	{
 		String output_string(34);
 

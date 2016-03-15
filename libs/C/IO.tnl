@@ -1,8 +1,8 @@
 import String
 
 //@ table Error Values
-/// Value | Error
-///    -1 | End of Stream / File
+//@ data Value | Error
+//@ data    -1 | End of Stream / File
 
 class IOStream
 {

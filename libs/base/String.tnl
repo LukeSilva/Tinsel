@@ -2,6 +2,7 @@ class String
 {
 public:
 	int pos = 0;
+	int length = 0;
 	u32 array characters;
 
 	/// Creates a string of length 0
@@ -9,15 +10,24 @@ public:
 	{
 		characters.reset(0);
 		pos = 0;
+		length = 0;
 	}
 
 	/// Creates a string with a certain length
-	String(int length)
+	String(int nlength)
+	{
+		length = nlength;
+		pos = 0;
+		characters.reset(nlength);
+	}
+
+	/// Sets the string to ""
+	void clear()
 	{
 		pos = 0;
 		characters.reset(length);
 	}
-
+	
 	/// Gets a character from the string
 	//@ return the character value
 	u32 getchar(int npos)
@@ -30,8 +40,6 @@ public:
 	bool setchar(int npos, u32 character)
 	{
 		characters[npos] = character;
-		if (pos < npos)
-			pos = npos;
 		return true;
 	}
 
@@ -47,16 +55,44 @@ public:
 		return true;		
 	}
 
+	/// Appends a string to the string
+	//@ return true on success
+	bool concat(String str)
+	{
+		int npos = 0;
+		while (npos < str.pos)
+		{
+			self.append(str.characters[npos]);
+			++npos;
+		}
+	}
+
 	/// Reverses the string
 	//@ return true on success (always)
 	bool reverse()
 	{
 		int npos = 0;
-		while (npos < pos)
+		while (npos < (pos)/2)
 		{
 			u32 ochar = characters[pos-npos-1];
 			characters[pos-npos-1] = characters[npos];
 			characters[npos] = ochar;
+			++npos;
+		}
+		return true;
+	}
+
+	/// Compares the string with another string
+	//@ return true on success
+	bool compare(String str)
+	{
+		if (pos != str.pos)
+			return false;
+		int npos = 0;
+		while(npos < pos)
+		{
+			if (characters[npos] != str.characters[npos])
+				return false;
 			++npos;
 		}
 		return true;
