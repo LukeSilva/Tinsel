@@ -269,6 +269,8 @@ private:
 			type = TOKEN_PRIVATE;
 		else if (str_token.compare("protected"))
 			type = TOKEN_PROTECTED;
+		else if (str_token.compare("virtual"))
+			type = TOKEN_VIRTUAL;
 		else if (str_token.compare("true"))
 			type = TOKEN_BOOL_TRUE;
 		else if (str_token.compare("false"))
