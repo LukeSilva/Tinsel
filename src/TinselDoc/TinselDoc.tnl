@@ -1,5 +1,6 @@
 /// This is a multiline
 /// Doc comment
+
 int tinsel_doc(String infile, String outfile, String format)
 {
 	std_out.putstring("Tinsel Documentation Generator\n In-file:  \"");
@@ -29,24 +30,85 @@ int tinsel_doc(String infile, String outfile, String format)
 	tok.type = TOKEN_UNKNOWN;
 	String comment(2048);
 	String source(512);
+	String retcomment(256);
 	bool parse_comment = false;
+	bool parse_table = false;
 	while (tok.type != TOKEN_ENDOFSTREAM && tok.type != TOKEN_ERROR)
 	{
 
 		if (tok.type == TOKEN_DOC_COMMENT)
 		{
-			if (tok.value == 47)
+			if (tok.value == 64)
+			{
+				int npos = 0;
+				if (tok.str.getchar(npos)==' ') npos = 1;
+				String cmd(16);
+				int len = 0;
+				while (len < 16 && tok.str.getchar(npos)!=' ' && npos < tok.str.pos)
+				{
+					cmd.append(tok.str.getchar(npos));
+					npos += 1;
+					len += 1;
+				}
+				if (cmd.compare("return"))
+				{
+					parse_comment = true;
+					while(npos < tok.str.pos)
+					{
+						retcomment.append(tok.str.getchar(npos));
+						npos += 1;
+					}
+				}
+				else if (cmd.compare("table"))
+				{
+					if (parse_table)
+						output.table_finish(doc_out);
+					parse_table = true;
+					String table_heading(256);
+					while (npos < tok.str.pos)
+					{
+						table_heading.append(tok.str.getchar(npos));
+						npos+=1;
+					}
+					output.table_begin(doc_out,table_heading);
+				}
+				else if (cmd.compare("row") && parse_table)
+				{
+					String cell_data(256);
+					output.table_row(doc_out);
+					while (npos < tok.str.pos)
+					{
+						if (tok.str.getchar(npos) != '|')
+							cell_data.append(tok.str.getchar(npos));
+						else
+						{
+							output.table_cell(doc_out,cell_data);
+							cell_data.clear();
+						}
+						npos+=1;
+					}
+					output.table_cell(doc_out,cell_data);
+				}
+				
+			}
+			else if (tok.value == 47)
 			{
 				comment.concat(tok.str);
 				comment.append('\n');
 				parse_comment = true;
 			}
+
 		}
 		else if ((tok.type == TOKEN_SEMICOLON || tok.type == TOKEN_OBLOCK) && parse_comment)
 		{
-			output.definition(doc_out,source,comment);
+			if (parse_table)
+			{
+				output.table_finish(doc_out);
+			}
+			output.definition(doc_out,source,comment,retcomment);
 			comment.clear();
 			source.clear();
+			retcomment.clear();
 			parse_comment = false;
 		}
 		else if (parse_comment)

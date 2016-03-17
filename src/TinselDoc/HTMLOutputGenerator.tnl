@@ -25,6 +25,9 @@ String nl2br(String in)
 
 class HTMLOutputGenerator extends OutputGenerator
 {
+private:
+	bool _table = false;
+	bool _table_row = false;
 public:
 	void header(IOStream stream, String filename)
 	{
@@ -35,7 +38,7 @@ public:
 		stream.putstring("</h1>");
 	}
 
-	void definition(IOStream stream, String source, String comment)
+	void _definition(IOStream stream, String source, String comment)
 	{
 		stream.putstring("<div><h2>");
 		stream.putstring(source);
@@ -44,6 +47,36 @@ public:
 		stream.putstring("</p></div>");
 	}
 
+	void table_begin(IOStream stream,String heading)
+	{
+		_table = true;
+		_table_row = false;
+		stream.putstring("<h2>");
+		stream.putstring(heading);
+		stream.putstring("</h2><table>");
+	}
+
+	void table_row(IOStream stream)
+	{
+		if (_table_row)
+			stream.putstring("</tr>");
+		stream.putstring("<tr>");
+		_table_row = true;
+	}
+
+	void table_cell(IOStream stream, String cell_data)
+	{
+		stream.putstring("<td>");
+		stream.putstring(cell_data);
+		stream.putstring("</td>");
+	}
+
+	void table_finish(IOStream stream)
+	{
+		if (_table_row)
+			stream.putstring("</tr>");
+		stream.putstring("</table>");
+	}
 	void footer(IOStream stream)
 	{
 		stream.putstring("<br><br>Documentation created with Tinsel Doc</body></html>");
