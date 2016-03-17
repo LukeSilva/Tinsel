@@ -109,7 +109,7 @@ public:
 	}
 
 	/// Compares the string with another string
-	//@ return true on success
+	//@ return true if the strings match
 	bool compare(String str)
 	{
 		if (pos != str.pos)

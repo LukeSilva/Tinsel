@@ -1,18 +1,18 @@
 import IO
 
 //@ table File modes
-//@ data mode  | meaning
-//@ data    r  | read only, do not open if the file doesn't exist
-//@ data    w  | write only, create file if the file doesn't exist
-//@ data    r+ | read and write, do not open if the file doesn't exist
-//@ data    w+ | read and write, create file if the file doesn't exist
+//@ row mode  | meaning
+//@ row    r  | read only, do not open if the file doesn't exist
+//@ row    w  | write only, create file if the file doesn't exist
+//@ row    r+ | read and write, do not open if the file doesn't exist
+//@ row    w+ | read and write, create file if the file doesn't exist
 
 //@ table Encodings
-//@ data code  | encoding
-//@ data ascii | ASCII (Returns characters as UTF-32)
-//@ data  utf8 | UTF-8 (Returns characters as UTF-32)
-//@ data utf32 | UTF-32 
-//@ data   bin | binary file (Only uses lower 8 bits on the character)
+//@ row code  | encoding
+//@ row ascii | ASCII (Returns characters as UTF-32)
+//@ row  utf8 | UTF-8 (Returns characters as UTF-32)
+//@ row utf32 | UTF-32 
+//@ row   bin | binary file (Only uses lower 8 bits on the character)
 
 class File extends IOStream
 {
