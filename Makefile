@@ -32,7 +32,7 @@ tinsel_doc: tokenizer_base
 
 docs: tinsel_doc
 	mkdir -p docs
-	echo "cd libs/base && for i in *.tnl; do ../../build/tinsel_doc --infile \$$$ i --outfile ../../docs/\$$$ i; done " | bash
+	echo "cd libs/base && for i in *.tnl; do ../../build/tinsel_doc --infile \$$$ i --outfile ../../docs/\$$$ i.htm; done " | bash
 	mkdir -p docs/Tokenizer
-	echo "cd src/Tokenizer && for i in *.tnl; do ../../build/tinsel_doc --infile \$$$ i --outfile ../../docs/Tokenizer/\$$$ i; done " | bash
+	echo "cd src/Tokenizer && for i in *.tnl; do ../../build/tinsel_doc --infile \$$$ i --outfile ../../docs/Tokenizer/\$$$ i.htm; done " | bash
  
