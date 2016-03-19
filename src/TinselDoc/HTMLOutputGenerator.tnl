@@ -1,5 +1,5 @@
 
-/// Function that converts \n to <br> for html
+/// Function that converts \n to <br/> for html
 String nl2br(String in)
 {
 	int len = in.length;
@@ -15,7 +15,7 @@ String nl2br(String in)
 	while (npos < in.pos)
 	{
 		if (in.characters[npos] == '\n')
-			out.concat("<br>");
+			out.concat("<br/>");
 		else
 			out.append(in.characters[npos]);
 		++npos;
@@ -50,7 +50,7 @@ public:
 		stream.putstring(source);
 		stream.putstring("</h2><p>");
 		stream.putstring(nl2br(comment));
-		stream.putstring("</p></div>");
+		stream.putstring("</p></div><br/>");
 	}
 
 	void table_begin(IOStream stream,String heading)
@@ -91,10 +91,10 @@ public:
 	{
 		if (_table_row)
 			stream.putstring("</tr>");
-		stream.putstring("</table><br>");
+		stream.putstring("</table><br/>");
 	}
 	void footer(IOStream stream)
 	{
-		stream.putstring("<br><br>Documentation created with Tinsel Doc (WIP)</body></html>");
+		stream.putstring("<br/><br/>Documentation created with Tinsel Doc (WIP)</body></html>");
 	}
 };

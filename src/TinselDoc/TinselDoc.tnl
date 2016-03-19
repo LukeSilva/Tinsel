@@ -110,6 +110,7 @@ int tinsel_doc(String infile, String outfile, String format)
 			source.clear();
 			retcomment.clear();
 			parse_comment = false;
+			parse_table = false;
 		}
 		else if (parse_comment)
 		{
