@@ -10,7 +10,7 @@ public:
 		int nlength = comment.pos + retcomment.pos + 16;
 		String ncomment(nlength);
 		ncomment.concat(comment);
-		ncomment.concat("\nReturns:");
+		ncomment.concat("Returns:");
 		ncomment.concat(retcomment);
 		_definition(stream,source,ncomment);
 		

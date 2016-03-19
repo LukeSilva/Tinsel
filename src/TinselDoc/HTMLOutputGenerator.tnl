@@ -28,21 +28,27 @@ class HTMLOutputGenerator extends OutputGenerator
 private:
 	bool _table = false;
 	bool _table_row = false;
+	bool _table_th = false;
 public:
 	void header(IOStream stream, String filename)
 	{
 		stream.putstring("<html><head><title>");
 		stream.putstring(filename);
-		stream.putstring("</title></head><body><h1>");
+		stream.putstring("</title>");
+
+		//CSS minified with http://www.cleancss.com/css-minify/
+		stream.putstring("<style>h1.filename{font-size:24pt;padding-bottom:20px}h2.table{font-size:20pt}table.table{background-color:lightblue;border-collapse:collapse;border:1px solid black}table.table td,th{border:1px solid black;padding:1px 2px 0px 2px}div.comment{border:1px solid black;background:lightblue}h2.comment{margin:1px 0px 10px 3px;font-size:14pt}div.comment p{margin:5px 0px 1px 3px}</style>");
+
+		stream.putstring("</head><body><h1 class='filename'>");
 		stream.putstring(filename);
 		stream.putstring("</h1>");
 	}
 
 	void _definition(IOStream stream, String source, String comment)
 	{
-		stream.putstring("<div><h2>");
+		stream.putstring("<div class='comment'><h2 class='comment'>");
 		stream.putstring(source);
-		stream.putstring("</h2><br><p>");
+		stream.putstring("</h2><p>");
 		stream.putstring(nl2br(comment));
 		stream.putstring("</p></div>");
 	}
@@ -51,34 +57,44 @@ public:
 	{
 		_table = true;
 		_table_row = false;
-		stream.putstring("<h2>");
+		_table_th = true;
+		stream.putstring("<h2 class='table'>");
 		stream.putstring(heading);
-		stream.putstring("</h2><table>");
+		stream.putstring("</h2><table class='table'>");
 	}
 
 	void table_row(IOStream stream)
 	{
 		if (_table_row)
+		{
+			_table_th = false;
 			stream.putstring("</tr>");
+		}
 		stream.putstring("<tr>");
 		_table_row = true;
 	}
 
 	void table_cell(IOStream stream, String cell_data)
 	{
-		stream.putstring("<td>");
+		if (_table_th)
+			stream.putstring("<th>");
+		else
+			stream.putstring("<td>");
 		stream.putstring(cell_data);
-		stream.putstring("</td>");
+		if (_table_th)
+			stream.putstring("</th>");
+		else
+			stream.putstring("</td>");
 	}
 
 	void table_finish(IOStream stream)
 	{
 		if (_table_row)
 			stream.putstring("</tr>");
-		stream.putstring("</table>");
+		stream.putstring("</table><br>");
 	}
 	void footer(IOStream stream)
 	{
-		stream.putstring("<br><br>Documentation created with Tinsel Doc</body></html>");
+		stream.putstring("<br><br>Documentation created with Tinsel Doc (WIP)</body></html>");
 	}
 };

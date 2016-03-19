@@ -1,0 +1,38 @@
+h1.filename{
+  font-size: 24pt;
+  padding-bottom: 20px;
+}
+
+h2.table
+{
+  font-size: 20pt;
+}
+
+table.table
+{
+  background-color: lightblue;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+table.table td,th{
+  border: 1px solid black;
+  padding: 1px 2px 0px 2px;
+}
+
+div.comment
+{
+  border: 1px solid black;
+  background: lightblue;
+  
+}
+
+h2.comment
+{
+  margin: 1px 0px 10px 3px;
+  font-size: 14pt;
+}
+div.comment p
+{
+  margin: 5px 0px 1px 3px;
+}
+
