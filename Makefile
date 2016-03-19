@@ -6,7 +6,7 @@ libs:
 	bash -e build.sh
 
 tokenizer_base:
-	mkdir -p build	
+	mkdir -p build
 	bash ctinsel.sh src/Tokenizer/TokenType.tnl build/TokenType.ctobj
 	bash ctinsel.sh src/Tokenizer/Token.tnl build/Token.ctobj
 	bash ctinsel.sh src/Tokenizer/TokenStream.tnl build/TokenStream.ctobj
@@ -29,3 +29,8 @@ tinsel_doc: tokenizer_base
 	bash ctinsel.sh src/TinselDoc/HTMLOutputGenerator.tnl build/HTMLOutputGenerator.ctobj
 	cat build/TokenType.ctobj build/Token.ctobj build/TokenStream.ctobj build/OutputGenerator.ctobj build/HTMLOutputGenerator.ctobj build/TinselDoc.ctobj > build/tinsel_doc.cpp
 	g++ $(CXXFLAGS) build/tinsel_doc.cpp -o build/tinsel_doc
+
+docs: tinsel_doc
+	mkdir -p docs
+	echo "cd libs/base && for i in *.tnl; do ../../build/tinsel_doc --infile \$$$ i --outfile ../../docs/\$$$ i; done " | bash
+ 
