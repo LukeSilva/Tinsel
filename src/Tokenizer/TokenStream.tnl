@@ -3,7 +3,7 @@ import FileIO
 /// A class that reads a .tnl file and creates a stream of token objects from it.
 class TokenStream
 {
-private:
+protected:
 	/// The file stream of the .tnl input file
 	File Stream;
 

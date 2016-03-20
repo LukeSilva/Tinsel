@@ -150,7 +150,6 @@ int test_Tokenizer()
 		std_out.putstring(String("[PASS]\n"));
 	}
 
-
 	//Print ending message, with percentage of pass rate
 	std_out.putstring(String("\n\n--------Tokenizer Results   --------\n\n"));
 	std_out.putstring(String("Pass-Rate: "));
