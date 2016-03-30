@@ -33,6 +33,7 @@ int tinsel_doc(String infile, String outfile, String format)
 	String retcomment(256);
 	bool parse_comment = false;
 	bool parse_table = false;
+	bool private_status = false;
 	while (tok.type != TOKEN_ENDOFSTREAM && tok.type != TOKEN_ERROR)
 	{
 
@@ -99,13 +100,15 @@ int tinsel_doc(String infile, String outfile, String format)
 			}
 
 		}
+    else if (tok.type == TOKEN_PRIVATE || tok.type == TOKEN_PROTECTED) private_status = true;
+    else if (tok.type == TOKEN_PUBLIC) private_status = false;
 		else if ((tok.type == TOKEN_SEMICOLON || tok.type == TOKEN_OBLOCK) && parse_comment)
 		{
 			if (parse_table)
 			{
 				output.table_finish(doc_out);
 			}
-			output.definition(doc_out,source,comment,retcomment);
+			output.definition(doc_out,source,comment,retcomment,private_status);
 			comment.clear();
 			source.clear();
 			retcomment.clear();

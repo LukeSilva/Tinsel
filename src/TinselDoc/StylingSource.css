@@ -23,7 +23,7 @@ div.comment
 {
   border: 1px solid black;
   background: lightblue;
-  
+  margin-bottom: 20px;
 }
 
 h2.comment
