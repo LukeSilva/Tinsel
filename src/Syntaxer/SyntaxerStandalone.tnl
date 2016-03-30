@@ -1,0 +1,12 @@
+/// The standalone syntaxer program
+/// Takes a .tnl as it's input, and creates a .tast file as it's output
+//@ return 0 on success, -1 on file error, -2 on internal error
+int standalone_syntaxer(String infile, String outfile)
+{
+  Syntaxer syn;
+  if (!syn.open(infile))
+  {
+    std_out.putstring("Could not open infile\n");
+    return -1;
+  }
+}
