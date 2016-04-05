@@ -1,0 +1,60 @@
+/// Returns true if a specific token is a primitive type
+bool is_pimitive_type(TokenType varType)
+{
+	if (	varType == TOKEN_U8  || varType == TOKEN_S8  || 
+		varType == TOKEN_U16 || varType == TOKEN_S16 ||
+		varType == TOKEN_U32 || varType == TOKEN_S32 ||
+		varType == TOKEN_INT || varType == TOKEN_BOOL || varType == TOKEN_VOID )
+	{
+		return true;
+	}
+	return false;
+}
+
+/// Returns an appropriate string representation of a variable type
+String var_type_string(TokenType varType)
+{
+	if (varType==TOKEN_U8) return String("U8");
+	else if (varType==TOKEN_S8) return String("S8");
+	else if (varType==TOKEN_U16) return String("U16");
+	else if (varType==TOKEN_S16) return String("S16");
+	else if (varType==TOKEN_U32) return String("U32");
+	else if (varType==TOKEN_S32) return String("S32");
+	else if (varType==TOKEN_INT) return String("INT");
+	else if (varType==TOKEN_VOID) return String("VOID");
+	else if (varType==TOKEN_BOOL) return String("BOOL");
+	return String("UNK");
+}
+
+int syntaxer_standalone(String infile)
+{
+	TokenStream tok_reader;
+
+	if (!tok_reader.open(infile))
+	{
+		std_out.putstring(String("Could not open infile!\n"));
+		return -1;
+	}
+
+	Token currentTok;
+
+	while (currentTok = tok_reader.getToken())
+	{
+		// Start a global primitive type definition
+		if (is_primitive_type(currentTok.type))
+		{
+			Token nxtTok = tok_reader.getToken();
+			if (nxtTok.type == TOKEN_NAME)
+			{
+				String var_name = nxtTok.str;
+				std_out.putstring(String("GLOBAL_BSS "));
+				std_out.putstring(var_type_string(currentTok.type));
+				std_out.putchar(' ');
+				std_out.putstring(var_name.str);
+				std_out.putchar('\n');
+			}
+			else std_out.putstring(String("Invalid Syntax"));
+		}
+	}
+
+}

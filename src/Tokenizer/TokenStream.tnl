@@ -324,6 +324,7 @@ protected:
 public:
 
 	/// Opens a filename and prepares it for parsing.
+	//@ return true on success
 	bool open(String filename){
 		if (!Stream.open(filename,String("r"),String("ASCII")))
 			return false;
