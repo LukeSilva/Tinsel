@@ -21,9 +21,15 @@ echo "#include \"ConsoleIO.h\"
 Console std_in;
 Console std_out;" >> h/tnl2c.h
 
+
+echo "----Building the String array type----"
+sed -e "s/_type/String/g" < templates/array_template > h/String_array.h
+echo "#include \"String_array.h\"" >> h/tnl2c.h
+echo " - String_array.h"
+
 cd ../../
 
-echo "----Building the stdlib for C---"
+echo "----Building the stdlib for C----"
 
 cstdlibfiles=("String" "IO" "FileIO" "ConsoleIO")
 for i in "${cstdlibfiles[@]}"

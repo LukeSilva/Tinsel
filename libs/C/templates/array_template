@@ -16,7 +16,7 @@ public:
 	void resize(int nlength)
 	{
 		// Create the starting ptr
-		_type* nptr = 0xDEADBEEF;
+		_type* nptr = (_type*)0xDEADBEEF;
 
 		// Figure out how many elements need to be copied
 		int copylen = length;
