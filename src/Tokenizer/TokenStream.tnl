@@ -61,6 +61,7 @@ protected:
 	/// Prints a pretty warning message
 	void print_warning(String warning_string, u32 warnlinenum)
 	{
+    std_out.putstring(String("[TOKENIZER] "));
 		std_out.putstring(_filename);
 		std_out.putchar(':');
 		std_out.putint(warnlinenum);
@@ -72,6 +73,7 @@ protected:
 	/// Prints a pretty error message
 	void print_error(String error_string, u32 errorlinenum)
 	{
+    std_out.putstring(String("[TOKENIZER] "));
 		std_out.putstring(_filename);
 		std_out.putchar(':');
 		std_out.putint(errorlinenum);

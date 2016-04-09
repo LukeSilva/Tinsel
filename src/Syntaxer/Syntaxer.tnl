@@ -58,3 +58,52 @@ int syntaxer_standalone(String infile)
 	}
 
 }
+
+
+class Syntaxer
+{
+protected:
+	bool _open = false;
+	bool _error = false;
+	TokenStream Stream;
+	String _filename;
+
+	/// Prints a pretty warning message
+	void print_warning(String warning_string, u32 warnlinenum)
+	{
+		std_out.putstring(String("[SYNTAX] "));
+		std_out.putstring(_filename);
+		std_out.putchar(':');
+		std_out.putint(warnlinenum);
+		std_out.putstring(" - Warning: ");
+		std_out.putstring(warning_string);
+		std_out.putchar('\n');
+	}
+
+	/// Prints a pretty error message
+	void print_error(String error_string, u32 errorlinenum)
+	{
+		std_out.putstring(String("[SYNTAX] "));
+		std_out.putstring(_filename);
+		std_out.putchar(':');
+		std_out.putint(errorlinenum);
+		std_out.putstring(" - Error: ");
+		std_out.putstring(error_string);
+		std_out.putchar('\n');
+	}
+
+
+public:
+	/// Opens a file and prepares it for the tokenizer and syntaxer
+	bool open(String filename)
+	{
+		if (!Stream.open(filename))
+			return false;
+		_open = true;
+		_error = false;
+		_filename = filename;
+		return true;
+	}
+  
+};
+

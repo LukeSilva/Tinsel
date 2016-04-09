@@ -37,20 +37,26 @@ public:
 		stream.putstring("</title>");
 
 		//CSS minified with http://www.cleancss.com/css-minify/
-		stream.putstring("<style>h1.filename{font-size:24pt;padding-bottom:20px}h2.table{font-size:20pt}table.table{background-color:lightblue;border-collapse:collapse;border:1px solid black}table.table td,th{border:1px solid black;padding:1px 2px 0px 2px}div.comment{border:1px solid black;background:lightblue}h2.comment{margin:1px 0px 10px 3px;font-size:14pt}div.comment p{margin:5px 0px 1px 3px}</style>");
+		stream.putstring("<style>h1.filename{font-size:24pt;padding-bottom:20px}h2.table{font-size:20pt}table.table{background-color:lightblue;border-collapse:collapse;border:1px solid black}table.table td,th{border:1px solid black;padding:1px 2px 0px 2px}div.comment{border:1px solid black;background:lightblue;margin-bottom:20px}h2.comment{margin:1px 0px 10px 3px;font-size:14pt}div.comment p{margin:5px 0px 1px 3px}</style>");
+    stream.putstring("<script>function privateStyle(style){privateElements = document.getElementsByClassName(\"private\");for (var i = 0; i < privateElements.length; ++i){privateElements[i].style=style;}}</script>");
 
-		stream.putstring("</head><body><h1 class='filename'>");
+		stream.putstring("</head><body onload='privateStyle(\"height:0;visibility:hidden;margin:0;border:0;\")'><h1 class='filename'>");
 		stream.putstring(filename);
 		stream.putstring("</h1>");
+    stream.putstring("<button onclick='privateStyle(\"height:0;visibility:hidden;margin:0;border:0;\")'>Hide private definitions</button>");
+    stream.putstring("<button onclick='privateStyle(\"\")'>Show private definitions</button><br/><br/>");
 	}
 
-	void _definition(IOStream stream, String source, String comment)
+	void _definition(IOStream stream, String source, String comment,bool private_status)
 	{
-		stream.putstring("<div class='comment'><h2 class='comment'>");
+    if (!private_status)
+  		stream.putstring("<div class='comment'><h2 class='comment'>");
+    else
+      stream.putstring("<div class='private comment'><h2 class='comment'>");
 		stream.putstring(source);
 		stream.putstring("</h2><p>");
 		stream.putstring(nl2br(comment));
-		stream.putstring("</p></div><br/>");
+		stream.putstring("</p></div>");
 	}
 
 	void table_begin(IOStream stream,String heading)
@@ -91,7 +97,7 @@ public:
 	{
 		if (_table_row)
 			stream.putstring("</tr>");
-		stream.putstring("</table><br/>");
+		stream.putstring("</table>");
 	}
 	void footer(IOStream stream)
 	{

@@ -2,17 +2,17 @@ class OutputGenerator
 {
 public:
 	virtual void header(IOStream stream, String filename){}
-	virtual void _definition(IOStream stream, String source, String comment){}
-	void definition(IOStream stream, String source, String comment, String retcomment)
+	virtual void _definition(IOStream stream, String source, String comment, bool private_status){}
+	void definition(IOStream stream, String source, String comment, String retcomment,bool private_status)
 	{
 		if (retcomment.compare(""))
-			return _definition(stream,source,comment);
+			return _definition(stream,source,comment,private_status);
 		int nlength = comment.pos + retcomment.pos + 16;
 		String ncomment(nlength);
 		ncomment.concat(comment);
 		ncomment.concat("Returns:");
 		ncomment.concat(retcomment);
-		_definition(stream,source,ncomment);
+		_definition(stream,source,ncomment,private_status);
 		
 	}
 
