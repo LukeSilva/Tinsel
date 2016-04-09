@@ -1,5 +1,7 @@
+int default_num_globals = 256;
+
 /// Returns true if a specific token is a primitive type
-bool is_pimitive_type(TokenType varType)
+bool is_primitive_type(TokenType varType)
 {
 	if (	varType == TOKEN_U8  || varType == TOKEN_S8  || 
 		varType == TOKEN_U16 || varType == TOKEN_S16 ||
@@ -12,7 +14,7 @@ bool is_pimitive_type(TokenType varType)
 }
 
 /// Returns an appropriate string representation of a variable type
-String var_type_string(TokenType varType)
+String var_type_string(int varType)
 {
 	if (varType==TOKEN_U8) return String("U8");
 	else if (varType==TOKEN_S8) return String("S8");
@@ -26,40 +28,6 @@ String var_type_string(TokenType varType)
 	return String("UNK");
 }
 
-int syntaxer_standalone(String infile)
-{
-	TokenStream tok_reader;
-
-	if (!tok_reader.open(infile))
-	{
-		std_out.putstring(String("Could not open infile!\n"));
-		return -1;
-	}
-
-	Token currentTok;
-
-	while (currentTok = tok_reader.getToken())
-	{
-		// Start a global primitive type definition
-		if (is_primitive_type(currentTok.type))
-		{
-			Token nxtTok = tok_reader.getToken();
-			if (nxtTok.type == TOKEN_NAME)
-			{
-				String var_name = nxtTok.str;
-				std_out.putstring(String("GLOBAL_BSS "));
-				std_out.putstring(var_type_string(currentTok.type));
-				std_out.putchar(' ');
-				std_out.putstring(var_name.str);
-				std_out.putchar('\n');
-			}
-			else std_out.putstring(String("Invalid Syntax"));
-		}
-	}
-
-}
-
-
 class Syntaxer
 {
 protected:
@@ -67,6 +35,11 @@ protected:
 	bool _error = false;
 	TokenStream Stream;
 	String _filename;
+
+
+	int 		global_nxtid = 0;
+	int array 	global_types;
+	String array 	global_names;
 
 	/// Prints a pretty warning message
 	void print_warning(String warning_string, u32 warnlinenum)
@@ -102,7 +75,60 @@ public:
 		_open = true;
 		_error = false;
 		_filename = filename;
+
+		global_nxtid = 0;
+		global_types.reset(default_num_globals);
+		global_names.reset(default_num_globals);
 		return true;
+	}
+
+	/// Parses a file, printing information about it.
+	//@ return false on failure
+	bool parse()
+	{
+		Token currentTok;
+
+		bool _eof = false;
+		while (!_error && !_eof)
+		{
+			currentTok = Stream.getToken();
+
+			// Start a global primitive type definition
+			if (is_primitive_type(currentTok.type))
+			{
+				Token nxtTok = Stream.getToken();
+				if (nxtTok.type == TOKEN_NAME)
+				{
+					String var_name = nxtTok.str;
+					global_types[global_nxtid] = currentTok.type;
+					global_names[global_nxtid++] = nxtTok.str;
+				}
+				else
+				{
+					print_error(String("Invalid name for variable / function"),nxtTok.linenum);
+					_error = true;
+				}
+			}
+			else if (currentTok.type == TOKEN_ERROR) _error = true;
+			else if (currentTok.type == TOKEN_ENDOFSTREAM) _eof = true;
+		}
+		return !_error;
+	}
+	
+	
+	void printGlobals()
+	{
+		std_out.putstring("--------GLOBALS--------\n\n");
+		std_out.putstring("TYPE\tNAME\t\t\n");
+		std_out.putstring("----\t----\t\t\n");
+		for (int i = 0; i < global_nxtid; ++i)
+		{
+			std_out.putstring(var_type_string(global_types[i]));
+			std_out.putchar('\t');
+			std_out.putstring(global_names[i]);
+			std_out.putchar('\n');
+		}
+		std_out.putstring("\n-----------------------\n");
 	}
   
 };

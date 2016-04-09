@@ -23,12 +23,21 @@ tokenizer_standalone: tokenizer_base
 	cat build/TokenType.ctobj build/Token.ctobj build/TokenStream.ctobj build/TokenStandalone.ctobj > build/tokenizer_standalone.cpp
 	g++ $(CXXFLAGS) build/tokenizer_standalone.cpp -o build/tokenizer_standalone
 
-tinsel_doc: tokenizer_base
+tokenizer: tokenizer_base
+	cat build/TokenType.ctobj build/Token.ctobj build/TokenStream.ctobj > build/Tokenizer.ctobj
+
+tinsel_doc: tokenizer
 	bash ctinsel.sh src/TinselDoc/TinselDoc.tnl build/TinselDoc.ctobj tinsel_doc
 	bash ctinsel.sh src/TinselDoc/OutputGenerator.tnl build/OutputGenerator.ctobj
 	bash ctinsel.sh src/TinselDoc/HTMLOutputGenerator.tnl build/HTMLOutputGenerator.ctobj
-	cat build/TokenType.ctobj build/Token.ctobj build/TokenStream.ctobj build/OutputGenerator.ctobj build/HTMLOutputGenerator.ctobj build/TinselDoc.ctobj > build/tinsel_doc.cpp
+	cat build/Tokenizer.ctobj build/OutputGenerator.ctobj build/HTMLOutputGenerator.ctobj build/TinselDoc.ctobj > build/tinsel_doc.cpp
 	g++ $(CXXFLAGS) build/tinsel_doc.cpp -o build/tinsel_doc
+
+syntaxer_standalone: tokenizer
+	bash ctinsel.sh src/Syntaxer/Syntaxer.tnl build/Syntaxer.tnl
+	bash ctinsel.sh src/Syntaxer/SyntaxerStandalone.tnl build/SyntaxerStandalone standalone_syntaxer
+	cat build/Tokenizer.ctobj build/Syntaxer.tnl build/SyntaxerStandalone > build/syntaxer_standalone.cpp
+	g++ $(CXXFLAGS) build/syntaxer_standalone.cpp -o build/syntaxer_standalone
 
 docs: tinsel_doc
 	mkdir -p docs
