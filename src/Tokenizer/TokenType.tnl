@@ -84,7 +84,10 @@ enum TokenType
 	TOKEN_ENDOFSTREAM,	// = EOF
 	TOKEN_ERROR,		// = Error has occured
 
-	TOKEN_UNKNOWN		// Anything else that doesn't match the tokens above
+	TOKEN_UNKNOWN,		// Anything else that doesn't match the tokens above
+
+// Syntaxer internal types
+	SYNTAXER_OBJECT
 	
 };
 

@@ -1,4 +1,5 @@
 int default_num_globals = 256;
+int default_num_functions = 255;
 
 /// Returns true if a specific token is a primitive type
 bool is_primitive_type(TokenType varType)
@@ -25,6 +26,7 @@ String var_type_string(int varType)
 	else if (varType==TOKEN_INT) return String("INT");
 	else if (varType==TOKEN_VOID) return String("VOID");
 	else if (varType==TOKEN_BOOL) return String("BOOL");
+	else if (varType==SYNTAXER_OBJECT) return String("OBJ");
 	return String("UNK");
 }
 
@@ -36,11 +38,18 @@ protected:
 	TokenStream Stream;
 	String _filename;
 
+	//Used kinda as a lookahaed
+	Token currentTok;
+
 
 	int 		global_nxtid = 0;
 	int array 	global_types;
+	String array	global_typenames; // Used if the type is SYNTAXER_OBJECT
 	s32 array	global_data;
 	String array 	global_names;
+
+	
+
 
 	/// Prints a pretty warning message
 	void print_warning(String warning_string, u32 warnlinenum)
@@ -67,6 +76,38 @@ protected:
 		_error = true;
 	}
 
+	void parse_global_variable()
+	{
+		Token nxtTok = Stream.getToken();
+		if (nxtTok.type == TOKEN_NAME)
+		{
+			String var_name = nxtTok.str;
+			global_types[global_nxtid] = currentTok.type;
+			global_typenames[global_nxtid] = currentTok.str;
+			global_names[global_nxtid] = var_name;
+
+			nxtTok = Stream.getToken();
+			if (nxtTok.type == TOKEN_ASSIGN)
+			{
+				nxtTok = Stream.getToken();
+				if (nxtTok.type == TOKEN_INT_LIT)
+					global_data[global_nxtid] = nxtTok.value;
+				else if (nxtTok.type == TOKEN_BOOL_TRUE)
+					global_data[global_nxtid] = 1;
+				else if (nxtTok.type == TOKEN_BOOL_FALSE)
+					global_data[global_nxtid] = 0;
+				else
+					print_error(String("Expected integer literal"),nxtTok.linenum);
+
+				nxtTok = Stream.getToken();
+			}
+			else if (nxtTok.type != TOKEN_SEMICOLON)
+				print_error(String("Expected semicolon"),nxtTok.linenum);
+			global_nxtid += 1;
+		}
+		else
+			print_error(String("Invalid name for variable / function"),nxtTok.linenum);
+	}
 
 public:
 	/// Opens a file and prepares it for the tokenizer and syntaxer
@@ -80,6 +121,7 @@ public:
 
 		global_nxtid = 0;
 		global_types.reset(default_num_globals);
+		global_typenames.reset(default_num_globals);
 		global_names.reset(default_num_globals);
 		global_data.reset(default_num_globals);
 		return true;
@@ -89,7 +131,6 @@ public:
 	//@ return false on failure
 	bool parse()
 	{
-		Token currentTok;
 
 		bool _eof = false;
 		while (!_error && !_eof)
@@ -99,33 +140,12 @@ public:
 			// Start a global primitive type definition
 			if (is_primitive_type(currentTok.type))
 			{
-				Token nxtTok = Stream.getToken();
-				if (nxtTok.type == TOKEN_NAME)
-				{
-					String var_name = nxtTok.str;
-					global_types[global_nxtid] = currentTok.type;
-					global_names[global_nxtid] = nxtTok.str;
-					nxtTok = Stream.getToken();
-					if (nxtTok.type == TOKEN_ASSIGN)
-					{
-						nxtTok = Stream.getToken();
-						if (nxtTok.type == TOKEN_INT_LIT)
-							global_data[global_nxtid] = nxtTok.value;
-						else if (nxtTok.type == TOKEN_BOOL_TRUE)
-							global_data[global_nxtid] = 1;
-						else if (nxtTok.type == TOKEN_BOOL_FALSE)
-							global_data[global_nxtid] = 0;
-						else
-							print_error(String("Expected integer literal"),nxtTok.linenum);
-
-						nxtTok = Stream.getToken();
-					}
-					if (nxtTok.type != TOKEN_SEMICOLON)
-						print_error(String("Expected semicolon"),nxtTok.linenum);
-					global_nxtid += 1;
-				}
-				else
-					print_error(String("Invalid name for variable / function"),nxtTok.linenum);
+				parse_global_variable();
+			}
+			else if (currentTok.type == TOKEN_NAME)
+			{
+				currentTok.type = SYNTAXER_OBJECT;
+				parse_global_variable();
 			}
 			else if (currentTok.type == TOKEN_ERROR) _error = true;
 			else if (currentTok.type == TOKEN_ENDOFSTREAM) _eof = true;
@@ -137,11 +157,13 @@ public:
 	void printGlobals()
 	{
 		std_out.putstring("--------GLOBALS--------\n\n");
-		std_out.putstring(" TYPE \tVALUE\t NAME \t\n");
-		std_out.putstring("------\t-----\t------\t\n");
+		std_out.putstring(" TYPE \tOBJNAME\tVALUE\t NAME \t\n");
+		std_out.putstring("------\t-------\t-----\t------\t\n");
 		for (int i = 0; i < global_nxtid; ++i)
 		{
 			std_out.putstring(var_type_string(global_types[i]));
+			std_out.putchar('\t');
+			std_out.putstring(global_typenames[i]);
 			std_out.putchar('\t');
 			std_out.putint(global_data[i]);
 			std_out.putchar('\t');
