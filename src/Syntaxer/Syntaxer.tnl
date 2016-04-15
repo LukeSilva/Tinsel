@@ -1,5 +1,19 @@
+/// Default number of variables / function defined in the global scope
+///  - Is fixed at this level in the C++14 bootstrapping environment
 int default_num_globals = 256;
-int default_num_functions = 255;
+
+/// Default number of characters to be reserved for function name mangling
+///  - Is fixed at this level in the C++14 bootstrapping environment
+int default_mangle_length = 256;
+
+/// Default number of function parameters
+///  - Is fixed at this level in the C++14 botstrapping environment
+int default_function_parameters = 16;
+
+int PROPERTY_FUNCTION = 1;
+int PROPERTY_OBJECT = 2;
+int PROPERTY_ARRAY = 4;
+
 
 /// Returns true if a specific token is a primitive type
 bool is_primitive_type(TokenType varType)
@@ -26,7 +40,6 @@ String var_type_string(int varType)
 	else if (varType==TOKEN_INT) return String("INT");
 	else if (varType==TOKEN_VOID) return String("VOID");
 	else if (varType==TOKEN_BOOL) return String("BOOL");
-	else if (varType==SYNTAXER_OBJECT) return String("OBJ");
 	return String("UNK");
 }
 
@@ -47,6 +60,7 @@ protected:
 	String array	global_typenames; // Used if the type is SYNTAXER_OBJECT
 	s32 array	global_data;
 	String array 	global_names;
+	int array	global_properties;
 
 	
 
@@ -76,11 +90,34 @@ protected:
 		_error = true;
 	}
 
+	void parse_global_function()
+	{
+		global_properties[global_nxtid] |= PROPERTY_FUNCTION;
+		String function_mangle(default_mangle_length);
+		bool parse_function = true;
+
+		while (parse_function && !_error)
+		{
+			currentTok = Stream.getToken();
+			if (currentTok.type == TOKEN_CBRACKET)
+				parse_function = false;
+			else if (currentTok.type == TOKEN_ENDOFSTREAM)
+				print_error(String("End-of-stream encountered while parsing function parameters"),currentTok.linenum);
+		}
+	}
+
 	void parse_global_variable()
 	{
 		Token nxtTok = Stream.getToken();
 		if (nxtTok.type == TOKEN_NAME)
 		{
+			if (nxtTok.str.compare(String("array")))
+			{
+				nxtTok = Stream.getToken();
+				global_properties[global_nxtid] |= PROPERTY_ARRAY;
+			}			
+
+
 			String var_name = nxtTok.str;
 			global_types[global_nxtid] = currentTok.type;
 			global_typenames[global_nxtid] = currentTok.str;
@@ -89,6 +126,7 @@ protected:
 			nxtTok = Stream.getToken();
 			if (nxtTok.type == TOKEN_ASSIGN)
 			{
+
 				nxtTok = Stream.getToken();
 				if (nxtTok.type == TOKEN_INT_LIT)
 					global_data[global_nxtid] = nxtTok.value;
@@ -100,6 +138,10 @@ protected:
 					print_error(String("Expected integer literal"),nxtTok.linenum);
 
 				nxtTok = Stream.getToken();
+			}
+			else if (nxtTok.type == TOKEN_OBRACKET)
+			{
+				parse_global_function();
 			}
 			else if (nxtTok.type != TOKEN_SEMICOLON)
 				print_error(String("Expected semicolon"),nxtTok.linenum);
@@ -124,6 +166,7 @@ public:
 		global_typenames.reset(default_num_globals);
 		global_names.reset(default_num_globals);
 		global_data.reset(default_num_globals);
+		global_properties.reset(default_num_globals);
 		return true;
 	}
 
@@ -144,7 +187,7 @@ public:
 			}
 			else if (currentTok.type == TOKEN_NAME)
 			{
-				currentTok.type = SYNTAXER_OBJECT;
+				global_properties[global_nxtid] |= PROPERTY_OBJECT;
 				parse_global_variable();
 			}
 			else if (currentTok.type == TOKEN_ERROR) _error = true;
@@ -157,11 +200,16 @@ public:
 	void printGlobals()
 	{
 		std_out.putstring("--------GLOBALS--------\n\n");
-		std_out.putstring(" TYPE \tOBJNAME\tVALUE\t NAME \t\n");
-		std_out.putstring("------\t-------\t-----\t------\t\n");
+		std_out.putstring("PROPERTIES\t TYPE \tOBJNAME\tVALUE\t NAME \t\n");
+		std_out.putstring("----------\t------\t-------\t-----\t------\t\n");
 		for (int i = 0; i < global_nxtid; ++i)
 		{
-			std_out.putstring(var_type_string(global_types[i]));
+			std_out.putint(global_properties[i]);
+			std_out.putstring(String("\t\t"));
+			if ((global_properties[i]&PROPERTY_OBJECT)==0)
+				std_out.putstring(var_type_string(global_types[i]));
+			else
+				std_out.putstring(String("OBJ"));
 			std_out.putchar('\t');
 			std_out.putstring(global_typenames[i]);
 			std_out.putchar('\t');
