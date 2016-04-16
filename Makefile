@@ -34,9 +34,10 @@ tinsel_doc: tokenizer
 	g++ $(CXXFLAGS) build/tinsel_doc.cpp -o build/tinsel_doc
 
 syntaxer_standalone: tokenizer
-	bash ctinsel.sh src/Syntaxer/Syntaxer.tnl build/Syntaxer.tnl
-	bash ctinsel.sh src/Syntaxer/SyntaxerStandalone.tnl build/SyntaxerStandalone standalone_syntaxer
-	cat build/Tokenizer.ctobj build/Syntaxer.tnl build/SyntaxerStandalone > build/syntaxer_standalone.cpp
+	bash ctinsel.sh src/Syntaxer/Syntaxer.tnl build/Syntaxer.ctobj
+	bash ctinsel.sh src/Syntaxer/Variable.tnl build/Variable.ctobj
+	bash ctinsel.sh src/Syntaxer/SyntaxerStandalone.tnl build/SyntaxerStandalone.ctobj standalone_syntaxer
+	cat build/Tokenizer.ctobj build/Variable.ctobj build/Syntaxer.ctobj build/SyntaxerStandalone.ctobj > build/syntaxer_standalone.cpp
 	g++ $(CXXFLAGS) build/syntaxer_standalone.cpp -o build/syntaxer_standalone
 
 docs: tinsel_doc

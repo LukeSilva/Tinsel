@@ -55,12 +55,8 @@ protected:
 	Token currentTok;
 
 
-	int 		global_nxtid = 0;
-	int array 	global_types;
-	String array	global_typenames; // Used if the type is SYNTAXER_OBJECT
-	s32 array	global_data;
-	String array 	global_names;
-	int array	global_properties;
+	int global_nxtid = 0;
+	Variable array globals;
 
 	
 
@@ -92,7 +88,7 @@ protected:
 
 	void parse_global_function()
 	{
-		global_properties[global_nxtid] |= PROPERTY_FUNCTION;
+		globals[global_nxtid].properties |= PROPERTY_FUNCTION;
 		String function_mangle(default_mangle_length);
 		bool parse_function = true;
 
@@ -114,14 +110,14 @@ protected:
 			if (nxtTok.str.compare(String("array")))
 			{
 				nxtTok = Stream.getToken();
-				global_properties[global_nxtid] |= PROPERTY_ARRAY;
+				globals[global_nxtid].properties |= PROPERTY_ARRAY;
 			}			
 
 
 			String var_name = nxtTok.str;
-			global_types[global_nxtid] = currentTok.type;
-			global_typenames[global_nxtid] = currentTok.str;
-			global_names[global_nxtid] = var_name;
+			globals[global_nxtid].type = currentTok.type;
+			globals[global_nxtid].objname = currentTok.str;
+			globals[global_nxtid].name = var_name;
 
 			nxtTok = Stream.getToken();
 			if (nxtTok.type == TOKEN_ASSIGN)
@@ -129,11 +125,11 @@ protected:
 
 				nxtTok = Stream.getToken();
 				if (nxtTok.type == TOKEN_INT_LIT)
-					global_data[global_nxtid] = nxtTok.value;
+					globals[global_nxtid].default_value = nxtTok.value;
 				else if (nxtTok.type == TOKEN_BOOL_TRUE)
-					global_data[global_nxtid] = 1;
+					globals[global_nxtid].default_value = 1;
 				else if (nxtTok.type == TOKEN_BOOL_FALSE)
-					global_data[global_nxtid] = 0;
+					globals[global_nxtid].default_value = 0;
 				else
 					print_error(String("Expected integer literal"),nxtTok.linenum);
 
@@ -162,11 +158,8 @@ public:
 		_filename = filename;
 
 		global_nxtid = 0;
-		global_types.reset(default_num_globals);
-		global_typenames.reset(default_num_globals);
-		global_names.reset(default_num_globals);
-		global_data.reset(default_num_globals);
-		global_properties.reset(default_num_globals);
+		globals.reset(default_num_globals);
+
 		return true;
 	}
 
@@ -187,7 +180,7 @@ public:
 			}
 			else if (currentTok.type == TOKEN_NAME)
 			{
-				global_properties[global_nxtid] |= PROPERTY_OBJECT;
+				globals[global_nxtid].properties |= PROPERTY_OBJECT;
 				parse_global_variable();
 			}
 			else if (currentTok.type == TOKEN_ERROR) _error = true;
@@ -204,18 +197,18 @@ public:
 		std_out.putstring("----------\t------\t-------\t-----\t------\t\n");
 		for (int i = 0; i < global_nxtid; ++i)
 		{
-			std_out.putint(global_properties[i]);
+			std_out.putint(globals[i].properties);
 			std_out.putstring(String("\t\t"));
-			if ((global_properties[i]&PROPERTY_OBJECT)==0)
-				std_out.putstring(var_type_string(global_types[i]));
+			if ((globals[i].properties&PROPERTY_OBJECT)==0)
+				std_out.putstring(var_type_string(globals[i].type));
 			else
 				std_out.putstring(String("OBJ"));
 			std_out.putchar('\t');
-			std_out.putstring(global_typenames[i]);
+			std_out.putstring(globals[i].objname);
 			std_out.putchar('\t');
-			std_out.putint(global_data[i]);
+			std_out.putint(globals[i].default_value);
 			std_out.putchar('\t');
-			std_out.putstring(global_names[i]);
+			std_out.putstring(globals[i].name);
 			std_out.putchar('\n');
 		}
 		std_out.putstring("\n-----------------------\n");

@@ -1,0 +1,9 @@
+class Variable
+{
+public:
+	String objname;
+	String name;
+	int properties;
+	int type;
+	s32 default_value;
+};
