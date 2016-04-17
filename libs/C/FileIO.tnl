@@ -25,11 +25,11 @@ public:
 	bool open(String filename, String mode, String encoding)
 	{
 		//Attempt to open the file, return false on error
-		char* c_filename = (char*)calloc(filename.length+1,1);
-		for (int i = 0; i < filename.length; ++i)
+		char* c_filename = (char*)calloc(filename.length()+1,1);
+		for (int i = 0; i < filename.length(); ++i)
 			c_filename[i] = filename.characters[i];
-		char* c_mode = (char*)calloc(mode.length+1,1);
-		for (int i = 0; i < mode.length; ++i)
+		char* c_mode = (char*)calloc(mode.length()+1,1);
+		for (int i = 0; i < mode.length(); ++i)
 			c_mode[i] = mode.characters[i];
 		_file=fopen(c_filename,c_mode);
 		free(c_filename);

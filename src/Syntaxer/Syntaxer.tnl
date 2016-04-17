@@ -8,7 +8,10 @@ int default_mangle_length = 256;
 
 /// Default number of function parameters
 ///  - Is fixed at this level in the C++14 botstrapping environment
-int default_function_parameters = 16;
+int default_function_arguments = 16;
+
+/// Default character to mangle function names with
+s32 mangle_character = '-';
 
 int PROPERTY_FUNCTION = 1;
 int PROPERTY_OBJECT = 2;
@@ -58,9 +61,6 @@ protected:
 	int global_nxtid = 0;
 	Variable array globals;
 
-	
-
-
 	/// Prints a pretty warning message
 	void print_warning(String warning_string, u32 warnlinenum)
 	{
@@ -89,16 +89,51 @@ protected:
 	void parse_global_function()
 	{
 		globals[global_nxtid].properties |= PROPERTY_FUNCTION;
-		String function_mangle(default_mangle_length);
-		bool parse_function = true;
+		String functionMangle(default_mangle_length);
+		bool parseFunction = true;
 
-		while (parse_function && !_error)
+		Variable array functionArguments;
+		functionArguments.reset(default_function_arguments);
+		int functionArgumentID = 0;
+
+		while (parseFunction && !_error)
 		{
 			currentTok = Stream.getToken();
 			if (currentTok.type == TOKEN_CBRACKET)
-				parse_function = false;
+				parseFunction = false;
 			else if (currentTok.type == TOKEN_ENDOFSTREAM)
 				print_error(String("End-of-stream encountered while parsing function parameters"),currentTok.linenum);
+			else if (is_primitive_type(currentTok.type))
+			{
+				functionArguments[functionArgumentID].type = currentTok.type;
+				Token nxtTok = Stream.getToken();
+				if (nxtTok.type != TOKEN_NAME)
+					print_error(String("Expected argument name after type in argument list"),nxtTok.linenum);
+				else
+				{
+					functionArguments[functionArgumentID].name = nxtTok.str;
+					nxtTok = Stream.getToken();
+					if (nxtTok.type == TOKEN_CBRACKET)
+						parseFunction = false;
+					else if (nxtTok.type != TOKEN_COMMA)
+						print_error(String("Expected ',' or ')' after argument declaration in argument list"), nxtTok.linenum);
+				}				
+				functionArgumentID+=1;
+			}
+		}
+
+		if (!_error)
+		{
+			for (int i = 0; i < functionArgumentID; ++i)
+			{
+				functionMangle.append(mangle_character);
+				functionMangle.concat(var_type_string(functionArguments[i].type));
+			}
+			int newNameLength = globals[global_nxtid].name.length() + functionMangle.length();
+			String newName(newNameLength);
+			newName.concat(globals[global_nxtid].name);
+			newName.concat(functionMangle);
+			globals[global_nxtid].name = newName;
 		}
 	}
 
