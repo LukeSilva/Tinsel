@@ -10,6 +10,9 @@ int default_mangle_length = 256;
 ///  - Is fixed at this level in the C++14 botstrapping environment
 int default_function_arguments = 16;
 
+/// Default number of max variables in the local scope
+int default_scope_length = 128;
+
 /// Default character to mangle function names with
 s32 mangle_character = '-';
 
@@ -86,6 +89,19 @@ protected:
 		_error = true;
 	}
 
+	void parse_block(Variable array arguments, Variable array locals)
+	{
+		bool parseBlock = true;
+		while (parseBlock && !_error)
+		{
+			currentTok = Stream.getToken();
+			if (currentTok.type == TOKEN_CBLOCK)
+				parseBlock = false;
+			else if (currentTok.type == TOKEN_ENDOFSTREAM)
+				print_error(String("End-of-stream encountered while parsing a code block"),currentTok.linenum);
+		}
+	}
+
 	void parse_global_function()
 	{
 		globals[global_nxtid].properties |= PROPERTY_FUNCTION;
@@ -134,6 +150,16 @@ protected:
 			newName.concat(globals[global_nxtid].name);
 			newName.concat(functionMangle);
 			globals[global_nxtid].name = newName;
+
+			currentTok = Stream.getToken();
+			if (currentTok.type == TOKEN_OBLOCK)
+			{
+				Variable array localScope;
+				localScope.reset(default_scope_length);
+				parse_block(functionArguments,localScope);
+			}
+			else
+				print_error(String("Expected block after function declaration"),currentTok.linenum);
 		}
 	}
 
