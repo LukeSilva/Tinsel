@@ -1,0 +1,9 @@
+class SyntaxFileWriter
+{
+	IOStream Stream;
+public:
+	SyntaxFileWriter(IOStream Stream)
+	{
+		self.Stream = Stream;
+	}	
+}

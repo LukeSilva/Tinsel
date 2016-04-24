@@ -13,7 +13,7 @@ int default_function_arguments = 16;
 /// Default number of max variables in the local scope
 int default_scope_length = 128;
 
-/// Default character to mangle function names with
+/// The character used to mangle function names with
 s32 mangle_character = '-';
 
 int PROPERTY_FUNCTION = 1;
