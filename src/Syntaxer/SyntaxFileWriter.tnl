@@ -3,7 +3,12 @@ class SyntaxFileWriter
 	bool _open = false;
 public:
 
-	bool startFunction(Variable functionVariable)
+	bool open(String Filename)
+	{
+		_open = true;
+	}
+
+	bool startFunction(Variable functionVariable,Variable array functionArguments)
 	{
 		std_out.putstring(String("DEFINE "));
 		if ((functionVariable.properties&PROPERTY_OBJECT)==0)
@@ -23,5 +28,24 @@ public:
 	{
 		std_out.putstring(String("}\n\n"));
 	}
+
+	bool defineVariable(Variable defineVariable)
+	{
+		std_out.putstring(String("CREATEVAR 0 "));
+		if ((defineVariable.properties&PROPERTY_OBJECT)==0)
+			std_out.putstring(var_type_string(defineVariable.type));
+		else
+		{
+			std_out.putstring(String("OBJ("));
+			std_out.putstring(defineVariable.objname);
+			std_out.putstring(String(")"));
+		}
+		std_out.putchar('\n');
+	}
 	
+	bool close()
+	{
+		_open = false;
+	}
+
 };

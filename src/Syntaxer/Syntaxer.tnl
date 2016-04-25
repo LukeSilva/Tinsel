@@ -71,6 +71,37 @@ protected:
 		_error = true;
 	}
 
+
+	void parse_local_variable()
+	{
+		Token nxtTok = Stream.getToken();
+		Variable local_variable;
+		if (nxtTok.type == TOKEN_NAME)
+		{
+			if (nxtTok.str.compare(String("array")))
+			{
+				nxtTok = Stream.getToken();
+				local_variable.properties |= PROPERTY_ARRAY;
+			}			
+
+
+			String var_name = nxtTok.str;
+			local_variable.type = currentTok.type;
+			local_variable.objname = currentTok.str;
+			local_variable.name = var_name;
+
+			nxtTok = Stream.getToken();
+			if (nxtTok.type != TOKEN_SEMICOLON)
+				print_error(String("Expected semicolon"),nxtTok.linenum);
+			else
+				outStream.defineVariable(local_variable);
+		}
+		else
+			print_error(String("Invalid name for variable / function"),nxtTok.linenum);
+	}
+
+
+
 	void parse_block(Variable array arguments, Variable array locals)
 	{
 		bool parseBlock = true;
@@ -79,6 +110,10 @@ protected:
 			currentTok = Stream.getToken();
 			if (currentTok.type == TOKEN_CBLOCK)
 				parseBlock = false;
+			else if (is_primitive_type(currentTok.type))
+			{
+				parse_local_variable();
+			}
 			else if (currentTok.type == TOKEN_ENDOFSTREAM)
 				print_error(String("End-of-stream encountered while parsing a code block"),currentTok.linenum);
 		}
@@ -138,7 +173,7 @@ protected:
 			{
 				Variable array localScope;
 				localScope.reset(default_scope_length);
-				outStream.startFunction(globals[global_nxtid]);
+				outStream.startFunction(globals[global_nxtid],functionArguments);
 				parse_block(functionArguments,localScope);
 				outStream.endFunction(globals[global_nxtid]);
 			}
