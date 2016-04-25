@@ -1,9 +1,27 @@
 class SyntaxFileWriter
 {
-	IOStream Stream;
+	bool _open = false;
 public:
-	SyntaxFileWriter(IOStream Stream)
+
+	bool startFunction(Variable functionVariable)
 	{
-		self.Stream = Stream;
-	}	
-}
+		std_out.putstring(String("DEFINE "));
+		if ((functionVariable.properties&PROPERTY_OBJECT)==0)
+			std_out.putstring(var_type_string(functionVariable.type));
+		else
+		{
+			std_out.putstring(String("OBJ("));
+			std_out.putstring(functionVariable.objname);
+			std_out.putstring(String(")"));
+		}
+		std_out.putchar(' ');
+		std_out.putstring(functionVariable.name);
+		std_out.putstring(String("\n{\n"));
+	}
+
+	bool endFunction(Variable functionVariable)
+	{
+		std_out.putstring(String("}\n\n"));
+	}
+	
+};

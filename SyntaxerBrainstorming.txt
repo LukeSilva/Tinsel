@@ -1,7 +1,7 @@
 ; globals should be defined in an external .x file along with all usable names in the program.
 
 ;Creates a (named) code block for a previously defined function in the .x file
-DEFINE <name>
+DEFINE <type> <name>
 {
 <exec>
 }
@@ -10,7 +10,7 @@ DEFINE <name>
 	[<digit>]*
 
 ; <exec>
-	NEWVAR <number> <type> ; Number should be a unique incremental ID, starting at 0 for every block
+	NEWVAR <number> <type> ; Number should be a unique incremental ID, starting at 0 for every function
 	ASSIGN <var> <expr> 
 	CALL <name>
 	IF <expr> { <exec> } { <exec> }
@@ -36,7 +36,7 @@ Example:
 		else
 			return b
 	}
-DEFINE max-INT-INT
+DEFINE INT max-INT-INT
 {
 	IF ($0 $1 LT) { RETURN ($0) } { RETURN ($1) }
 }
@@ -64,7 +64,7 @@ DEFINE := 0x7F
 	INT  = 0x06
 	BOOL = 0x07
 	VOID = 0x08
-	OBJ  = 0x09
+	OBJ  = 0x09 <name>
 }
 <var> :=
 {

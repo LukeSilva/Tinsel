@@ -1,9 +1,12 @@
+#pragma once
+#include "tnl2c.h" 
+
 class String
 {
 public:
 	int pos = 0;
 	int size = 0;
-	u32 array characters;
+	tinsel_array<u32> characters;
 
 	/// Creates a string of size 0
 	String()
@@ -94,7 +97,7 @@ public:
 		int npos = 0;
 		while (npos < str.pos)
 		{
-			self.append(str.characters[npos]);
+			this->append(str.characters[npos]);
 			++npos;
 		}
 	}

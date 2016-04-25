@@ -1,4 +1,4 @@
-CXXFLAGS := -std=c++14 -Ilibs/C/h
+CXXFLAGS := -std=c++14 -Ilibs/C/h -g 	
 
 .PHONY: libs tokenizer
 
@@ -36,8 +36,9 @@ tinsel_doc: tokenizer
 syntaxer_standalone: tokenizer
 	bash ctinsel.sh src/Syntaxer/Syntaxer.tnl build/Syntaxer.ctobj
 	bash ctinsel.sh src/Syntaxer/Variable.tnl build/Variable.ctobj
+	bash ctinsel.sh src/Syntaxer/SyntaxFileWriter.tnl build/SyntaxFileWriter.ctobj
 	bash ctinsel.sh src/Syntaxer/SyntaxerStandalone.tnl build/SyntaxerStandalone.ctobj standalone_syntaxer
-	cat build/Tokenizer.ctobj build/Variable.ctobj build/Syntaxer.ctobj build/SyntaxerStandalone.ctobj > build/syntaxer_standalone.cpp
+	cat build/Tokenizer.ctobj build/Variable.ctobj build/SyntaxFileWriter.ctobj build/Syntaxer.ctobj build/SyntaxerStandalone.ctobj > build/syntaxer_standalone.cpp
 	g++ $(CXXFLAGS) build/syntaxer_standalone.cpp -o build/syntaxer_standalone
 
 docs: tinsel_doc

@@ -1,0 +1,65 @@
+#pragma once
+#include "tnl2c.h" 
+
+#include "IO.h"
+#include <stdio.h>
+#include <stdlib.h>
+//@ table File modes
+//@ data mode  | meaning
+//@ data    r  | read only, do not open if the file doesn't exist
+//@ data    w  | write only, create file if the file doesn't exist
+//@ data    r+ | read and write, do not open if the file doesn't exist
+//@ data    w+ | read and write, create file if the file doesn't exist
+
+//@ table Encodings
+//@ data code  | encoding
+//@ data ascii | ASCII (Returns& characters as UTF-32)
+//@ data  utf8 | UTF-8 (Returns& characters as UTF-32)
+//@ data utf32 | UTF-32 
+//@ data   bin | binary file (Only& uses lower 8 bits on the character)
+
+class File : public IOStream
+{
+
+	FILE* _file;
+public:
+	/// Attempts to open a file in the requested mode
+	//@ return true on success
+	bool open(String filename, String mode, String encoding)
+	{
+		//Attempt to open the file, return false on error
+		char* c_filename = (char*)calloc(filename.length()+1,1);
+		for (int i = 0; i < filename.length(); ++i)
+			c_filename[i] = filename.characters[i];
+		char* c_mode = (char*)calloc(mode.length()+1,1);
+		for (int i = 0; i < mode.length(); ++i)
+			c_mode[i] = mode.characters[i];
+		_file=fopen(c_filename,c_mode);
+		free(c_filename);
+		free(c_mode);
+		return _file!=NULL;
+	}
+
+	/// Attempts to flush and close the file
+	//@ return true on success
+	bool close()
+	{
+		fclose(_file);
+		return true;
+	}
+
+	/// Attempts to get the next character in the file
+	//@ return negative value on error
+	//@ return character value on success
+	s32 getchar()
+	{
+		return getc(_file);
+	}
+
+	/// Puts a character into the file
+	//@ return true on success
+	bool putchar(u32 character)
+	{
+		return fputc(character,_file);
+	}
+};
