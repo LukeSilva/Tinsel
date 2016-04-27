@@ -6,159 +6,161 @@ int test_Tokenizer()
 	TokenStream test;
 
 	//Print welcome message	
-	std_out.putstring(String("--------Tokenizer Unit Tests--------\n\n"));	
+	std_out.putstring("--------Tokenizer Unit Tests--------\n\n");	
 
 
 	//@test 1 Creates a TokenStream, without opening it. Checks for ENDOFSTREAM token type;
-	std_out.putstring(String("Test #001: Un-opened files    "));
+	std_out.putstring("Test #001: Un-opened files    ");
 	
 	Token rettok = test.getToken();
 	if (rettok.type == TOKEN_ENDOFSTREAM)
 	{
 		passed_tests++;
-		std_out.putstring(String("[PASS]\n"));
-	}else   std_out.putstring(String("[FAIL]\n"));
+		std_out.putstring("[PASS]\n");
+	}else   std_out.putstring("[FAIL]\n");
 
 
 	//@test 2 Creates a TokenStream, opening a file with a token in it. Check for no ENDOFSTREAM token.
-	std_out.putstring(String("Test #002: Openfile, NO EOF   "));
+	std_out.putstring("Test #002: Openfile, NO EOF   ");
 
-	if (!test.open(String("tests/Tokenizer/NonEmptyFile.tnl")))
-		std_out.putstring(String("[FAIL]\n  Could not open file\n"));
+	if (!test.open("tests/Tokenizer/NonEmptyFile.tnl"))
+		std_out.putstring("[FAIL]\n  Could not open file\n");
 	else
 	{
 		rettok = test.getToken();
 		if (rettok.type != TOKEN_ENDOFSTREAM)
 		{
 			passed_tests+=1;
-			std_out.putstring(String("[PASS]\n"));
-		}else std_out.putstring(String("[FAIL]\n"));
+			std_out.putstring("[PASS]\n");
+		}else std_out.putstring("[FAIL]\n");
 	}
 	test.close();
 
 	//@test 3 Creates a TokenStream, opens an empty file and expects ENDOFSTREAM
 
-	std_out.putstring(String("Test #003: Empty file, EOF    "));
+	std_out.putstring("Test #003: Empty file, EOF    ");
 
-	if (!test.open(String("tests/Tokenizer/EmptyFile.tnl")))
-		std_out.putstring(String("[FAIL]\n  Could not open file\n"));
+	if (!test.open("tests/Tokenizer/EmptyFile.tnl"))
+		std_out.putstring("[FAIL]\n  Could not open file\n");
 	else
 	{
 		rettok = test.getToken();
 		if (rettok.type == TOKEN_ENDOFSTREAM)
 		{
 			passed_tests+=1;
-			std_out.putstring(String("[PASS]\n"));
-		}else std_out.putstring(String("[FAIL]\n"));
+			std_out.putstring("[PASS]\n");
+		}else std_out.putstring("[FAIL]\n");
 	}
 	
 	//@test 4 Tests the strong tokens
 	
-	std_out.putstring(String("Test #004: Strong Tokens      "));
+	std_out.putstring("Test #004: Strong Tokens      ");
 
-	if (standalone_tokenizer(String("tests/Tokenizer/StrongTokens.tnl"),String("tmp.ttok")))
-		std_out.putstring(String("[FAIL]\n  Internal error\n"));
-	else if(file_compare(String("tmp.ttok"),String("tests/Tokenizer/StrongTokens.ttok")))
-		std_out.putstring(String("[FAIL]\n"));
+	if (standalone_tokenizer("tests/Tokenizer/StrongTokens.tnl","tmp.ttok"))
+		std_out.putstring("[FAIL]\n  Internal error\n");
+	else if(file_compare("tmp.ttok","tests/Tokenizer/StrongTokens.ttok"))
+		std_out.putstring("[FAIL]\n");
 	else
 	{
 		passed_tests+=1;
-		std_out.putstring(String("[PASS]\n"));
+		std_out.putstring("[PASS]\n");
 	}
 
 	//@test 5 Tests the strong tokens, with whitespace separating the characters
 
-	std_out.putstring(String("Test #005: Strong Tokens with whitespace \n    (warning): "));
+	std_out.putstring("Test #005: Strong Tokens with whitespace \n    (warning): ");
 
-	if (standalone_tokenizer(String("tests/Tokenizer/StrongTokensWhitespace.tnl"),String("tmp.ttok")))
-		std_out.putstring(String("[FAIL]\n  Internal error\n"));
-	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/StrongTokensWhitespace.ttok")))
-		std_out.putstring(String("[FAIL]\n"));
+	if (standalone_tokenizer("tests/Tokenizer/StrongTokensWhitespace.tnl","tmp.ttok"))
+		std_out.putstring("[FAIL]\n  Internal error\n");
+	else if (file_compare("tmp.ttok","tests/Tokenizer/StrongTokensWhitespace.ttok"))
+		std_out.putstring("[FAIL]\n");
 	else
 	{
 		passed_tests+=1;
-		std_out.putstring(String("[PASS]\n"));
+		std_out.putstring("[PASS]\n");
 	}
 
 	//@test 6 Tests textual tokens
 
-	std_out.putstring(String("Test #006: Textual Tokens     "));
+	std_out.putstring("Test #006: Textual Tokens     ");
 
-	if (standalone_tokenizer(String("tests/Tokenizer/TextTokens.tnl"),String("tmp.ttok")))
-		std_out.putstring(String("[FAIL]\n  Internal error\n"));
-	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/TextTokens.ttok")))
-		std_out.putstring(String("[FAIL]\n"));
+	if (standalone_tokenizer("tests/Tokenizer/TextTokens.tnl","tmp.ttok"))
+		std_out.putstring("[FAIL]\n  Internal error\n");
+	else if (file_compare("tmp.ttok","tests/Tokenizer/TextTokens.ttok"))
+		std_out.putstring("[FAIL]\n");
 	else
 	{
 		passed_tests+=1;
-		std_out.putstring(String("[PASS]\n"));
+		std_out.putstring("[PASS]\n");
 	}	
 
 	//@test 7 Tests String tokens
 
-	std_out.putstring(String("Test #007: String Tokens      "));
+	std_out.putstring("Test #007: String Tokens      ");
 
-	if (standalone_tokenizer(String("tests/Tokenizer/StringLiterals.tnl"),String("tmp.ttok")))
-		std_out.putstring(String("[FAIL]\n  Internal error\n"));
-	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/StringLiterals.ttok")))
-		std_out.putstring(String("[FAIL]\n"));
+	if (standalone_tokenizer("tests/Tokenizer/StringLiterals.tnl","tmp.ttok"))
+		std_out.putstring("[FAIL]\n  Internal error\n");
+	else if (file_compare("tmp.ttok","tests/Tokenizer/StringLiterals.ttok"))
+		std_out.putstring("[FAIL]\n");
 	else
 	{
 		passed_tests+=1;
-		std_out.putstring(String("[PASS]\n"));
+		std_out.putstring("[PASS]\n");
 	}
 
 	//@test 8 Tests char tokens
 
-	std_out.putstring(String("Test #008: Char Tokens        "));
+	std_out.putstring("Test #008: Char Tokens        ");
 
-	if (standalone_tokenizer(String("tests/Tokenizer/CharLiterals.tnl"),String("tmp.ttok")))
-		std_out.putstring(String("[FAIL]\n  Internal error\n"));
-	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/CharLiterals.ttok")))
-		std_out.putstring(String("[FAIL]\n"));
+	if (standalone_tokenizer("tests/Tokenizer/CharLiterals.tnl","tmp.ttok"))
+		std_out.putstring("[FAIL]\n  Internal error\n");
+	else if (file_compare("tmp.ttok","tests/Tokenizer/CharLiterals.ttok"))
+		std_out.putstring("[FAIL]\n");
 	else
 	{
 		passed_tests+=1;
-		std_out.putstring(String("[PASS]\n"));
+		std_out.putstring("[PASS]\n");
 	}
 
 	//@test 9 Tests integer literals
 
-	std_out.putstring(String("Test #009: Integer Tokens     "));
+	std_out.putstring("Test #009: Integer Tokens     ");
 
-	if (standalone_tokenizer(String("tests/Tokenizer/LiteralIntegers.tnl"),String("tmp.ttok")))
-		std_out.putstring(String("[FAIL]\n  Internal error\n"));
-	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/LiteralIntegers.ttok")))
-		std_out.putstring(String("[FAIL]\n"));
+	if (standalone_tokenizer("tests/Tokenizer/LiteralIntegers.tnl","tmp.ttok"))
+		std_out.putstring("[FAIL]\n  Internal error\n");
+	else if (file_compare("tmp.ttok","tests/Tokenizer/LiteralIntegers.ttok"))
+		std_out.putstring("[FAIL]\n");
 	else
 	{
 		passed_tests+=1;
-		std_out.putstring(String("[PASS]\n"));
+		std_out.putstring("[PASS]\n");
 	}
 
 	//@test 10 Tests comments
 
-	std_out.putstring(String("Test #010: Comments           "));
+	std_out.putstring("Test #010: Comments           ");
 
-	if (standalone_tokenizer(String("tests/Tokenizer/Comments.tnl"),String("tmp.ttok")))
-		std_out.putstring(String("[FAIL]\n  Internal error\n"));
-	else if (file_compare(String("tmp.ttok"),String("tests/Tokenizer/Comments.ttok")))
-		std_out.putstring(String("[FAIL]\n"));
+	if (standalone_tokenizer("tests/Tokenizer/Comments.tnl","tmp.ttok"))
+		std_out.putstring("[FAIL]\n  Internal error\n");
+	else if (file_compare("tmp.ttok","tests/Tokenizer/Comments.ttok"))
+		std_out.putstring("[FAIL]\n");
 	else
 	{
 		passed_tests+=1;
-		std_out.putstring(String("[PASS]\n"));
+		std_out.putstring("[PASS]\n");
 	}
 
 	//Print ending message, with percentage of pass rate
-	std_out.putstring(String("\n\n--------Tokenizer Results   --------\n\n"));
-	std_out.putstring(String("Pass-Rate: "));
+	std_out.putstring("\n\n--------Tokenizer Results   --------\n\n");
+	std_out.putstring("Pass-Rate: ");
 	std_out.putint((passed_tests*100)/total_tests);
-	std_out.putstring(String("%\n"));
+	std_out.putstring("%\n");
 	if (passed_tests>=total_tests)
-		std_out.putstring(String("All tests passed, tokenizer _should_ be stable\n"));
+		std_out.putstring("All tests passed, tokenizer _should_ be stable\n");
 
 	std_out.close();
 	
 	return (passed_tests*100)/total_tests;
 }
+
+

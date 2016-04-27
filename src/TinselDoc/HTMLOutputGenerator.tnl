@@ -2,7 +2,7 @@
 /// Function that converts \n to <br/> for html
 String nl2br(String in)
 {
-	int len = in.length;
+	int len = in.size;
 	int npos = 0;
 	while (npos < in.pos)
 	{

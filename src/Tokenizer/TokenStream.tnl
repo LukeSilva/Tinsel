@@ -328,7 +328,7 @@ public:
 	/// Opens a filename and prepares it for parsing.
 	//@ return true on success
 	bool open(String filename){
-		if (!Stream.open(filename,String("r"),String("ASCII")))
+		if (!Stream.open(filename,"r","ASCII"))
 			return false;
 		_open = true;
 		_error = false;

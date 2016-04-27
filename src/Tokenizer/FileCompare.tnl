@@ -6,12 +6,12 @@ int file_compare(String filename1, String filename2)
 {
 	File file1;
 	File file2;
-	if (!file1.open(filename1,String("r"),String("ASCII")))
+	if (!file1.open(filename1,"r","ASCII"))
 	{
 		std_out.putstring("Could not open file 1\n");
 		return -1;
 	}
-	if (!file2.open(filename2,String("r"),String("ASCII")))
+	if (!file2.open(filename2,"r","ASCII"))
 	{
 		file1.close();
 		std_out.putstring("Could not open file 2\n");

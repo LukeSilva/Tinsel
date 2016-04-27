@@ -18,7 +18,7 @@ int tinsel_doc(String infile, String outfile, String format)
 
 	HTMLOutputGenerator output;
 	File doc_out;
-	if (!doc_out.open(outfile,String("w"),String("ASCII")))
+	if (!doc_out.open(outfile,"w","ASCII"))
 	{
 		std_out.putstring("Could not open outfile!\n");
 		return -1;
@@ -117,28 +117,28 @@ int tinsel_doc(String infile, String outfile, String format)
 		}
 		else if (parse_comment)
 		{
-			if (tok.type == TOKEN_U8) source.concat(String("u8 "));
-			else if (tok.type == TOKEN_S8) source.concat(String("s8 "));
-			else if (tok.type == TOKEN_U16)	source.concat(String("u16 "));
-			else if (tok.type == TOKEN_S16) source.concat(String("s16 "));
-			else if (tok.type == TOKEN_U32) source.concat(String("u32 "));
-			else if (tok.type == TOKEN_S32) source.concat(String("s32 "));
-			else if (tok.type == TOKEN_INT) source.concat(String("int "));
-			else if (tok.type == TOKEN_BOOL) source.concat(String("bool "));
-			else if (tok.type == TOKEN_VOID) source.concat(String("void "));
+			if (tok.type == TOKEN_U8) source.concat("u8 ");
+			else if (tok.type == TOKEN_S8) source.concat("s8 ");
+			else if (tok.type == TOKEN_U16)	source.concat("u16 ");
+			else if (tok.type == TOKEN_S16) source.concat("s16 ");
+			else if (tok.type == TOKEN_U32) source.concat("u32 ");
+			else if (tok.type == TOKEN_S32) source.concat("s32 ");
+			else if (tok.type == TOKEN_INT) source.concat("int ");
+			else if (tok.type == TOKEN_BOOL) source.concat("bool ");
+			else if (tok.type == TOKEN_VOID) source.concat("void ");
 			else if (tok.type == TOKEN_NAME){  source.concat(tok.str); source.append(' '); }
-			else if (tok.type == TOKEN_COMMA) source.concat(String(", "));
-			else if (tok.type == TOKEN_OBRACKET) source.concat(String("("));
-			else if (tok.type == TOKEN_CBRACKET) source.concat(String(")"));
-			else if (tok.type == TOKEN_CLASS) source.concat(String("class "));
-			else if (tok.type == TOKEN_ENUM) source.concat(String("enum "));
-			else if (tok.type == TOKEN_VIRTUAL) source.concat(String("virtual "));
-			else if (tok.type == TOKEN_ASSIGN) source.concat(String("= "));
-			else if (tok.type == TOKEN_BOOL_TRUE) source.concat(String("true "));
-			else if (tok.type == TOKEN_BOOL_FALSE) source.concat(String("false "));
+			else if (tok.type == TOKEN_COMMA) source.concat(", ");
+			else if (tok.type == TOKEN_OBRACKET) source.concat("(");
+			else if (tok.type == TOKEN_CBRACKET) source.concat(")");
+			else if (tok.type == TOKEN_CLASS) source.concat("class ");
+			else if (tok.type == TOKEN_ENUM) source.concat("enum ");
+			else if (tok.type == TOKEN_VIRTUAL) source.concat("virtual ");
+			else if (tok.type == TOKEN_ASSIGN) source.concat("= ");
+			else if (tok.type == TOKEN_BOOL_TRUE) source.concat("true ");
+			else if (tok.type == TOKEN_BOOL_FALSE) source.concat("false ");
 			else
 			{
-				std_out.putstring(String("Unknown token to add to source line\n"));
+				std_out.putstring("Unknown token to add to source line\n");
 				tok.print(std_out);
 			}
 		}
