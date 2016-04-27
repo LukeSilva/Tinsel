@@ -49,7 +49,7 @@ protected:
 	/// Prints a pretty warning message
 	void print_warning(String warning_string, u32 warnlinenum)
 	{
-		std_out.putstring(String("[SYNTAX] "));
+		std_out.putstring("[SYNTAX] ");
 		std_out.putstring(_filename);
 		std_out.putchar(':');
 		std_out.putint(warnlinenum);
@@ -61,7 +61,7 @@ protected:
 	/// Prints a pretty error message
 	void print_error(String error_string, u32 errorlinenum)
 	{
-		std_out.putstring(String("[SYNTAX] "));
+		std_out.putstring("[SYNTAX] ");
 		std_out.putstring(_filename);
 		std_out.putchar(':');
 		std_out.putint(errorlinenum);
@@ -71,14 +71,45 @@ protected:
 		_error = true;
 	}
 
+	/// Prints a pretty table of an array of variables
+	void print_variable_table(Variable array variables,String heading)
+	{
+		std_out.putstring("--------");
+		std_out.putstring(heading);
+		std_out.putstring("--------\n\n");
+		std_out.putstring("PROPERTIES\t TYPE \tOBJNAME\tVALUE/ID NAME \t\n");
+		std_out.putstring("----------\t------\t-------\t--------------\t\n");
+		for (int i = 0; i < variables.length; ++i)
+		{
+			// Only print variables with a valid name
+			if (!variables[i].name.compare(""))
+			{
+				std_out.putint(variables[i].properties);
+				std_out.putstring(String("\t\t"));
+				if ((variables[i].properties&PROPERTY_OBJECT)==0)
+					std_out.putstring(var_type_string(variables[i].type));
+				else
+					std_out.putstring("OBJ");
+				std_out.putchar('\t');
+				std_out.putstring(variables[i].objname);
+				std_out.putchar('\t');
+				std_out.putint(variables[i].default_value);
+				std_out.putchar('\t');
+				std_out.putstring(variables[i].name);
+				std_out.putchar('\n');
+			}
+		}
+		std_out.putstring("\n-----------------------\n");
+	}
+	
 
-	void parse_local_variable()
+	Variable parse_local_variable()
 	{
 		Token nxtTok = Stream.getToken();
 		Variable local_variable;
 		if (nxtTok.type == TOKEN_NAME)
 		{
-			if (nxtTok.str.compare(String("array")))
+			if (nxtTok.str.compare("array"))
 			{
 				nxtTok = Stream.getToken();
 				local_variable.properties |= PROPERTY_ARRAY;
@@ -92,12 +123,13 @@ protected:
 
 			nxtTok = Stream.getToken();
 			if (nxtTok.type != TOKEN_SEMICOLON)
-				print_error(String("Expected semicolon"),nxtTok.linenum);
+				print_error("Expected semicolon",nxtTok.linenum);
 			else
 				outStream.defineVariable(local_variable);
 		}
 		else
-			print_error(String("Invalid name for variable / function"),nxtTok.linenum);
+			print_error("Invalid name for variable / function",nxtTok.linenum);
+		return local_variable;
 	}
 
 
@@ -112,11 +144,15 @@ protected:
 				parseBlock = false;
 			else if (is_primitive_type(currentTok.type))
 			{
-				parse_local_variable();
+				Variable var = parse_local_variable();
+				int currentLength = locals.length;
+				locals.resize(currentLength+1);
+				locals[currentLength] = var;
 			}
 			else if (currentTok.type == TOKEN_ENDOFSTREAM)
-				print_error(String("End-of-stream encountered while parsing a code block"),currentTok.linenum);
+				print_error("End-of-stream encountered while parsing a code block",currentTok.linenum);
 		}
+		print_variable_table(locals,"LOCALS");
 	}
 
 	void parse_global_function()
@@ -135,13 +171,13 @@ protected:
 			if (currentTok.type == TOKEN_CBRACKET)
 				parseFunction = false;
 			else if (currentTok.type == TOKEN_ENDOFSTREAM)
-				print_error(String("End-of-stream encountered while parsing function parameters"),currentTok.linenum);
+				print_error("End-of-stream encountered while parsing function parameters",currentTok.linenum);
 			else if (is_primitive_type(currentTok.type))
 			{
 				functionArguments[functionArgumentID].type = currentTok.type;
 				Token nxtTok = Stream.getToken();
 				if (nxtTok.type != TOKEN_NAME)
-					print_error(String("Expected argument name after type in argument list"),nxtTok.linenum);
+					print_error("Expected argument name after type in argument list",nxtTok.linenum);
 				else
 				{
 					functionArguments[functionArgumentID].name = nxtTok.str;
@@ -149,7 +185,7 @@ protected:
 					if (nxtTok.type == TOKEN_CBRACKET)
 						parseFunction = false;
 					else if (nxtTok.type != TOKEN_COMMA)
-						print_error(String("Expected ',' or ')' after argument declaration in argument list"), nxtTok.linenum);
+						print_error("Expected ',' or ')' after argument declaration in argument list", nxtTok.linenum);
 				}				
 				functionArgumentID+=1;
 			}
@@ -178,7 +214,7 @@ protected:
 				outStream.endFunction(globals[global_nxtid]);
 			}
 			else
-				print_error(String("Expected block after function declaration"),currentTok.linenum);
+				print_error("Expected block after function declaration",currentTok.linenum);
 		}
 	}
 
@@ -187,7 +223,7 @@ protected:
 		Token nxtTok = Stream.getToken();
 		if (nxtTok.type == TOKEN_NAME)
 		{
-			if (nxtTok.str.compare(String("array")))
+			if (nxtTok.str.compare("array"))
 			{
 				nxtTok = Stream.getToken();
 				globals[global_nxtid].properties |= PROPERTY_ARRAY;
@@ -211,7 +247,7 @@ protected:
 				else if (nxtTok.type == TOKEN_BOOL_FALSE)
 					globals[global_nxtid].default_value = 0;
 				else
-					print_error(String("Expected integer literal"),nxtTok.linenum);
+					print_error("Expected integer literal",nxtTok.linenum);
 
 				nxtTok = Stream.getToken();
 			}
@@ -220,11 +256,11 @@ protected:
 				parse_global_function();
 			}
 			else if (nxtTok.type != TOKEN_SEMICOLON)
-				print_error(String("Expected semicolon"),nxtTok.linenum);
+				print_error("Expected semicolon",nxtTok.linenum);
 			global_nxtid += 1;
 		}
 		else
-			print_error(String("Invalid name for variable / function"),nxtTok.linenum);
+			print_error("Invalid name for variable / function",nxtTok.linenum);
 	}
 
 public:
@@ -239,6 +275,8 @@ public:
 
 		global_nxtid = 0;
 		globals.reset(default_num_globals);
+	
+		outStream.open("default.tast");
 
 		return true;
 	}
@@ -272,26 +310,7 @@ public:
 	
 	void printGlobals()
 	{
-		std_out.putstring("--------GLOBALS--------\n\n");
-		std_out.putstring("PROPERTIES\t TYPE \tOBJNAME\tVALUE\t NAME \t\n");
-		std_out.putstring("----------\t------\t-------\t-----\t------\t\n");
-		for (int i = 0; i < global_nxtid; ++i)
-		{
-			std_out.putint(globals[i].properties);
-			std_out.putstring(String("\t\t"));
-			if ((globals[i].properties&PROPERTY_OBJECT)==0)
-				std_out.putstring(var_type_string(globals[i].type));
-			else
-				std_out.putstring(String("OBJ"));
-			std_out.putchar('\t');
-			std_out.putstring(globals[i].objname);
-			std_out.putchar('\t');
-			std_out.putint(globals[i].default_value);
-			std_out.putchar('\t');
-			std_out.putstring(globals[i].name);
-			std_out.putchar('\n');
-		}
-		std_out.putstring("\n-----------------------\n");
+		print_variable_table(globals,"GLOBALS");
 	}
   
 };

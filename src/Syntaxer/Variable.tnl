@@ -6,24 +6,25 @@ int PROPERTY_ARRAY = 4;
 /// Returns an appropriate string representation of a variable type
 String var_type_string(int varType)
 {
-	if (varType==TOKEN_U8) return String("U8");
-	else if (varType==TOKEN_S8) return String("S8");
-	else if (varType==TOKEN_U16) return String("U16");
-	else if (varType==TOKEN_S16) return String("S16");
-	else if (varType==TOKEN_U32) return String("U32");
-	else if (varType==TOKEN_S32) return String("S32");
-	else if (varType==TOKEN_INT) return String("INT");
-	else if (varType==TOKEN_VOID) return String("VOID");
-	else if (varType==TOKEN_BOOL) return String("BOOL");
-	return String("UNK");
+	if (varType==TOKEN_U8) return "U8";
+	else if (varType==TOKEN_S8) return "S8";
+	else if (varType==TOKEN_U16) return "U16";
+	else if (varType==TOKEN_S16) return "S16";
+	else if (varType==TOKEN_U32) return "U32";
+	else if (varType==TOKEN_S32) return "S32";
+	else if (varType==TOKEN_INT) return "INT";
+	else if (varType==TOKEN_VOID) return "VOID";
+	else if (varType==TOKEN_BOOL) return "BOOL";
+	return "UNK";
 }
 
 class Variable
 {
 public:
-	String objname;
-	String name;
-	int properties;
-	int type;
-	s32 default_value;
+	String objname = "";
+	String name = "";
+	int properties = 0;
+	int type = 0;
+	s32 default_value = 0;
+	bool localVariable = false;
 };

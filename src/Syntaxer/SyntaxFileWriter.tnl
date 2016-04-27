@@ -1,46 +1,56 @@
 class SyntaxFileWriter
 {
 	bool _open = false;
+	int nxt_var_id = 0;
+	File myFile;
 public:
 
 	bool open(String Filename)
 	{
 		_open = true;
+		myFile.open(Filename,"w","ASCII");
 	}
 
 	bool startFunction(Variable functionVariable,Variable array functionArguments)
 	{
-		std_out.putstring(String("DEFINE "));
+		myFile.putstring("DEFINE ");
 		if ((functionVariable.properties&PROPERTY_OBJECT)==0)
-			std_out.putstring(var_type_string(functionVariable.type));
+			myFile.putstring(var_type_string(functionVariable.type));
 		else
 		{
-			std_out.putstring(String("OBJ("));
-			std_out.putstring(functionVariable.objname);
-			std_out.putstring(String(")"));
+			myFile.putstring("OBJ(");
+			myFile.putstring(functionVariable.objname);
+			myFile.putstring(")");
 		}
-		std_out.putchar(' ');
-		std_out.putstring(functionVariable.name);
-		std_out.putstring(String("\n{\n"));
+		myFile.putchar(' ');
+		myFile.putstring(functionVariable.name);
+		myFile.putstring("\n{\n");
+		nxt_var_id = 0;
 	}
 
 	bool endFunction(Variable functionVariable)
 	{
-		std_out.putstring(String("}\n\n"));
+		myFile.putstring("}\n\n");
 	}
 
 	bool defineVariable(Variable defineVariable)
 	{
-		std_out.putstring(String("CREATEVAR 0 "));
+
+		myFile.putstring("CREATEVAR ");
+		myFile.putint(nxt_var_id);
+		myFile.putchar(' ');
 		if ((defineVariable.properties&PROPERTY_OBJECT)==0)
-			std_out.putstring(var_type_string(defineVariable.type));
+			myFile.putstring(var_type_string(defineVariable.type));
 		else
 		{
-			std_out.putstring(String("OBJ("));
-			std_out.putstring(defineVariable.objname);
-			std_out.putstring(String(")"));
+			myFile.putstring("OBJ(");
+			myFile.putstring(defineVariable.objname);
+			myFile.putstring(")");
 		}
-		std_out.putchar('\n');
+		myFile.putchar('\n');
+		defineVariable.default_value = nxt_var_id;
+		defineVariable.localVariable = true;
+		nxt_var_id += 1;
 	}
 	
 	bool close()
