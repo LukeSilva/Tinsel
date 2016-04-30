@@ -12,7 +12,7 @@ DEFINE <type> <name>
 ; <exec>
 	NEWVAR <number> <type> ; Number should be a unique incremental ID, starting at 0 for every function
 	ASSIGN <var> <expr> 
-	CALL <name>
+	CALL(<name>,[<expr>],*)
 	IF <expr> { <exec> } { <exec> }
 	WHILE <expr> { <exec> }
 	RETURN <expr>
@@ -22,7 +22,7 @@ DEFINE <type> <name>
 ; <type>
 	["U8","S8","U16","S16","U32","S32","INT","VOID","BOOL","OBJ"]
 ; <expr>
-	([VAR(<var>) LIT(<number>) GT LT EQ GTE LTE NEQ ADD SUB DIV MUL MOD OR AND XOR NOT]*) ; Written in stack notation / Reverse polish notation
+	([VAR(<var>) LIT(<number>) GT LT EQ GTE LTE NEQ ADD SUB DIV MUL MOD OR AND XOR NOT CALL(<name>,[<expr>]*)]*) ; Written in stack notation / Reverse polish notation
 ; <var>
 	!<name> ; References a global reference
 	@<number> ; References a function parameter, number is the number of the function paramter, starting from 0 (uses function name mangling to find the variable position in bytes)

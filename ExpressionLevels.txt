@@ -1,0 +1,32 @@
+Level0:
+	name()		- function calls
+	name 		- variable lookup
+	<number>	- literals
+	(<expression>)	- Parse another expression
+Level1:
+	!		- Boolean not
+	~		- Bitwise not
+Level2:
+	*		- Multiplication
+	/		- Division
+	%		- Remainder
+Level2:
+	+		- Addition
+	-		- Subtraction
+Level3:
+	>>		- Bitwise Right Shift
+	<<		- Bitwise Left Shift
+Level4:
+	<		- Less than comparison
+	>		- Greater than comparison
+	<=		- Less than or equal to comparison
+	>=		- Greater than or equal to comparison
+	==		- Equal to comparison
+	!=		- Not equal to comparison
+Level5:
+	&		- Bitwise AND
+	|		- Bitwise OR
+	^		- Bitwise XOR
+Level6:
+	&&		- Logical AND
+	||		- Logical OR
