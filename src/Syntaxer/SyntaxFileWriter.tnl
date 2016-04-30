@@ -53,6 +53,12 @@ public:
 		nxt_var_id += 1;
 	}
 	
+	bool assignmentGlobal(String name)
+	{
+		myFile.putstring("ASSIGN !");
+		myFile.putstring(name);
+	}
+
 	bool close()
 	{
 		_open = false;

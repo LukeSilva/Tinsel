@@ -149,6 +149,16 @@ protected:
 				locals.resize(currentLength+1);
 				locals[currentLength] = var;
 			}
+			else if (currentTok.type == TOKEN_NAME)
+			{
+				Token nxtTok = Stream.getToken();
+				if (nxtTok.type == TOKEN_ASSIGN)
+				{
+					outStream.assignmentGlobal(currentTok.str);
+				}
+				else
+					print_error("Expected assignment after variable name",currentTok.linenum);
+			}
 			else if (currentTok.type == TOKEN_ENDOFSTREAM)
 				print_error("End-of-stream encountered while parsing a code block",currentTok.linenum);
 		}
