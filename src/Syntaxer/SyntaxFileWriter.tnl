@@ -1,3 +1,9 @@
+enum ExpressionOperations
+{
+	OPERATION_BITNOT,
+	OPERATION_BOOLNOT	
+};
+
 class SyntaxFileWriter
 {
 	bool _open = false;
@@ -119,6 +125,19 @@ public:
 		myFile.putint(value);
 		myFile.putstring(") ");
 	}
+
+	bool expressionOperation(int operation)
+	{
+		if (operation==OPERATION_BITNOT)
+		{
+			myFile.putstring("BITNOT ");
+		}
+		else if (operation==OPERATION_BOOLNOT)
+		{
+			myFile.putstring("BOOLNOT ");
+		}
+	}
+
 	bool endExpression()
 	{
 		if (expressionCount == 1)

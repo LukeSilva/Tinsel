@@ -22,7 +22,7 @@ DEFINE <type> <name>
 ; <type>
 	["U8","S8","U16","S16","U32","S32","INT","VOID","BOOL","OBJ"]
 ; <expr>
-	([CALL(<name>,[<expr>]*) VAR(<var>) LIT(<number>) GT LT EQ GTE LTE NEQ ADD SUB DIV MUL MOD OR AND XOR NOT ]*) ; Written in stack notation / Reverse polish notation
+	([CALL(<name>,[<expr>]*) VAR(<var>) LIT(<number>) GT LT EQ GTE LTE NEQ ADD SUB DIV MUL MOD OR BITAND BITXOR BITNOT BOOLNOT ]*) ; Written in stack notation / Reverse polish notation
 ; <var>
 	!<name> ; References a global reference
 	@<number> ; References a function parameter, number is the number of the function paramter, starting from 0 (uses function name mangling to find the variable position in bytes)
@@ -104,10 +104,11 @@ DEFINE := 0x7F
 		DIV = 0x8A
 		MUL = 0x8B
 		MOD = 0x8C
-		OR  = 0x8D
-		AND = 0x8E
-		XOR = 0x8F
-		NOT = 0x90
+		BITOR  = 0x8D
+		BITAND = 0x8E
+		BITXOR = 0x8F
+		BITNOT = 0x90
+		BOOLNOT = 0x91
 	},
 	0x51
 }
