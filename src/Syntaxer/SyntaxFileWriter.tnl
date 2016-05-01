@@ -1,7 +1,11 @@
 enum ExpressionOperations
 {
 	OPERATION_BITNOT,
-	OPERATION_BOOLNOT	
+	OPERATION_BOOLNOT,
+	
+	OPERATION_MULTIPLICATION,
+	OPERATION_DIVISION,
+	OPERATION_MODULO
 };
 
 class SyntaxFileWriter
@@ -129,13 +133,15 @@ public:
 	bool expressionOperation(int operation)
 	{
 		if (operation==OPERATION_BITNOT)
-		{
 			myFile.putstring("BITNOT ");
-		}
 		else if (operation==OPERATION_BOOLNOT)
-		{
 			myFile.putstring("BOOLNOT ");
-		}
+		else if (operation==OPERATION_MULTIPLICATION)
+			myFile.putstring("MUL ");
+		else if (operation==OPERATION_DIVISION)
+			myFile.putstring("DIV ");
+		else if (operation==OPERATION_MODULO)
+			myFile.putstring("MOD ");
 	}
 
 	bool endExpression()

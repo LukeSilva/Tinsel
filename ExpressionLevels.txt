@@ -10,23 +10,23 @@ Level2:
 	*		- Multiplication
 	/		- Division
 	%		- Remainder
-Level2:
+Level3:
 	+		- Addition
 	-		- Subtraction
-Level3:
+Level4:
 	>>		- Bitwise Right Shift
 	<<		- Bitwise Left Shift
-Level4:
+Level5:
 	<		- Less than comparison
 	>		- Greater than comparison
 	<=		- Less than or equal to comparison
 	>=		- Greater than or equal to comparison
 	==		- Equal to comparison
 	!=		- Not equal to comparison
-Level5:
+Level6:
 	&		- Bitwise AND
 	|		- Bitwise OR
 	^		- Bitwise XOR
-Level6:
+Level7:
 	&&		- Logical AND
 	||		- Logical OR

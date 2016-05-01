@@ -49,13 +49,30 @@ public:
 		else if (oldTok.type == TOKEN_BOOLNOT)
 			outStream.expressionOperation(OPERATION_BOOLNOT);
 	}
+	
+	bool parseLevel2(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	{
+		parseLevel1(inStream,outStream,locals);
+		while (currentTok.type == TOKEN_MULTIPLICATION || currentTok.type == TOKEN_DIVISION || currentTok.type == TOKEN_MODULO)
+		{
+			Token oldTok = currentTok;
+			currentTok = inStream.getToken();
+			parseLevel1(inStream,outStream,locals);
+			if (oldTok.type == TOKEN_MULTIPLICATION)
+				outStream.expressionOperation(OPERATION_MULTIPLICATION);
+			else if (oldTok.type == TOKEN_DIVISION)
+				outStream.expressionOperation(OPERATION_DIVISION);
+			else if (oldTok.type == TOKEN_MODULO)
+				outStream.expressionOperation(OPERATION_MODULO);
+		}
+	}
 
 
 	bool parse(TokenStream inStream, SyntaxFileWriter outStream,Variable array locals)
 	{
 		currentTok = inStream.getToken();
 		outStream.startExpression();
-		parseLevel1(inStream,outStream,locals);
+		parseLevel2(inStream,outStream,locals);
 		outStream.endExpression();
 	}
 };
