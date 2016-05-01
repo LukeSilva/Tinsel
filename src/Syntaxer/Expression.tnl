@@ -65,6 +65,21 @@ public:
 			else if (oldTok.type == TOKEN_MODULO)
 				outStream.expressionOperation(OPERATION_MODULO);
 		}
+	}	
+
+	bool parseLevel3(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	{
+		parseLevel2(inStream,outStream,locals);
+		while (currentTok.type == TOKEN_ADDITION || currentTok.type == TOKEN_SUBTRACTION)
+		{
+			Token oldTok = currentTok;
+			currentTok = inStream.getToken();
+			parseLevel2(inStream,outStream,locals);
+			if (oldTok.type == TOKEN_SUBTRACTION)
+				outStream.expressionOperation(OPERATION_SUBTRACTION);
+			else if (oldTok.type == TOKEN_ADDITION)
+				outStream.expressionOperation(OPERATION_ADDITION);
+		}
 	}
 
 
@@ -72,7 +87,7 @@ public:
 	{
 		currentTok = inStream.getToken();
 		outStream.startExpression();
-		parseLevel2(inStream,outStream,locals);
+		parseLevel3(inStream,outStream,locals);
 		outStream.endExpression();
 	}
 };

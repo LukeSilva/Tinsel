@@ -5,7 +5,10 @@ enum ExpressionOperations
 	
 	OPERATION_MULTIPLICATION,
 	OPERATION_DIVISION,
-	OPERATION_MODULO
+	OPERATION_MODULO,
+
+	OPERATION_ADDITION,
+	OPERATION_SUBTRACTION
 };
 
 class SyntaxFileWriter
@@ -142,6 +145,10 @@ public:
 			myFile.putstring("DIV ");
 		else if (operation==OPERATION_MODULO)
 			myFile.putstring("MOD ");
+		else if (operation==OPERATION_ADDITION)
+			myFile.putstring("ADD ");
+		else if (operation==OPERATION_SUBTRACTION)
+			myFile.putstring("SUB ");
 	}
 
 	bool endExpression()
