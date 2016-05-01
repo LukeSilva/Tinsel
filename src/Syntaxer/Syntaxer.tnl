@@ -10,9 +10,6 @@ int default_mangle_length = 256;
 ///  - Is fixed at this level in the C++14 botstrapping environment
 int default_function_arguments = 16;
 
-/// Default number of max variables in the local scope
-int default_scope_length = 128;
-
 /// The character used to mangle function names with
 s32 mangle_character = '-';
 
@@ -134,7 +131,7 @@ protected:
 
 
 
-	void parse_block(Variable array arguments, Variable array locals)
+	void parse_block(Variable array locals)
 	{
 		bool parseBlock = true;
 		while (parseBlock && !_error)
@@ -154,7 +151,26 @@ protected:
 				Token nxtTok = Stream.getToken();
 				if (nxtTok.type == TOKEN_ASSIGN)
 				{
-					outStream.assignmentGlobal(currentTok.str);
+
+					bool foundVariable = false;
+					Variable local;
+					for (int i = 0; i < locals.length; ++i)
+					{
+						if (locals[i].name.compare(currentTok.str))
+						{
+							local = locals[i];
+							foundVariable = true;
+						}
+					}
+
+					if (!foundVariable)
+						outStream.assignmentGlobal(currentTok.str);
+					else
+						outStream.assignmentLocal(local);
+
+					Expression expr;
+					expr.parse(Stream,outStream,locals);
+					
 				}
 				else
 					print_error("Expected assignment after variable name",currentTok.linenum);
@@ -203,10 +219,17 @@ protected:
 
 		if (!_error)
 		{
+
+			Variable array localScope;
+			localScope.reset(functionArgumentID+1);
+
 			for (int i = 0; i < functionArgumentID; ++i)
 			{
 				functionMangle.append(mangle_character);
 				functionMangle.concat(var_type_string(functionArguments[i].type));
+				localScope[i] = functionArguments[i];
+				localScope[i].localVariable = true;
+				localScope[i].default_value = -i - 1;
 			}
 			int newNameLength = globals[global_nxtid].name.length() + functionMangle.length();
 			String newName(newNameLength);
@@ -217,10 +240,8 @@ protected:
 			currentTok = Stream.getToken();
 			if (currentTok.type == TOKEN_OBLOCK)
 			{
-				Variable array localScope;
-				localScope.reset(default_scope_length);
-				outStream.startFunction(globals[global_nxtid],functionArguments);
-				parse_block(functionArguments,localScope);
+				outStream.startFunction(globals[global_nxtid]);
+				parse_block(localScope);
 				outStream.endFunction(globals[global_nxtid]);
 			}
 			else

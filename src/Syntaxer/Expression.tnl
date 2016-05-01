@@ -1,0 +1,41 @@
+class Expression
+{
+public:
+	int returnType;
+	Token currentTok;
+	bool parseLevel0(TokenStream inStream, SyntaxFileWriter outStream,Variable array locals)
+	{
+		if (currentTok.type == TOKEN_NAME)
+		{
+			bool foundVariable = false;
+			Variable local;
+			for (int i = 0; i < locals.length; ++i)
+			{
+				if (locals[i].name.compare(currentTok.str))
+				{
+					foundVariable = true;
+					local = locals[i];
+				}
+			}
+			if (!foundVariable)
+				outStream.expressionGlobalVariable(currentTok.str);
+			else
+				outStream.expressionLocalVariable(local);
+			currentTok = inStream.getToken();
+		}
+		else if (currentTok.type == TOKEN_INT_LIT)
+		{
+			outStream.expressionLiteral(currentTok.value);
+			currentTok = inStream.getToken();
+		}
+	}
+
+
+	bool parse(TokenStream inStream, SyntaxFileWriter outStream,Variable array locals)
+	{
+		currentTok = inStream.getToken();
+		outStream.startExpression();
+		parseLevel0(inStream,outStream,locals);
+		outStream.endExpression();
+	}
+};

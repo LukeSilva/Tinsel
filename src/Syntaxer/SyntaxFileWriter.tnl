@@ -3,6 +3,22 @@ class SyntaxFileWriter
 	bool _open = false;
 	int nxt_var_id = 0;
 	File myFile;
+	int expressionCount = 0;
+
+	void printLocalVariable(Variable localVariable)
+	{
+		if (localVariable.default_value < 0)
+		{
+			myFile.putchar('@');
+			myFile.putint(-localVariable.default_value - 1);
+		}
+		else
+		{
+			myFile.putchar('$');
+			myFile.putint(localVariable.default_value);
+		}
+	}
+
 public:
 
 	bool open(String Filename)
@@ -11,7 +27,7 @@ public:
 		myFile.open(Filename,"w","ASCII");
 	}
 
-	bool startFunction(Variable functionVariable,Variable array functionArguments)
+	bool startFunction(Variable functionVariable)
 	{
 		myFile.putstring("DEFINE ");
 		if ((functionVariable.properties&PROPERTY_OBJECT)==0)
@@ -57,6 +73,59 @@ public:
 	{
 		myFile.putstring("ASSIGN !");
 		myFile.putstring(name);
+		myFile.putchar(' ');
+		return true;
+	}
+
+	bool assignmentLocal(Variable localVariable)
+	{
+		if (!localVariable.localVariable) 
+			return false;
+		myFile.putstring("ASSIGN ");
+		printLocalVariable(localVariable);
+		myFile.putchar(' ');
+		return true;
+	}
+
+	bool startExpression()
+	{
+		if (expressionCount == 0)
+		{
+			myFile.putstring("( ");
+			expressionCount += 1;
+		}
+	}
+
+	bool expressionGlobalVariable(String name)
+	{
+		myFile.putchar('!');
+		myFile.putstring(name);
+		myFile.putchar(' ');
+	}
+
+	bool expressionLocalVariable(Variable localVariable)
+	{
+		if (!localVariable.localVariable)
+			return false;
+
+		printLocalVariable(localVariable);
+		myFile.putchar(' ');
+		return true;
+	}
+
+	bool expressionLiteral(int value)
+	{
+		myFile.putstring("LIT(");
+		myFile.putint(value);
+		myFile.putstring(") ");
+	}
+	bool endExpression()
+	{
+		if (expressionCount == 1)
+		{
+			myFile.putstring(")\n");
+		}
+		expressionCount -= 1;
 	}
 
 	bool close()

@@ -7,10 +7,10 @@ public:
 
 	void reset(int nlength)
 	{
-		if (length != 0)
+		if (length > 0)
 			free(ptr);
 		if (nlength != 0)
-			ptr = (_type*)malloc(nlength * sizeof(_type));
+			ptr = new _type[nlength];
 		length = nlength;
 	}
 	
