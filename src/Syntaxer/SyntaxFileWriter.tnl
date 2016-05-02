@@ -8,7 +8,24 @@ enum ExpressionOperations
 	OPERATION_MODULO,
 
 	OPERATION_ADDITION,
-	OPERATION_SUBTRACTION
+	OPERATION_SUBTRACTION,
+
+	OPERATION_BITRSH,
+	OPERATION_BITLSH,
+	
+	OPERATION_LT,
+	OPERATION_GT,
+	OPERATION_LTE,
+	OPERATION_GTE,
+	OPERATION_EQ,
+	OPERATION_NEQ,
+	
+	OPERATION_BITOR,
+	OPERATION_BITAND,
+	OPERATION_BITXOR,
+
+	OPERATION_BOOLOR,
+	OPERATION_BOOLAND
 };
 
 class SyntaxFileWriter
@@ -149,6 +166,34 @@ public:
 			myFile.putstring("ADD ");
 		else if (operation==OPERATION_SUBTRACTION)
 			myFile.putstring("SUB ");
+		else if (operation==OPERATION_BITRSH)
+			myFile.putstring("RSH ");
+		else if (operation==OPERATION_BITLSH)
+			myFile.putstring("LSH ");
+		else if (operation == OPERATION_LT)
+			myFile.putstring("LT ");
+		else if (operation == OPERATION_GT)
+			myFile.putstring("GT ");
+		else if (operation == OPERATION_LTE)
+			myFile.putstring("LTE ");
+		else if (operation == OPERATION_GTE)
+			myFile.putstring("GTE ");
+		else if (operation == OPERATION_EQ)
+			myFile.putstring("EQ ");
+		else if (operation == OPERATION_NEQ)
+			myFile.putstring("NEQ ");
+		else if (operation == OPERATION_BITOR)
+			myFile.putstring("BITOR ");
+		else if (operation == OPERATION_BITAND)
+			myFile.putstring("BITAND ");
+		else if (operation == OPERATION_BITXOR)
+			myFile.putstring("BITXOR ");
+		else if (operation == OPERATION_BOOLOR)
+			myFile.putstring("BOOLOR ");
+		else if (operation == OPERATION_BOOLAND)
+			myFile.putstring("BOOLAND ");
+
+
 	}
 
 	bool endExpression()

@@ -113,6 +113,8 @@ protected:
 			type = TOKEN_MODULO;
 		else if (lookahead=='~')
 			type = TOKEN_BITNOT;
+		else if (lookahead=='^')
+			type = TOKEN_BITXOR;
 		else if (lookahead=='=')
 		{
 			type = TOKEN_ASSIGN;
@@ -190,6 +192,11 @@ protected:
 				type = TOKEN_GREATEREQUAL;
 				safe_getchar();
 			}
+			else if (lookahead=='>' && found_whitespace == false)
+			{
+				type = TOKEN_BITRSH;
+				safe_getchar();
+			}
 			return true;
 		}
 		else if (lookahead=='<')
@@ -199,6 +206,11 @@ protected:
 			if (lookahead=='=' && found_whitespace == false)
 			{
 				type = TOKEN_LESSEQUAL;
+				safe_getchar();
+			}
+			else if (lookahead=='<' && found_whitespace == false)
+			{
+				type = TOKEN_BITLSH;
 				safe_getchar();
 			}
 			return true;

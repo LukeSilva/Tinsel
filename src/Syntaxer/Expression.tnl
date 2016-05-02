@@ -82,12 +82,83 @@ public:
 		}
 	}
 
+	bool parseLevel4(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	{
+		parseLevel3(inStream,outStream,locals);
+		while (currentTok.type == TOKEN_BITRSH || currentTok.type == TOKEN_BITLSH)
+		{
+			Token oldTok = currentTok;
+			currentTok = inStream.getToken();
+			parseLevel3(inStream,outStream,locals);
+			if (oldTok.type == TOKEN_BITRSH)
+				outStream.expressionOperation(OPERATION_BITRSH);
+			else if (oldTok.type == TOKEN_BITLSH)
+				outStream.expressionOperation(OPERATION_BITLSH);
+		}
+	}
+
+	bool parseLevel5(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	{
+		parseLevel4(inStream,outStream,locals);
+		while (	currentTok.type == TOKEN_GREATER 	|| currentTok.type == TOKEN_LESS 	|| 
+			currentTok.type == TOKEN_GREATEREQUAL 	|| currentTok.type == TOKEN_LESSEQUAL 	||
+			currentTok.type == TOKEN_EQUAL		|| currentTok.type == TOKEN_NOTEQUAL	)
+		{
+			Token oldTok = currentTok;
+			currentTok = inStream.getToken();
+			parseLevel4(inStream,outStream,locals);
+			if (oldTok.type == TOKEN_GREATER)
+				outStream.expressionOperation(OPERATION_GT);
+			else if (oldTok.type == TOKEN_LESS)
+				outStream.expressionOperation(OPERATION_LT);
+			else if (oldTok.type == TOKEN_GREATEREQUAL)
+				outStream.expressionOperation(OPERATION_GTE);
+			else if (oldTok.type == TOKEN_LESSEQUAL)
+				outStream.expressionOperation(OPERATION_LTE);
+			else if (oldTok.type == TOKEN_EQUAL)
+				outStream.expressionOperation(OPERATION_EQ);
+			else if (oldTok.type == TOKEN_NOTEQUAL)
+				outStream.expressionOperation(OPERATION_NEQ);
+		}
+	}
+
+	bool parseLevel6(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	{
+		parseLevel5(inStream,outStream,locals);
+		while ( currentTok.type == TOKEN_BITOR || currentTok.type == TOKEN_BITAND || currentTok.type == TOKEN_BITXOR )
+		{
+			Token oldTok = currentTok;
+			currentTok = inStream.getToken();
+			parseLevel5(inStream,outStream,locals);
+			if (oldTok.type == TOKEN_BITOR)
+				outStream.expressionOperation(OPERATION_BITOR);
+			else if (oldTok.type == TOKEN_BITAND)
+				outStream.expressionOperation(OPERATION_BITAND);
+			else if (oldTok.type == TOKEN_BITXOR)
+				outStream.expressionOperation(OPERATION_BITXOR);
+		}
+	}
+
+	bool parseLevel7(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	{
+		parseLevel6(inStream,outStream,locals);
+		while ( currentTok.type == TOKEN_BOOLOR || currentTok.type == TOKEN_BOOLAND )
+		{
+			Token oldTok = currentTok;
+			currentTok = inStream.getToken();
+			parseLevel6(inStream,outStream,locals);
+			if (oldTok.type == TOKEN_BOOLOR)
+				outStream.expressionOperation(OPERATION_BOOLOR);
+			else if (oldTok.type == TOKEN_BOOLAND)
+				outStream.expressionOperation(OPERATION_BOOLAND);
+		}
+	}
 
 	bool parse(TokenStream inStream, SyntaxFileWriter outStream,Variable array locals)
 	{
 		currentTok = inStream.getToken();
 		outStream.startExpression();
-		parseLevel3(inStream,outStream,locals);
+		parseLevel7(inStream,outStream,locals);
 		outStream.endExpression();
 	}
 };
