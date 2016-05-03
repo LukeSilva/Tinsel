@@ -122,8 +122,8 @@ public:
 		if (expressionCount == 0)
 		{
 			myFile.putstring("( ");
-			expressionCount += 1;
 		}
+		expressionCount += 1;
 	}
 
 	bool expressionGlobalVariable(String name)

@@ -1,8 +1,15 @@
+/// A class that parses an expression from a TokenStream, and writes the proper result to a SyntaxFileWriter
 class Expression
 {
 public:
 	int returnType;
 	Token currentTok;
+
+	/// Parses level 0 operators:
+	///  - Function calls
+	///  - Variables
+	///  - Literals
+	///  - Expressions
 	bool parseLevel0(TokenStream inStream, SyntaxFileWriter outStream,Variable array locals)
 	{
 		if (currentTok.type == TOKEN_NAME)
@@ -28,6 +35,8 @@ public:
 			outStream.expressionLiteral(currentTok.value);
 			currentTok = inStream.getToken();
 		}
+		else if (currentTok.type == TOKEN_OBRACKET)
+			parse(inStream,outStream,locals);
 		else
 		{
 			std_out.putstring("[EXPRESSION] Unknown statement ");
@@ -159,6 +168,12 @@ public:
 		currentTok = inStream.getToken();
 		outStream.startExpression();
 		parseLevel7(inStream,outStream,locals);
+		if (! (currentTok.type == TOKEN_SEMICOLON || currentTok.type == TOKEN_CBRACKET) )
+		{
+			std_out.putstring("[EXPRESSION] Invalid end to expression \n");
+			return false;
+		}
 		outStream.endExpression();
+		return true;
 	}
 };

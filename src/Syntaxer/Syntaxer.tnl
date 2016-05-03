@@ -169,7 +169,8 @@ protected:
 						outStream.assignmentLocal(local);
 
 					Expression expr;
-					expr.parse(Stream,outStream,locals);
+					if (!expr.parse(Stream,outStream,locals))
+						print_error("\tExpression error",currentTok.linenum);
 					
 				}
 				else
