@@ -100,7 +100,7 @@ protected:
 	}
 	
 
-	Variable parse_local_variable()
+	Variable parse_local_variable(Variable array locals)
 	{
 		Token nxtTok = Stream.getToken();
 		Variable local_variable;
@@ -119,10 +119,18 @@ protected:
 			local_variable.name = var_name;
 
 			nxtTok = Stream.getToken();
-			if (nxtTok.type != TOKEN_SEMICOLON)
-				print_error("Expected semicolon",nxtTok.linenum);
-			else
+			if (nxtTok.type == TOKEN_ASSIGN)
+			{
 				outStream.defineVariable(local_variable);
+				outStream.assignmentLocal(local_variable);
+				Expression expr;
+				if (!expr.parse(Stream,outStream,locals))
+					print_error("\rExpression error", nxtTok.linenum);
+			}
+			else if (nxtTok.type == TOKEN_SEMICOLON)
+				outStream.defineVariable(local_variable);
+			else 
+				print_error("Expected semicolon",nxtTok.linenum);
 		}
 		else
 			print_error("Invalid name for variable / function",nxtTok.linenum);
@@ -141,7 +149,7 @@ protected:
 				parseBlock = false;
 			else if (is_primitive_type(currentTok.type))
 			{
-				Variable var = parse_local_variable();
+				Variable var = parse_local_variable(locals);
 				int currentLength = locals.length;
 				locals.resize(currentLength+1);
 				locals[currentLength] = var;

@@ -36,7 +36,10 @@ public:
 			currentTok = inStream.getToken();
 		}
 		else if (currentTok.type == TOKEN_OBRACKET)
+		{
 			parse(inStream,outStream,locals);
+			currentTok = inStream.getToken();
+		}
 		else
 		{
 			std_out.putstring("[EXPRESSION] Unknown statement ");
