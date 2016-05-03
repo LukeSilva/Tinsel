@@ -6,11 +6,11 @@ public:
 	Token currentTok;
 
 	/// Parses level 0 operators:
-	///  - Function calls
+	///  - Function calls (TODO)
 	///  - Variables
 	///  - Literals
 	///  - Expressions
-	bool parseLevel0(TokenStream inStream, SyntaxFileWriter outStream,Variable array locals)
+	void parseLevel0(TokenStream inStream, SyntaxFileWriter outStream,Variable array locals)
 	{
 		if (currentTok.type == TOKEN_NAME)
 		{
@@ -45,7 +45,10 @@ public:
 		}
 	}
 	
-	bool parseLevel1(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	/// Parses level 1 operators:
+	///  - Bit not
+	///  - Boolean not
+	void parseLevel1(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
 	{
 		Token oldTok = currentTok;
 		if (currentTok.type == TOKEN_BITNOT || currentTok.type == TOKEN_BOOLNOT)
@@ -59,7 +62,11 @@ public:
 			outStream.expressionOperation(OPERATION_BOOLNOT);
 	}
 	
-	bool parseLevel2(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	/// Parses level 2 operators:
+	///  - Multiplication
+	///  - Division
+	///  - Modulo
+	void parseLevel2(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
 	{
 		parseLevel1(inStream,outStream,locals);
 		while (currentTok.type == TOKEN_MULTIPLICATION || currentTok.type == TOKEN_DIVISION || currentTok.type == TOKEN_MODULO)
@@ -76,7 +83,10 @@ public:
 		}
 	}	
 
-	bool parseLevel3(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	/// Parses level 3 operators:
+	///  - Addition
+	///  - Subtraction
+	void parseLevel3(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
 	{
 		parseLevel2(inStream,outStream,locals);
 		while (currentTok.type == TOKEN_ADDITION || currentTok.type == TOKEN_SUBTRACTION)
@@ -91,7 +101,10 @@ public:
 		}
 	}
 
-	bool parseLevel4(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	/// Parses level 4 operators:
+	///  - Right shift
+	///  - Left shift
+	void parseLevel4(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
 	{
 		parseLevel3(inStream,outStream,locals);
 		while (currentTok.type == TOKEN_BITRSH || currentTok.type == TOKEN_BITLSH)
@@ -106,7 +119,14 @@ public:
 		}
 	}
 
-	bool parseLevel5(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	/// Parses level 5 operators:
+	///  - Greater than
+	///  - Less than
+	///  - Greater than or equal to
+	///  - Less than or equal to
+	///  - Equal to
+	///  - Not equal to
+	void parseLevel5(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
 	{
 		parseLevel4(inStream,outStream,locals);
 		while (	currentTok.type == TOKEN_GREATER 	|| currentTok.type == TOKEN_LESS 	|| 
@@ -131,7 +151,11 @@ public:
 		}
 	}
 
-	bool parseLevel6(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	/// Parses level 6 operators:
+	///  - Bitwise or
+	///  - Bitwise and
+	///  - Bitwise xor
+	void parseLevel6(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
 	{
 		parseLevel5(inStream,outStream,locals);
 		while ( currentTok.type == TOKEN_BITOR || currentTok.type == TOKEN_BITAND || currentTok.type == TOKEN_BITXOR )
@@ -148,7 +172,10 @@ public:
 		}
 	}
 
-	bool parseLevel7(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
+	/// Parses level 7 operators:
+	///  - Boolean or
+	///  - Boolean and
+	void parseLevel7(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
 	{
 		parseLevel6(inStream,outStream,locals);
 		while ( currentTok.type == TOKEN_BOOLOR || currentTok.type == TOKEN_BOOLAND )
@@ -163,6 +190,8 @@ public:
 		}
 	}
 
+
+	/// The root parse function - parses an expression and generates the proper output
 	bool parse(TokenStream inStream, SyntaxFileWriter outStream,Variable array locals)
 	{
 		currentTok = inStream.getToken();

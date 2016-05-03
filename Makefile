@@ -47,4 +47,6 @@ docs: tinsel_doc
 	echo "cd libs/base && for i in *.tnl; do ../../build/tinsel_doc --infile \$$$ i --outfile ../../docs/\$$$ i.htm; done " | bash
 	mkdir -p docs/Tokenizer
 	echo "cd src/Tokenizer && for i in *.tnl; do ../../build/tinsel_doc --infile \$$$ i --outfile ../../docs/Tokenizer/\$$$ i.htm; done " | bash
+	mkdir -p docs/Syntaxer
+	echo "cd src/Syntaxer && for i in *.tnl; do ../../build/tinsel_doc --infile \$$$ i --outfile ../../docs/Syntaxer/\$$$ i.htm; done " | bash
  
