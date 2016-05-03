@@ -136,6 +136,10 @@ int tinsel_doc(String infile, String outfile, String format)
 			else if (tok.type == TOKEN_ASSIGN) source.concat("= ");
 			else if (tok.type == TOKEN_BOOL_TRUE) source.concat("true ");
 			else if (tok.type == TOKEN_BOOL_FALSE) source.concat("false ");
+			else if (tok.type == TOKEN_INT_LIT)
+			{
+				source.concat(int_to_string(tok.value));
+			}
 			else
 			{
 				std_out.putstring("Unknown token to add to source line\n");

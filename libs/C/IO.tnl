@@ -58,26 +58,7 @@ public:
 	//@ return true on success
 	bool putint(s32 integer)
 	{
-		String output_string(34);
-
-		int sign = integer;
-		if (integer < 0)
-			integer = -integer;
-
-		while (integer > 0)
-		{
-			output_string.append('0' + integer%10);
-			integer /= 10;
-		}
-	
-		if (sign < 0)
-			output_string.append('-');
-		else if (sign == 0)
-			output_string.append('0');
-
-		output_string.reverse();
-
-		return putstring(output_string);
+		return putstring(int_to_string(integer));
 	}
 
 };
