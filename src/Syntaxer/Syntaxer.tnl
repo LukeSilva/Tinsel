@@ -154,6 +154,13 @@ protected:
 				locals.resize(currentLength+1);
 				locals[currentLength] = var;
 			}
+			else if (currentTok.type == TOKEN_RETURN)
+			{
+				outStream.startReturn();
+				Expression expr;
+				expr.parse(Stream,outStream,locals);
+				outStream.endReturn();
+			}
 			else if (currentTok.type == TOKEN_NAME)
 			{
 				Token nxtTok = Stream.getToken();

@@ -79,6 +79,16 @@ public:
 		myFile.putstring("}\n\n");
 	}
 
+	bool startReturn()
+	{
+		myFile.putstring("RETURN ");
+	}
+
+	bool endReturn()
+	{
+		myFile.putstring("\n");
+	}
+
 	bool defineVariable(Variable defineVariable)
 	{
 
