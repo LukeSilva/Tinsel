@@ -91,3 +91,133 @@ enum TokenType
 	
 };
 
+String TokenType_to_str(int type)
+{
+		if (type == TOKEN_UNKNOWN)
+			return String("TOKEN_UNKNOWN");
+		else if (type == TOKEN_ENDOFSTREAM)
+			return String("TOKEN_ENDOFSTREAM");
+		else if (type == TOKEN_OBRACKET)
+			return String("TOKEN_OBRACKET");
+		else if (type == TOKEN_CBRACKET)
+			return String("TOKEN_CBRACKET");
+		else if (type == TOKEN_COMMA)
+			return String("TOKEN_COMMA");
+		else if (type == TOKEN_ELEMENT)
+			return String("TOKEN_ELEMENT");
+		else if (type == TOKEN_COLON)
+			return String("TOKEN_COLON");
+		else if (type == TOKEN_STATICELEMENT)
+			return String("TOKEN_STATICELEMENT");
+		else if (type == TOKEN_OSBRACKET)
+			return String("TOKEN_OSBRACKET");
+		else if (type == TOKEN_CSBRACKET)
+			return String("TOKEN_CSBRACKET");
+		else if (type == TOKEN_OBLOCK)
+			return String("TOKEN_OBLOCK");
+		else if (type == TOKEN_CBLOCK)
+			return String("TOKEN_CBLOCK");
+		else if (type == TOKEN_SEMICOLON)
+			return String("TOKEN_SEMICOLON");
+		else if (type == TOKEN_ASSIGN)
+			return String("TOKEN_ASSIGN");
+		else if (type == TOKEN_ADDITION)
+			return String("TOKEN_ADDITION");
+		else if (type == TOKEN_SUBTRACTION)
+			return String("TOKEN_SUBTRACTION");
+		else if (type == TOKEN_MULTIPLICATION)
+			return String("TOKEN_MULTIPLICATION");
+		else if (type == TOKEN_DIVISION)
+			return String("TOKEN_DIVISION");
+		else if (type == TOKEN_MODULO)
+			return String("TOKEN_MODULO");
+		else if (type == TOKEN_BITNOT)
+			return String("TOKEN_BITNOT");
+		else if (type == TOKEN_BITOR)
+			return String("TOKEN_BITOR");
+		else if (type == TOKEN_BITAND)
+			return String("TOKEN_BITAND");
+		else if (type == TOKEN_BOOLNOT)
+			return String("TOKEN_BOOLNOT");
+		else if (type == TOKEN_BOOLOR)
+			return String("TOKEN_BOOLOR");
+		else if (type == TOKEN_BOOLAND)
+			return String("TOKEN_BOOLAND");
+		else if (type == TOKEN_GREATER)
+			return String("TOKEN_GREATER");
+		else if (type == TOKEN_LESS)
+			return String("TOKEN_LESS");
+		else if (type == TOKEN_GREATEREQUAL)
+			return String("TOKEN_GREATEREQUAL");
+		else if (type == TOKEN_LESSEQUAL)
+			return String("TOKEN_LESSEQUAL");
+		else if (type == TOKEN_EQUAL)
+			return String("TOKEN_EQUAL");
+		else if (type == TOKEN_NOTEQUAL)
+			return String("TOKEN_NOTEQUAL");
+		else if (type == TOKEN_INT_LIT)
+			return String("TOKEN_INT_LIT");
+		else if (type == TOKEN_NAME)
+			return String("TOKEN_NAME");
+		else if (type==TOKEN_U8)
+			return String("TOKEN_U8");
+		else if (type==TOKEN_S8)
+			return String("TOKEN_S8");
+		else if (type==TOKEN_U16)
+			return String("TOKEN_U16");
+		else if (type==TOKEN_S16)
+			return String("TOKEN_S16");
+		else if (type==TOKEN_U32)
+			return String("TOKEN_U32");
+		else if (type==TOKEN_S32)
+			return String("TOKEN_S32");
+		else if (type==TOKEN_INT)
+			return String("TOKEN_INT");
+		else if (type==TOKEN_BOOL)
+			return String("TOKEN_BOOL");
+		else if (type==TOKEN_SELF)
+			return String("TOKEN_SELF");
+		else if (type==TOKEN_CLASS)
+			return String("TOKEN_CLASS");
+		else if (type==TOKEN_CONST)
+			return String("TOKEN_CONST");
+		else if (type==TOKEN_ENUM)
+			return String("TOKEN_ENUM");
+		else if (type==TOKEN_RETURN)
+			return String("TOKEN_RETURN");
+		else if (type==TOKEN_IF)
+			return String("TOKEN_IF");
+		else if (type==TOKEN_ELSE)
+			return String("TOKEN_ELSE");
+		else if (type==TOKEN_WHILE)
+			return String("TOKEN_WHILE");
+		else if (type==TOKEN_FOR)
+			return String("TOKEN_FOR");
+		else if (type==TOKEN_PUBLIC)
+			return String("TOKEN_PUBLIC");
+		else if (type==TOKEN_PRIVATE)
+			return String("TOKEN_PRIVATE");
+		else if (type==TOKEN_PROTECTED)
+			return String("TOKEN_PROTECTED");
+		else if (type==TOKEN_CHAR_LIT)
+			return String("TOKEN_CHAR_LIT");
+		else if (type==TOKEN_STRING_LIT)
+			return String("TOKEN_STRING_LIT");
+		else if (type==TOKEN_ERROR)
+			return String("TOKEN_ERROR");
+		else if (type==TOKEN_BOOL_TRUE)
+			return String("TOKEN_BOOL_TRUE");
+		else if (type==TOKEN_BOOL_FALSE)
+			return String("TOKEN_BOOL_FALSE");
+		else if (type==TOKEN_COMMENT)
+			return String("TOKEN_COMMENT");
+		else if (type==TOKEN_DOC_COMMENT)
+			return String("TOKEN_DOC_COMMENT");
+		else if (type==TOKEN_IMPORT)
+			return String("TOKEN_IMPORT");
+		else if (type==TOKEN_VOID)
+			return String("TOKEN_VOID");
+		else if (type==TOKEN_BREAK)
+			return String("TOKEN_BREAK");
+}
+

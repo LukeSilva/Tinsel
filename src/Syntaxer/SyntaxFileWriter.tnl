@@ -57,6 +57,16 @@ public:
 		myFile.open(Filename,"w","ASCII");
 	}
 
+	bool startBlock()
+	{
+		myFile.putstring("{\n");
+	}
+
+	bool endBlock()
+	{
+		myFile.putstring("}\n");
+	}
+
 	bool startFunction(Variable functionVariable)
 	{
 		myFile.putstring("DEFINE ");
@@ -70,13 +80,14 @@ public:
 		}
 		myFile.putchar(' ');
 		myFile.putstring(functionVariable.name);
-		myFile.putstring("\n{\n");
+		myFile.putchar('\n');
+		startBlock();
 		nxt_var_id = 0;
 	}
 
 	bool endFunction(Variable functionVariable)
 	{
-		myFile.putstring("}\n\n");
+		endBlock();
 	}
 
 	bool startReturn()
@@ -87,6 +98,11 @@ public:
 	bool endReturn()
 	{
 		myFile.putstring("\n");
+	}
+
+	bool whileLoop()
+	{
+		myFile.putstring("WHILE ");
 	}
 
 	bool defineVariable(Variable defineVariable)

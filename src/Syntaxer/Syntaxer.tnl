@@ -68,6 +68,20 @@ protected:
 		_error = true;
 	}
 
+	void expect(int type)
+	{
+		currentTok = Stream.getToken();
+		if (currentTok.type != type)
+		{
+			String error_msg(255);
+			error_msg.concat("Unexpected token, got: ");
+			error_msg.concat(TokenType_to_str(currentTok.type));
+			error_msg.concat(", expected: ");
+			error_msg.concat(TokenType_to_str(type));
+			print_error(error_msg,currentTok.linenum);
+		}
+	}
+
 	/// Prints a pretty table of an array of variables
 	void print_variable_table(Variable array variables,String heading)
 	{
@@ -160,6 +174,19 @@ protected:
 				Expression expr;
 				expr.parse(Stream,outStream,locals);
 				outStream.endReturn();
+			}
+			else if (currentTok.type == TOKEN_WHILE)
+			{
+				outStream.whileLoop();
+				expect(TOKEN_OBRACKET);
+				Expression expr;
+				expr.parse(Stream,outStream,locals);
+				expect(TOKEN_OBLOCK);
+				outStream.startBlock();
+				Variable array new_locals;
+				new_locals = locals;
+				parse_block(new_locals);
+				outStream.endBlock();
 			}
 			else if (currentTok.type == TOKEN_NAME)
 			{
