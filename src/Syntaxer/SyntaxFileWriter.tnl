@@ -64,7 +64,7 @@ public:
 
 	bool endBlock()
 	{
-		myFile.putstring("}\n");
+		myFile.putstring("}\n\n");
 	}
 
 	bool startFunction(Variable functionVariable)
@@ -97,7 +97,6 @@ public:
 
 	bool endReturn()
 	{
-		myFile.putstring("\n");
 	}
 
 	bool whileLoop()

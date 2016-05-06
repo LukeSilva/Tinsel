@@ -21,8 +21,8 @@ public:
 
 	void reset(int nlength)
 	{
-		if (length > 0)
-			delete[] ptr;
+		/*if (length > 0)
+			delete[] ptr;*/
 		if (nlength != 0)
 			ptr = new _type[nlength];
 		length = nlength;
@@ -47,8 +47,8 @@ public:
 			nptr[i] = ptr[i];
 
 		// Free the old data
-		if (length != 0)
-			delete[] ptr;
+/*		if (length != 0)
+			delete[] ptr;*/
 		
 		// Setup the variables
 		ptr = nptr;

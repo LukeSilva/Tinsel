@@ -151,8 +151,6 @@ protected:
 		return local_variable;
 	}
 
-//	void parse_block(Variable array locals);
-
 	void parse_block_segment(Variable array locals)
 	{
 			if (is_primitive_type(currentTok.type))
@@ -188,14 +186,19 @@ protected:
 				expect(TOKEN_OBRACKET);
 				Expression expr;
 				expr.parse(Stream,outStream,locals);
-				expect(TOKEN_OBLOCK);
 				outStream.startBlock();
 
-				Variable array new_locals;
-				new_locals = locals;
-
-
-				parse_block(new_locals);
+				currentTok = Stream.getToken();
+				if (currentTok.type == TOKEN_OBLOCK)
+				{
+					Variable array new_locals;
+					new_locals = locals;
+					parse_block(new_locals);
+				}
+				else
+				{
+					parse_block_segment(locals);
+				}
 				outStream.endBlock();
 			}
 			else if (currentTok.type == TOKEN_NAME)
