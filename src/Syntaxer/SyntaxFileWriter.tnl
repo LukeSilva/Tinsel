@@ -105,6 +105,11 @@ public:
 		myFile.putstring("WHILE ");
 	}
 
+	bool ifStatement()
+	{
+		myFile.putstring("IF ");
+	}
+
 	bool defineVariable(Variable defineVariable)
 	{
 

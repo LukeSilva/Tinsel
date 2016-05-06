@@ -8,9 +8,10 @@ public:
 	/// Creates a string of size 0
 	String()
 	{
-		characters.reset(0);
+		characters.reset(1);
 		pos = 0;
-		size = 0;
+		size = 1;
+		characters[0] = 0;
 	}
 
 	/// Creates a string with a certain size

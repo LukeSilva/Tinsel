@@ -21,8 +21,8 @@ String var_type_string(int varType)
 class Variable
 {
 public:
-	String objname = "";
-	String name = "";
+	String objname;
+	String name;
 	int properties = 0;
 	int type = 0;
 	s32 default_value = 0;

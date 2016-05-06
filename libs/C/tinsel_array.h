@@ -5,10 +5,24 @@ public:
 	int length = 0;
 	_type* ptr;
 
+	tinsel_array()
+	{
+		length = 0;
+		ptr = (_type*) 0xDEADBEEF;
+	}
+	
+	tinsel_array(tinsel_array const & that)
+	{
+		this->length = that.length;
+		this->ptr = new _type[length];
+		for (int i = 0; i < this->length; ++i)
+			this->ptr[i] = that.ptr[i];
+	}
+
 	void reset(int nlength)
 	{
 		if (length > 0)
-			free(ptr);
+			delete[] ptr;
 		if (nlength != 0)
 			ptr = new _type[nlength];
 		length = nlength;
@@ -26,7 +40,7 @@ public:
 
 		// Allocate the new memory position, if needed
 		if (nlength != 0)
-			nptr = (_type*)malloc(nlength * sizeof(_type));
+			nptr = new _type[nlength];
 
 		// Copy the old data into the new memory position
 		for (int i = 0; i < copylen; ++i)
@@ -34,7 +48,7 @@ public:
 
 		// Free the old data
 		if (length != 0)
-			free(ptr);
+			delete[] ptr;
 		
 		// Setup the variables
 		ptr = nptr;

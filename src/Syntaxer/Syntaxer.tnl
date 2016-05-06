@@ -188,6 +188,22 @@ protected:
 				parse_block(new_locals);
 				outStream.endBlock();
 			}
+			else if (currentTok.type == TOKEN_IF)
+			{
+				outStream.ifStatement();
+				expect(TOKEN_OBRACKET);
+				Expression expr;
+				expr.parse(Stream,outStream,locals);
+				expect(TOKEN_OBLOCK);
+				outStream.startBlock();
+
+				Variable array new_locals;
+				new_locals = locals;
+
+
+				parse_block(new_locals);
+				outStream.endBlock();
+			}
 			else if (currentTok.type == TOKEN_NAME)
 			{
 				Token nxtTok = Stream.getToken();
