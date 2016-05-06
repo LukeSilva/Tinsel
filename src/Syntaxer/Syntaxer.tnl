@@ -151,17 +151,11 @@ protected:
 		return local_variable;
 	}
 
+//	void parse_block(Variable array locals);
 
-
-	void parse_block(Variable array locals)
+	void parse_block_segment(Variable array locals)
 	{
-		bool parseBlock = true;
-		while (parseBlock && !_error)
-		{
-			currentTok = Stream.getToken();
-			if (currentTok.type == TOKEN_CBLOCK)
-				parseBlock = false;
-			else if (is_primitive_type(currentTok.type))
+			if (is_primitive_type(currentTok.type))
 			{
 				Variable var = parse_local_variable(locals);
 				int currentLength = locals.length;
@@ -236,6 +230,17 @@ protected:
 			}
 			else if (currentTok.type == TOKEN_ENDOFSTREAM)
 				print_error("End-of-stream encountered while parsing a code block",currentTok.linenum);
+	}
+
+	void parse_block(Variable array locals)
+	{
+		bool parseBlock = true;
+		while (parseBlock && !_error)
+		{
+			currentTok = Stream.getToken();
+			if (currentTok.type == TOKEN_CBLOCK)
+				parseBlock = false;
+			else parse_block_segment(locals);
 		}
 		print_variable_table(locals,"LOCALS");
 	}
