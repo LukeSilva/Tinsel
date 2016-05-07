@@ -396,9 +396,15 @@ public:
 				{
 					safe_getchar();
 					if (lookahead == 'b')
+					{
 						base = 2;
+						safe_getchar();
+					}
 					else if (lookahead == 'x')
+					{
 						base = 16;
+						safe_getchar();
+					}
 					else if (lookahead < '0' || lookahead > '9' || found_whitespace==true)
 					{
 						base = 0;
@@ -406,8 +412,8 @@ public:
 					else
 					{
 						print_error("Invalid base for integer literal, but you have a leading 0", tok.linenum);
+						safe_getchar();
 					}
-					safe_getchar();
 				}
 				tok.type = TOKEN_INT_LIT;
 				tok.value = parse_integer_literal(base);
