@@ -151,7 +151,7 @@ protected:
 		return local_variable;
 	}
 
-	void parse_block_segment(Variable array locals)
+	bool parse_block_segment(Variable array locals)
 	{
 			if (is_primitive_type(currentTok.type))
 			{
@@ -182,12 +182,13 @@ protected:
 			}
 			else if (currentTok.type == TOKEN_IF)
 			{
+				std_out.putstring("A");
 				outStream.ifStatement();
 				expect(TOKEN_OBRACKET);
 				Expression expr;
 				expr.parse(Stream,outStream,locals);
 				outStream.startBlock();
-
+				std_out.putstring("B");
 				currentTok = Stream.getToken();
 				if (currentTok.type == TOKEN_OBLOCK)
 				{
@@ -196,10 +197,32 @@ protected:
 					parse_block(new_locals);
 				}
 				else
-				{
 					parse_block_segment(locals);
-				}
+				std_out.putstring("C");
 				outStream.endBlock();
+				outStream.startBlock();
+				std_out.putstring("D");
+				currentTok = Stream.getToken();
+				currentTok.print(std_out);
+				std_out.putstring("DD");
+				if (currentTok.type == TOKEN_ELSE)
+				{
+					std_out.putstring("E");
+					currentTok = Stream.getToken();
+					if (currentTok.type == TOKEN_OBLOCK)
+					{
+						Variable array new_locals;
+						new_locals = locals;
+						parse_block(new_locals);
+					}
+					else
+						parse_block_segment(locals);
+					outStream.endBlock();
+					return true;
+				}
+				std_out.putstring("F");
+				outStream.endBlock();
+				return false;
 			}
 			else if (currentTok.type == TOKEN_NAME)
 			{
@@ -233,17 +256,19 @@ protected:
 			}
 			else if (currentTok.type == TOKEN_ENDOFSTREAM)
 				print_error("End-of-stream encountered while parsing a code block",currentTok.linenum);
+			return true;
 	}
 
 	void parse_block(Variable array locals)
 	{
 		bool parseBlock = true;
+		currentTok = Stream.getToken();
 		while (parseBlock && !_error)
 		{
-			currentTok = Stream.getToken();
 			if (currentTok.type == TOKEN_CBLOCK)
 				parseBlock = false;
-			else parse_block_segment(locals);
+			else if (parse_block_segment(locals))
+				currentTok = Stream.getToken();
 		}
 		print_variable_table(locals,"LOCALS");
 	}
