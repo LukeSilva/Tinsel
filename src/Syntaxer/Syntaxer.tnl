@@ -182,13 +182,11 @@ protected:
 			}
 			else if (currentTok.type == TOKEN_IF)
 			{
-				std_out.putstring("A");
 				outStream.ifStatement();
 				expect(TOKEN_OBRACKET);
 				Expression expr;
 				expr.parse(Stream,outStream,locals);
 				outStream.startBlock();
-				std_out.putstring("B");
 				currentTok = Stream.getToken();
 				if (currentTok.type == TOKEN_OBLOCK)
 				{
@@ -198,16 +196,11 @@ protected:
 				}
 				else
 					parse_block_segment(locals);
-				std_out.putstring("C");
 				outStream.endBlock();
 				outStream.startBlock();
-				std_out.putstring("D");
 				currentTok = Stream.getToken();
-				currentTok.print(std_out);
-				std_out.putstring("DD");
 				if (currentTok.type == TOKEN_ELSE)
 				{
-					std_out.putstring("E");
 					currentTok = Stream.getToken();
 					if (currentTok.type == TOKEN_OBLOCK)
 					{
@@ -220,7 +213,6 @@ protected:
 					outStream.endBlock();
 					return true;
 				}
-				std_out.putstring("F");
 				outStream.endBlock();
 				return false;
 			}
