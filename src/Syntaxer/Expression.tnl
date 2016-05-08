@@ -51,10 +51,11 @@ public:
 	/// Parses level 1 operators:
 	///  - Bit not
 	///  - Boolean not
+	///  - Unary subtraction
 	void parseLevel1(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals)
 	{
 		Token oldTok = currentTok;
-		if (currentTok.type == TOKEN_BITNOT || currentTok.type == TOKEN_BOOLNOT)
+		if (currentTok.type == TOKEN_BITNOT || currentTok.type == TOKEN_BOOLNOT || currentTok.type == TOKEN_SUBTRACTION)
 		{
 			currentTok = inStream.getToken();
 		}
@@ -63,6 +64,8 @@ public:
 			outStream.expressionOperation(OPERATION_BITNOT);
 		else if (oldTok.type == TOKEN_BOOLNOT)
 			outStream.expressionOperation(OPERATION_BOOLNOT);
+		else if (oldTok.type == TOKEN_SUBTRACTION)
+			outStream.expressionOperation(OPERATION_NEG);
 	}
 	
 	/// Parses level 2 operators:

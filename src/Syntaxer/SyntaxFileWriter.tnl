@@ -2,6 +2,7 @@ enum ExpressionOperations
 {
 	OPERATION_BITNOT,
 	OPERATION_BOOLNOT,
+	OPERATION_NEG,
 	
 	OPERATION_MULTIPLICATION,
 	OPERATION_DIVISION,
@@ -186,6 +187,8 @@ public:
 			myFile.putstring("BITNOT ");
 		else if (operation==OPERATION_BOOLNOT)
 			myFile.putstring("BOOLNOT ");
+		else if (operation==OPERATION_NEG)
+			myFile.putstring("NEG ");
 		else if (operation==OPERATION_MULTIPLICATION)
 			myFile.putstring("MUL ");
 		else if (operation==OPERATION_DIVISION)
