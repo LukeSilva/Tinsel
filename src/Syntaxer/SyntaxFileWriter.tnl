@@ -1,3 +1,4 @@
+/// An enum containing all of the possible operations that can be done in an expression
 enum ExpressionOperations
 {
 	OPERATION_BITNOT,
@@ -29,11 +30,16 @@ enum ExpressionOperations
 	OPERATION_BOOLAND
 };
 
+/// The syntaxer class that creates the .tast file outputs 
+///   Could be extended to allow for different file formats
 class SyntaxFileWriter
 {
 	bool _open = false;
+	// ID for the next global variable
 	int nxt_var_id = 0;
 	File myFile;
+
+	/// Keeps track of nested expressions
 	int expressionCount = 0;
 
 	void printLocalVariable(Variable localVariable)
@@ -52,23 +58,29 @@ class SyntaxFileWriter
 
 public:
 
+	/// Opens the output file
+	//@return true on success
 	bool open(String Filename)
 	{
 		_open = true;
-		myFile.open(Filename,"w","ASCII");
+		return	myFile.open(Filename,"w","ASCII");
+		
 	}
 
-	bool startBlock()
+	/// Starts a code block
+	void startBlock()
 	{
 		myFile.putstring("{\n");
 	}
 
-	bool endBlock()
+	/// Ends a code block
+	void endBlock()
 	{
 		myFile.putstring("}\n\n");
 	}
 
-	bool startFunction(Variable functionVariable)
+	/// Starts a function, passed a variable with the return type and name of the function.
+	void startFunction(Variable functionVariable)
 	{
 		myFile.putstring("DEFINE ");
 		if ((functionVariable.properties&PROPERTY_OBJECT)==0)
@@ -86,31 +98,42 @@ public:
 		nxt_var_id = 0;
 	}
 
-	bool endFunction(Variable functionVariable)
+	/// Ends the function, and its internal block
+	void endFunction(Variable functionVariable)
 	{
 		endBlock();
 	}
 
-	bool startReturn()
+	/// Starts a return statement
+	///  Syntaxer should follow with an expression
+	void startReturn()
 	{
 		myFile.putstring("RETURN ");
 	}
 
-	bool endReturn()
+	/// Ends a return statement
+	void endReturn()
 	{
 	}
 
-	bool whileLoop()
+	/// Starts a while loop
+	///  Syntaxer should follow with an expression, then a code block
+	void whileLoop()
 	{
 		myFile.putstring("WHILE ");
 	}
 
-	bool ifStatement()
+	/// Starts an if statement
+	///  Syntaxer should follow with an expression, then two code blocks.
+	///   First code block is for true condition, second is for false condition	
+	void ifStatement()
 	{
 		myFile.putstring("IF ");
 	}
 
-	bool defineVariable(Variable defineVariable)
+
+	/// Used to create a variable on the stack.
+	void defineVariable(Variable defineVariable)
 	{
 
 		myFile.putstring("CREATEVAR ");
@@ -130,7 +153,9 @@ public:
 		nxt_var_id += 1;
 	}
 	
-	bool assignmentGlobal(String name)
+	/// Used to assign a global variable by its name
+	///  Syntaxer should follow with an expression
+	void assignmentGlobal(String name)
 	{
 		myFile.putstring("ASSIGN !");
 		myFile.putstring(name);
@@ -138,7 +163,9 @@ public:
 		return true;
 	}
 
-	bool assignmentLocal(Variable localVariable)
+	/// Used to assign a local variabel by its variable object
+	///  Syntaxer should follow with an expression
+	void assignmentLocal(Variable localVariable)
 	{
 		if (!localVariable.localVariable) 
 			return false;
@@ -148,7 +175,8 @@ public:
 		return true;
 	}
 
-	bool startExpression()
+	/// Starts an expression, which is formed with appropriate expression calls in reverse polish notation
+	void startExpression()
 	{
 		if (expressionCount == 0)
 		{
@@ -157,14 +185,16 @@ public:
 		expressionCount += 1;
 	}
 
-	bool expressionGlobalVariable(String name)
+	/// Puts a gobal variable onto the working stack
+	void expressionGlobalVariable(String name)
 	{
 		myFile.putchar('!');
 		myFile.putstring(name);
 		myFile.putchar(' ');
 	}
 
-	bool expressionLocalVariable(Variable localVariable)
+	/// Puts a local variable onto the working stack
+	void expressionLocalVariable(Variable localVariable)
 	{
 		if (!localVariable.localVariable)
 			return false;
@@ -174,14 +204,16 @@ public:
 		return true;
 	}
 
-	bool expressionLiteral(int value)
+	/// Puts a literal onto the working stack
+	void expressionLiteral(s32 value)
 	{
 		myFile.putstring("LIT(");
 		myFile.putint(value);
 		myFile.putstring(") ");
 	}
 
-	bool expressionOperation(int operation)
+	/// Does an operation on the last 1-2 variables pushed onto the stack
+	void expressionOperation(int operation)
 	{
 		if (operation==OPERATION_BITNOT)
 			myFile.putstring("BITNOT ");
@@ -229,7 +261,8 @@ public:
 
 	}
 
-	bool endExpression()
+	/// Ends an expression
+	void endExpression()
 	{
 		if (expressionCount == 1)
 		{
@@ -238,9 +271,11 @@ public:
 		expressionCount -= 1;
 	}
 
-	bool close()
+	/// Closes the syntax file
+	void close()
 	{
 		_open = false;
+		myFile.close();
 	}
 
 };

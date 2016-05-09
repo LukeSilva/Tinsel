@@ -18,6 +18,7 @@ String var_type_string(int varType)
 	return "UNK";
 }
 
+/// A class that represents a variable within the syntaxer.
 class Variable
 {
 public:
