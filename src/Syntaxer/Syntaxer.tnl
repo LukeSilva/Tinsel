@@ -137,7 +137,7 @@ protected:
 			{
 				outStream.defineVariable(local_variable);
 				outStream.assignmentLocal(local_variable);
-				Expression expr;
+				SynExpression expr;
 				if (!expr.parse(Stream,outStream,locals))
 					print_error("\rExpression error", nxtTok.linenum);
 			}
@@ -163,7 +163,7 @@ protected:
 			else if (currentTok.type == TOKEN_RETURN)
 			{
 				outStream.startReturn();
-				Expression expr;
+				SynExpression expr;
 				expr.parse(Stream,outStream,locals);
 				outStream.endReturn();
 			}
@@ -171,7 +171,7 @@ protected:
 			{
 				outStream.whileLoop();
 				expect(TOKEN_OBRACKET);
-				Expression expr;
+				SynExpression expr;
 				expr.parse(Stream,outStream,locals);
 				expect(TOKEN_OBLOCK);
 				outStream.startBlock();
@@ -184,7 +184,7 @@ protected:
 			{
 				outStream.ifStatement();
 				expect(TOKEN_OBRACKET);
-				Expression expr;
+				SynExpression expr;
 				expr.parse(Stream,outStream,locals);
 				outStream.startBlock();
 				currentTok = Stream.getToken();
@@ -238,7 +238,7 @@ protected:
 					else
 						outStream.assignmentLocal(local);
 
-					Expression expr;
+					SynExpression expr;
 					if (!expr.parse(Stream,outStream,locals))
 						print_error("\tExpression error",currentTok.linenum);
 					

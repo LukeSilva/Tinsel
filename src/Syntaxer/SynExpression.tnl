@@ -1,5 +1,5 @@
 /// A class that parses an expression from a TokenStream, and writes the proper result to a SyntaxFileWriter
-class Expression
+class SynExpression
 {
 public:
 	int returnType;

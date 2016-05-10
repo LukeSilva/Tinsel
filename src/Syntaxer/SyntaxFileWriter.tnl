@@ -160,12 +160,11 @@ public:
 		myFile.putstring("ASSIGN !");
 		myFile.putstring(name);
 		myFile.putchar(' ');
-		return true;
 	}
 
 	/// Used to assign a local variabel by its variable object
 	///  Syntaxer should follow with an expression
-	void assignmentLocal(Variable localVariable)
+	bool assignmentLocal(Variable localVariable)
 	{
 		if (!localVariable.localVariable) 
 			return false;
@@ -194,7 +193,7 @@ public:
 	}
 
 	/// Puts a local variable onto the working stack
-	void expressionLocalVariable(Variable localVariable)
+	bool expressionLocalVariable(Variable localVariable)
 	{
 		if (!localVariable.localVariable)
 			return false;
