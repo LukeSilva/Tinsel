@@ -19,12 +19,16 @@ public:
 			if (nxtTok.type == TOKEN_OBRACKET)
 			{
 				outStream.startCall(currentTok.str);
+				currentTok = inStream.getToken();
+
+				bool skipToken = true;
 				while (currentTok.type != TOKEN_CBRACKET)
 				{
 					outStream.nxtCallArgument();
-					parse(inStream,outStream,locals,TOKEN_COMMA,TOKEN_CBRACKET);
+					parse(inStream,outStream,locals,TOKEN_COMMA,TOKEN_CBRACKET,skipToken);
+					skipToken = false;
+					
 				}
-				currentTok = inStream.getToken();
 				outStream.endCall();
 			}
 			else
@@ -61,9 +65,8 @@ public:
 		}
 		else
 		{
-			std_out.putstring("[EXPRESSION] Unknown statement ");
-			std_out.putint(currentTok.type);
-			std_out.putchar('\n');
+			std_out.putstring("[EXPRESSION] Unknown statement\n");
+			currentTok.print(std_out);
 		}
 	}
 	
@@ -217,9 +220,12 @@ public:
 
 
 	/// The root parse function - parses an expression and generates the proper output
-	bool parse(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals, int endToken1 = TOKEN_SEMICOLON, int endToken2 = -1)
+	bool parse(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals, int endToken1 = TOKEN_SEMICOLON, int endToken2 = -1,bool presetToken = false)
 	{
-		currentTok = inStream.getToken();
+		// Used in call statements if the first token has already been read.
+		if (!presetToken)
+			currentTok = inStream.getToken();
+
 		outStream.startExpression();
 		parseLevel7(inStream,outStream,locals);
 		
@@ -227,6 +233,7 @@ public:
 		if (! (currentTok.type == endToken1 || currentTok.type == endToken2) )
 		{
 			std_out.putstring("[EXPRESSION] Invalid end to expression \n");
+			currentTok.print(std_out);
 			return false;
 		}
 		outStream.endExpression();

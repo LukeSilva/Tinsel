@@ -195,7 +195,7 @@ public:
 	/// Ends a call procedure
 	void endCall()
 	{
-		myFile.putstring(") ");
+		myFile.putstring(") \n");
 		callCount -= 1;
 	}
 

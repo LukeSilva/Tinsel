@@ -243,6 +243,23 @@ protected:
 						print_error("\tExpression error",currentTok.linenum);
 					
 				}
+				else if (nxtTok.type == TOKEN_OBRACKET)
+				{
+					outStream.startCall(currentTok.str);
+					SynExpression expr;
+					expr.currentTok = Stream.getToken();
+					bool skipToken = true;
+					while (expr.currentTok.type != TOKEN_CBRACKET)
+					{
+						outStream.nxtCallArgument();
+						if (!expr.parse(Stream,outStream,locals,TOKEN_COMMA,TOKEN_CBRACKET,skipToken))
+						{
+								print_error("\tExpression error",currentTok.linenum);
+						}
+						skipToken = false;
+					}
+					outStream.endCall();
+				}
 				else
 					print_error("Expected assignment after variable name",currentTok.linenum);
 			}
