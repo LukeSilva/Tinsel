@@ -172,7 +172,7 @@ protected:
 				outStream.whileLoop();
 				expect(TOKEN_OBRACKET);
 				SynExpression expr;
-				expr.parse(Stream,outStream,locals);
+				expr.parse(Stream,outStream,locals,TOKEN_CBRACKET);
 				expect(TOKEN_OBLOCK);
 				outStream.startBlock();
 				Variable array new_locals;
@@ -185,7 +185,7 @@ protected:
 				outStream.ifStatement();
 				expect(TOKEN_OBRACKET);
 				SynExpression expr;
-				expr.parse(Stream,outStream,locals);
+				expr.parse(Stream,outStream,locals,TOKEN_CBRACKET);
 				outStream.startBlock();
 				currentTok = Stream.getToken();
 				if (currentTok.type == TOKEN_OBLOCK)

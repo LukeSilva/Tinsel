@@ -6,7 +6,7 @@ public:
 	Token currentTok;
 
 	/// Parses level 0 operators:
-	///  - Function calls (TODO)
+	///  - Function calls
 	///  - Variables
 	///  - Literals
 	///  - Expressions
@@ -14,21 +14,40 @@ public:
 	{
 		if (currentTok.type == TOKEN_NAME)
 		{
-			bool foundVariable = false;
-			Variable local;
-			for (int i = 0; i < locals.length; ++i)
+			Token nxtTok = inStream.getToken();
+
+			if (nxtTok.type == TOKEN_OBRACKET)
 			{
-				if (locals[i].name.compare(currentTok.str))
+				outStream.startCall(currentTok.str);
+				while (currentTok.type != TOKEN_CBRACKET)
 				{
-					foundVariable = true;
-					local = locals[i];
+					outStream.nxtCallArgument();
+					parse(inStream,outStream,locals,TOKEN_COMMA,TOKEN_CBRACKET);
 				}
+				currentTok = inStream.getToken();
+				outStream.endCall();
 			}
-			if (!foundVariable)
-				outStream.expressionGlobalVariable(currentTok.str);
 			else
-				outStream.expressionLocalVariable(local);
-			currentTok = inStream.getToken();
+			{
+				bool foundVariable = false;
+				Variable local;
+				for (int i = 0; i < locals.length; ++i)
+				{
+					if (locals[i].name.compare(currentTok.str))
+					{
+						foundVariable = true;
+						local = locals[i];
+					}
+				}
+
+				if (!foundVariable)
+					outStream.expressionGlobalVariable(currentTok.str);
+				else
+					outStream.expressionLocalVariable(local);
+
+				currentTok = nxtTok;
+			}
+
 		}
 		else if (currentTok.type == TOKEN_INT_LIT)
 		{
@@ -37,7 +56,7 @@ public:
 		}
 		else if (currentTok.type == TOKEN_OBRACKET)
 		{
-			parse(inStream,outStream,locals);
+			parse(inStream,outStream,locals,TOKEN_CBRACKET,-1);
 			currentTok = inStream.getToken();
 		}
 		else
@@ -198,12 +217,14 @@ public:
 
 
 	/// The root parse function - parses an expression and generates the proper output
-	bool parse(TokenStream inStream, SyntaxFileWriter outStream,Variable array locals)
+	bool parse(TokenStream inStream, SyntaxFileWriter outStream, Variable array locals, int endToken1 = TOKEN_SEMICOLON, int endToken2 = -1)
 	{
 		currentTok = inStream.getToken();
 		outStream.startExpression();
 		parseLevel7(inStream,outStream,locals);
-		if (! (currentTok.type == TOKEN_SEMICOLON || currentTok.type == TOKEN_CBRACKET) )
+		
+		
+		if (! (currentTok.type == endToken1 || currentTok.type == endToken2) )
 		{
 			std_out.putstring("[EXPRESSION] Invalid end to expression \n");
 			return false;

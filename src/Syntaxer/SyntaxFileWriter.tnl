@@ -42,6 +42,9 @@ class SyntaxFileWriter
 	/// Keeps track of nested expressions
 	int expressionCount = 0;
 
+	/// Keeps track of nested calls
+	int callCount = 0;
+
 	void printLocalVariable(Variable localVariable)
 	{
 		if (localVariable.default_value < 0)
@@ -174,10 +177,32 @@ public:
 		return true;
 	}
 
+	/// Starts a call procedure, which is formed with a number of expressions
+	void startCall(String function_name)
+	{
+		myFile.putstring("CALL( ");
+		myFile.putstring(function_name);
+		myFile.putchar(' ');
+		callCount += 1;
+	}
+
+	/// Signifies the end of a call argument expression, and the beginning of the next
+	void nxtCallArgument()
+	{
+		myFile.putstring(", ");
+	}
+
+	/// Ends a call procedure
+	void endCall()
+	{
+		myFile.putstring(") ");
+		callCount -= 1;
+	}
+
 	/// Starts an expression, which is formed with appropriate expression calls in reverse polish notation
 	void startExpression()
 	{
-		if (expressionCount == 0)
+		if (expressionCount == 0 && callCount == 0)
 		{
 			myFile.putstring("( ");
 		}
@@ -263,7 +288,7 @@ public:
 	/// Ends an expression
 	void endExpression()
 	{
-		if (expressionCount == 1)
+		if (expressionCount == 1 && callCount == 0)
 		{
 			myFile.putstring(")\n");
 		}
