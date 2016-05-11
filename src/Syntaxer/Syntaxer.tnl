@@ -26,9 +26,11 @@ bool is_primitive_type(TokenType varType)
 	return false;
 }
 
+/// The main class of the Syntaxer subsystem
 class Syntaxer
 {
 protected:
+
 	bool _open = false;
 	bool _error = false;
 	TokenStream Stream;
@@ -68,6 +70,7 @@ protected:
 		_error = true;
 	}
 
+	/// Expects a certain token type, and prints a pretty error message if the token type is not found.
 	void expect(int type)
 	{
 		currentTok = Stream.getToken();
@@ -113,7 +116,7 @@ protected:
 		std_out.putstring("\n-----------------------\n");
 	}
 	
-
+	/// Attempts to parse a local variable definition and assignment if present
 	Variable parse_local_variable(Variable array locals)
 	{
 		Token nxtTok = Stream.getToken();
@@ -151,6 +154,7 @@ protected:
 		return local_variable;
 	}
 
+	/// Attempts to parse a single executable statement within a code block
 	bool parse_block_segment(Variable array locals)
 	{
 			if (is_primitive_type(currentTok.type))
@@ -268,6 +272,7 @@ protected:
 			return true;
 	}
 
+	/// Attempts to parse a full block
 	void parse_block(Variable array locals)
 	{
 		bool parseBlock = true;
@@ -282,6 +287,8 @@ protected:
 		print_variable_table(locals,"LOCALS");
 	}
 
+	/// Attempts to parse a global function definitions with arguments
+	///  expects the most recent global variable to be the function variable
 	void parse_global_function()
 	{
 		globals[global_nxtid].properties |= PROPERTY_FUNCTION;
@@ -350,6 +357,7 @@ protected:
 		}
 	}
 
+	/// Attempts to parse a global variable definition and put it into the variable store.
 	void parse_global_variable()
 	{
 		Token nxtTok = Stream.getToken();
@@ -397,13 +405,13 @@ protected:
 
 public:
 	/// Opens a file and prepares it for the tokenizer and syntaxer
-	bool open(String filename)
+	bool open(String infilename)
 	{
-		if (!Stream.open(filename))
+		if (!Stream.open(infilename))
 			return false;
 		_open = true;
 		_error = false;
-		_filename = filename;
+		_filename = infilename;
 
 		global_nxtid = 0;
 		globals.reset(default_num_globals);

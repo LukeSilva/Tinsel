@@ -1,5 +1,8 @@
+/// Property value for function definitions
 int PROPERTY_FUNCTION = 1;
+/// Property value for object types
 int PROPERTY_OBJECT = 2;
+/// Property value for 1D arrays
 int PROPERTY_ARRAY = 4;
 
 
