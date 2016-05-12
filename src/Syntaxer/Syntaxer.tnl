@@ -284,7 +284,9 @@ protected:
 			else if (parse_block_segment(locals))
 				currentTok = Stream.getToken();
 		}
-		print_variable_table(locals,"LOCALS");
+
+		//Can be used for debugging to check if all the local variables have been parsed for a block
+		//print_variable_table(locals,"LOCALS");
 	}
 
 	/// Attempts to parse a global function definitions with arguments
@@ -405,7 +407,7 @@ protected:
 
 public:
 	/// Opens a file and prepares it for the tokenizer and syntaxer
-	bool open(String infilename)
+	bool open(String infilename,SyntaxFileWriter outStream)
 	{
 		if (!Stream.open(infilename))
 			return false;
@@ -416,7 +418,7 @@ public:
 		global_nxtid = 0;
 		globals.reset(default_num_globals);
 	
-		outStream.open("default.tast");
+		self.outStream = outStream;
 
 		return true;
 	}
